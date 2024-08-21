@@ -1,0 +1,84 @@
+{% comment %}
+Header block content, used in both mobile header and desktop header.
+
+Accepts a block, returns the content to render for that block.
+
+Required params:
+* block: (Object) the block that should be rednered.
+* image_count: (Int) the number of images per menu item
+* link_columns: (Int) the number of columns with links. Max: 3
+* only_images: (Boolean) whether we have images only or images with links
+* is_mobile: (Boolean) if the block is called from the mobile nav. Default: false
+* link_level_next: (Int) the index of the next link level
+
+{% render 'header-block', block: block, image_count: image_count, only_images: only_images, link_columns: link_columns, link_level_next: link_level_next %}
+
+{% endcomment %}
+
+{%- liquid
+  assign grid_style = settings.grid_style
+  assign animation_name = 'drawer-items-fade'
+  assign animation_duration = 500
+  assign text_color = block.settings.text_color
+  assign width_class = 'menu__block--narrow'
+  assign aspect_ratio = 1 | divided_by: block.settings.aspect_ratio
+  assign link_columns = link_columns | at_most: 3 | default: 1
+  assign is_mobile = is_mobile | default: false
+  if block.settings.wide_image
+    assign width_class = 'menu__block--wide'
+    assign link_columns = 1
+  endif
+
+  assign full_width = '100vw'
+  if grid_style == 'classic'
+    assign full_width = '(100vw - 100px)'
+  endif
+
+  if only_images
+    assign columns = image_count
+  else
+    assign columns = image_count | plus: link_columns
+  endif
+
+  assign sizes = '(min-width: 990px) calc(' | append: full_width | append: ' / ' | append: columns | append: '), (min-width: 380px) 350px, calc(100vw - 30px)'
+
+  if is_mobile
+    assign sizes = '(min-width: 380px) 350px, calc(100vw - 30px)'
+  endif
+-%}
+
+<div class="menu__block {{ width_class }}" {{ block.shopify_attributes }}
+  {% if link_level_next %}
+    data-animates="{{ link_level_next }}"
+    data-animation="{{ animation_name }}"
+    data-animation-delay="{{ animation_delay }}"
+    data-animation-duration="{{ animation_duration }}"
+  {% endif %}>
+  <div class="header__dropdown__image palette--contrast--dark"       
+    {% unless text_color == 'rgba(0,0,0,0)' or text_color == blank %}style="--text: {{ text_color }};"{% endunless %}
+    data-stagger-first>
+    {%- if block.settings.title != blank or block.settings.link_text != blank -%}
+      <a href="{{ block.settings.link }}" class="link-over-image">
+        <div class="hero__content__wrapper align--bottom-left">
+          <div class="hero__content hero__content--transparent backdrop--radial">
+            {%- if block.settings.title != blank -%}
+              <h2 class="hero__title h4">
+                {{ block.settings.title | escape }}
+              </h2>
+            {%- endif -%}
+
+            {%- if block.settings.link_text != blank -%}
+              <p class="hero__description">
+                {{ block.settings.link_text | escape }}
+              </p>
+            {%- endif -%}
+          </div>
+        </div>
+      </a>
+    {%- endif -%}
+
+    <div class="image-overlay" style="--bg: {{ block.settings.overlay_color }}; --overlay-opacity: {{ block.settings.overlay_opacity | times: 0.01 }};"></div>
+
+    {%- render 'image', image: block.settings.image, aspect_ratio: aspect_ratio, sizes: sizes -%}
+  </div>
+</div>

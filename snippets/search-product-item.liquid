@@ -1,0 +1,108 @@
+{% comment %}
+    Renders product item in predictive search
+
+    Accepts:
+    - product: {Object} product (required)
+    - product_item_classes: {String} product item classes
+    - animation_delay: {Int} Animation delay
+    - animation_duration: {Int} Animation duration
+    - animation_anchor: {String} Animation anchor
+    - focusable: {Boolean} Default: false
+
+    Usage:
+    {% render 'search-product-item', product: product, animation_delay: animation_delay, animation_duration: animation_duration, animation_anchor: animation_anchor, product_item_classes: product_item_classes %}
+{% endcomment %}
+
+{%- liquid
+  assign featured_image = product.featured_media
+  assign second_image = product.media[1]
+  assign product_item_classes = product_item_classes | prepend: ' ' | default: ''
+  assign animation_delay = animation_delay | default: 100
+  assign animation_duration = animation_duration | default: 800
+  assign animation_anchor = animation_anchor | default: ''
+  assign focusable = focusable | default: false
+
+  assign product_double_class = ''
+  if second_image.preview_image and settings.image_hover_enable
+    assign product_double_class = ' double__image'
+  endif
+
+  assign image_sizes = '(min-width: 1400px) calc((80vw - 100px) / 4), (min-width: 750px) calc(1100px / 3), 50px'
+-%}
+
+<div class="predictive-search__product-item product-item{{ product_item_classes }}"
+  role="option"
+  aria-selected="false"
+  data-aos="fade"
+  data-aos-delay="{{ animation_delay }}"
+  data-aos-duration="{{ animation_duration }}"
+  data-aos-anchor="{{ animation_anchor }}"> 
+  <a href="{{ product.url }}" class="product-link" aria-label="{{ product.title | strip_html | escape }}"{% unless focusable %} tabindex="-1"{% endunless %}>
+    <div class="product-item__image{{ product_double_class }}{% unless featured_image %} product-item__image--empty{% endunless %}">
+      {%- if featured_image -%}
+        <div class="product-item__bg">
+          {%- render 'image' image: featured_image.preview_image, sizes: image_sizes, cover: true -%}
+        </div>
+        
+        {%- if second_image -%}
+          <div class="product-item__bg__under">
+            {%- render 'image' image: second_image.preview_image, sizes: image_sizes, cover: true -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  
+    <div class="product-information">
+      <div class="product-item__info">
+        <p class="product-item__title">
+          {{ product.title | strip_html }}
+        </p>
+
+        {%- liquid
+  if settings.currency_code_enable
+    assign product_price_min = product.price_min | money_with_currency
+    assign product_compare_at_price = product.compare_at_price | money_with_currency
+  else
+    assign product_price_min = product.price_min | money
+    assign product_compare_at_price = product.compare_at_price | money
+  endif
+-%}
+
+<span class="price{% if product.compare_at_price > product.price %} sale{% endif %}">
+  {% if product.available %}
+    <span class="new-price">
+      {% if product.price_varies %}
+        <small>{{ 'products.general.from' | t }}</small>
+      {% endif %}
+      {%- if product.price == 0 and product.price_varies == false -%}
+        {{ 'general.money.free' | t }}
+      {%- else -%}
+        {{ product_price_min }}
+      {%- endif -%}
+    </span>
+    {% if product.compare_at_price > product.price %}
+      <span class="old-price">{{ product_compare_at_price }}</span>
+    {% endif %}
+  {% else %}
+    <span class="sold-out">{{ 'products.product.sold_out' | t }}</span>
+  {% endif %}
+</span>
+{% if current_variant.unit_price %}
+  {% capture unit_price_separator %}
+    <span aria-hidden="true">/</span>
+    <span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+  {% endcapture %}
+  {% capture unit_price_base_unit %}
+    {% if current_variant.unit_price_measurement.reference_value != 1 %}
+      {{ current_variant.unit_price_measurement.reference_value }}
+    {% endif %}
+    {{ current_variant.unit_price_measurement.reference_unit }}
+  {% endcapture %}
+  <br>
+  <span class="visually-hidden visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
+  <span class="unit small">{% if settings.currency_code_enable %}{{ current_variant.unit_price | money_with_currency }}{% else %}{{ current_variant.unit_price | money }}{% endif %}{{ unit_price_separator }}{{ unit_price_base_unit }}</span>
+{% endif %}
+        </div>
+    </div>
+  </a>
+</div>

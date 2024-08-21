@@ -1,0 +1,270 @@
+<!-- /sections/section-rich-text.liquid -->
+{%- liquid
+  assign aside_html = ''
+  assign content_html = ''
+  assign first_element_flag = true
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+-%}
+
+{%- style -%}
+  #Sidebar--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+      --link: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+{%- if section.blocks.size > 0 -%}
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign title = block.settings.title
+      assign text = block.settings.text
+      assign content = block.settings.content
+      assign unique = 'Widget--' | append: block.id
+    -%}
+
+    {%- capture aside_html -%}
+      {{ aside_html }}
+
+      {%- if block.type == 'header' and title != blank -%}
+        <li>
+          <button type="button" class="widget__link{% if first_element_flag %} is-selected{% endif %}"
+            data-scroll-to="#{{ unique }}"
+            data-scroll-spy="#{{ unique }}"
+            data-scroll-spy-desktop
+            {{ block.shopify_attributes }}>
+            {{- title -}}
+          </button>
+        </li>
+        {%- assign first_element_flag = false -%}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- capture content_html -%}
+      {{ content_html }}
+
+      {%- if block.type == 'header' and title != blank -%}
+        <div class="section-sidebar__row section-sidebar__row--title">
+          <h6 class="section-sidebar__title" id="{{ unique }}" {{ block.shopify_attributes }}>{{ title }}</h6>
+        </div>
+      {%- endif -%}
+
+      {%- if block.type == 'text' and text != blank -%}
+        <div class="section-sidebar__row section-sidebar__row--text" {{ block.shopify_attributes }}>{{ text }}</div>
+      {%- endif -%}
+
+      {%- if block.type == 'accordion' and title != blank and content != blank -%}
+        <div class="section-sidebar__row section-sidebar__row--accordion">
+          <div class="accordion" data-accordion {{ block.shopify_attributes }}>
+            <p class="accordion__title" data-focus-element tabindex="0" data-accordion-toggle data-block-id="{{ block.id }}">
+              {{ title }}
+
+              {%- render 'icon-plus' -%}
+              {%- render 'icon-minus' -%}
+            </p>
+
+            <div class="accordion__body rte" data-accordion-body>
+              {{ content }}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endcapture -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section id="Sidebar--{{ section.id }}"
+  class="section-sidebar section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="sidebar">
+  {%- if section.blocks.size > 0 -%}
+    <div class="{{ section.settings.width }}">
+      <div class="section-sidebar__body">
+        <div class="section-sidebar__aside">
+          <div class="section-sidebar__widget">
+            {%- if aside_html != '' -%}
+              <ul class="widget__links widget__links--secondary">
+                {{ aside_html }}
+              </ul>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="section-sidebar__content">
+          {{ content_html }}
+        </div>
+      </div>
+    </div>
+  {%- else -%}
+    {%- render 'no-blocks' -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Sidebar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper--full-padded",
+      "options": [
+        {"value": "wrapper--full-padded", "label": "Full width padded"},
+        {"value": "wrapper", "label": "Normal"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 100
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Header",
+      "type": "header",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        }
+      ]
+    },
+    {
+      "name": "Accordion",
+      "type": "accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Question",
+          "default": "Frequently asked question"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Answer",
+          "default": "<p>Share details about your shipping policies, item returns, or customer service.<\/p>"
+        }
+      ]
+    },
+    {
+      "name": "Text",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share details about your shipping policies, item returns, or customer service.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sidebar",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "header",
+          "settings": {
+            "title": "Shipping & Returns"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "How much is shipping?",
+            "content": "<p>We offer free shipping on all US orders, and a flat rate of $10 for all international orders.<\/p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "What is your return policy?",
+            "content": "<p>We accept returns within 30 days of the purchase date.<\/p>"
+          }
+        },
+        {
+          "type": "header",
+          "settings": {
+            "title": "Discount"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Can I use more than one discount code?",
+            "content": "<p>Only one discount code can be used per order and cannot be combined with other promotions.<\/p>"
+          }
+        },
+        {
+          "type": "header",
+          "settings": {
+            "title": "Contact"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Still have questions? We're happy to help! Please email us at hi@email.com and we will get back to you within 24 hours.<\/p>"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

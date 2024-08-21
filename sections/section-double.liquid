@@ -1,0 +1,490 @@
+<!-- /sections/section-double.liquid -->
+{%- liquid
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign animation_anchor = '#double-section-' | append: section.id
+  assign animation_order = 0
+
+  capture style
+    echo '--PT: ' | append: section.settings.padding_top | append: 'px;'
+    echo '--PB: ' | append: section.settings.padding_bottom | append: 'px;'
+
+    unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank
+      echo '--bg: ' | append: bg_color | append: ';'
+    endunless
+
+    unless text_color == 'rgba(0,0,0,0)' or text_color == blank
+      echo '--text: ' | append: text_color | append: ';'
+    endunless
+  endcapture
+
+  assign image_1 = section.settings.image_1
+  assign image_2 = section.settings.image_2
+  assign image_width = section.settings.image_width
+  capture sizes
+    if image_1 and image_2
+      if image_width == 'three-quarters'
+        echo '(min-width: 768px) 37.5vw, 100vw'
+      else
+        echo '(min-width: 768px) 25vw, 100vw'
+      endif
+    else
+      if image_width == 'three-quarters'
+        echo '(min-width: 768px) 75vw, 100vw'
+      else
+        echo '(min-width: 768px) 50vw, 100vw'
+      endif
+    endif
+  endcapture
+
+  assign figure_width_class = 'section-double__figure--one-half'
+  if image_width == 'three-quarters'
+    assign figure_width_class = 'section-double__figure--three-quarters'
+  endif
+
+  capture alignment
+    if section.settings.text_alignment == 'text-left'
+      echo ' align--middle-left'
+    else
+      echo ' align--middle-center'
+    endif
+  endcapture
+-%}
+
+<section class="section-double section-double--image section-padding {{ section.settings.layout }}"
+  id="double-section-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="double"
+  style="{{ style }}">
+  <div class="{{ section.settings.width }}">
+    {%- if section.blocks.size > 0 -%}
+      <div class="section-double__body {{ section.settings.height }}">
+        <figure class="section-double__figure {{ figure_width_class }} {{ section.settings.mobile_height }}"
+          {% if image_1 != blank and image_2 != blank %}
+            data-slider
+            data-slider-fullwidth
+            data-options='{"watchCSS": true, "pageDots": false, "prevNextButtons": false, "autoPlay": 4000, "pauseAutoPlayOnHover": false}'
+          {% endif %}>
+          {%- if image_1 != blank -%}
+            <div class="section-double__split-image"
+              data-slide="1"
+              data-slide-index="1">
+              {%- render 'image-hero' image: image_1, sizes: sizes, modifier: 'section-double__image', desktop_height: section.settings.height, mobile_height: section.settings.mobile_height -%}
+            </div>
+          {%- endif -%}
+
+          {%- if image_2 != blank or image_1 == blank -%}
+            <div class="section-double__split-image"
+              data-slide="2"
+              data-slide-index="2">
+              {%- render 'image-hero' image: image_2, sizes: sizes, modifier: 'section-double__image', desktop_height: section.settings.height, mobile_height: section.settings.mobile_height -%}
+            </div>
+          {%- endif -%}
+        </figure>
+
+        <div class="section-double__aside">
+          <div class="section-double__content hero__content__wrapper{{ alignment }}">
+            <div class="hero__content">
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'heading' -%}
+                    {%- if block.settings.title != blank -%}
+                      {%- assign animation_order = animation_order | plus: 1 -%}
+                      {%- assign font_size_class = block.settings.text_size | prepend: 'heading-size-' -%}
+                      <h2 class="hero__title {{ font_size_class }}"
+                        data-aos="hero"
+                        data-aos-anchor="{{ animation_anchor }}"
+                        data-aos-order="{{ animation_order }}"
+                        {{ block.shopify_attributes }}>
+                        {{ block.settings.title }}
+                      </h2>
+                    {%- endif -%}
+
+                  {%- when 'text' -%}
+                    {%- if block.settings.text != blank -%}
+                      {%- assign animation_order = animation_order | plus: 1 -%}
+                      {%- assign font_size_class = block.settings.text_size | prepend: 'body-size-' -%}
+                      <div class="hero__rte {{ font_size_class }} {{ block.settings.text_style }}"
+                        data-aos="hero"
+                        data-aos-anchor="{{ animation_anchor }}"
+                        data-aos-order="{{ animation_order }}"
+                        {{ block.shopify_attributes }}>
+                        {{ block.settings.text }}
+                      </div>
+                    {%- endif -%}
+
+                  {%- when 'buttons' -%}
+                    {%- if block.settings.button_text != blank -%}
+                      {%- liquid
+                        assign prev_index = forloop.index0 | minus: 1
+                        assign next_index = forloop.index0 | plus: 1
+                        assign prev_block = section.blocks[prev_index]
+                        assign next_block = section.blocks[next_index]
+                        assign animation_order = animation_order | plus: 1
+                        assign first_button_of_group = false
+                        assign last_button_of_group = false
+                        if next_block.type == 'buttons' and forloop.index0 == 0 or prev_block.type != 'buttons' and next_index != section.blocks.size and next_block.type == 'buttons'
+                          assign first_button_of_group = true
+                        endif
+
+                        if prev_block.type == 'buttons' and next_block.type != 'buttons' and prev_index != -1 or forloop.index == section.blocks.size and prev_block.type == 'buttons'
+                          assign last_button_of_group = true
+                        endif
+                      -%}
+
+                      {%- if first_button_of_group -%}
+                        <div class="hero__button-group">
+                      {%- endif -%}
+
+                      <div class="hero__button"
+                        data-aos="hero"
+                        data-aos-anchor="{{ animation_anchor }}"
+                        data-aos-order="{{ animation_order }}"
+                        {{ block.shopify_attributes }}>
+                        <a href="{{ block.settings.button_url | default: '#!' }}" class="btn {{ block.settings.button_size }} {{ block.settings.button_style }} {{ block.settings.button_type }}">
+                          <span>{{ block.settings.button_text }}</span>
+
+                          {%- if block.settings.show_arrow -%}
+                            {%- render 'icon-arrow-right' -%}
+                          {%- endif -%}
+                        </a>
+                      </div>
+
+                    {%- if last_button_of_group -%}
+                      </div>
+                    {%- endif -%}
+                  {%- endif -%}
+
+                {%- when 'divider' -%}
+                  {%- assign animation_order = animation_order | plus: 1 -%}
+                  {%- capture attributes -%}
+                    data-aos="hero"
+                    data-aos-anchor="{{ animation_anchor }}"
+                    data-aos-order="{{ animation_order }}"
+                  {%- endcapture -%}
+
+                  {%- render 'divider' block: block, attributes: attributes -%}
+
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      {%- render 'no-blocks' -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "",
+      "options": [
+        {"value": "","label": "Image left, text right"},
+        {"value": "is-reversed","label": "Text left, image right"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Desktop height",
+      "default": "screen-height-three-quarters",
+      "options": [
+        { "value": "image-height", "label": "Image height" },
+        { "value": "screen-height-full", "label": "Full screen height"},
+        { "value": "screen-height-three-quarters", "label": "3/4 of screen"},
+        { "value": "screen-height-two-thirds", "label": "2/3 of screen"},
+        { "value": "screen-height-one-half", "label": "1/2 of screen"},
+        { "value": "screen-height-one-third", "label": "1/3 of screen"},
+        { "value": "seven-fifty-height-hero", "label": "750px" },
+        { "value": "sixty-fifty-height-hero", "label": "650px" },
+        { "value": "five-fifty-height-hero", "label": "550px" },
+        { "value": "four-fifty-height-hero", "label": "450px" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "default": "screen-height-one-half--mobile",
+      "options": [
+        { "value": "image-height--mobile", "label": "Image height" },
+        { "value": "screen-height-full--mobile", "label": "Full screen height"},
+        { "value": "screen-height-three-quarters--mobile", "label": "3/4 of screen"},
+        { "value": "screen-height-two-thirds--mobile", "label": "2/3 of screen"},
+        { "value": "screen-height-one-half--mobile", "label": "1/2 of screen"},
+        { "value": "screen-height-one-third--mobile", "label": "1/3 of screen"},
+        { "value": "seven-fifty-height-hero--mobile", "label": "750px" },
+        { "value": "sixty-fifty-height-hero--mobile", "label": "650px" },
+        { "value": "five-fifty-height-hero--mobile", "label": "550px" },
+        { "value": "four-fifty-height-hero--mobile", "label": "450px" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper--full",
+      "options": [
+        {"value": "wrapper--full", "label": "Full width"},
+        {"value": "wrapper--full-padded", "label": "Full width padded"},
+        {"value": "wrapper", "label": "Normal"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "Image width",
+      "default": "one-half",
+      "options": [
+        { "value": "one-half", "label": "50%"},
+        { "value": "three-quarters", "label": "75%" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Alignment",
+      "default": "text-left",
+      "options": [
+        {"value": "text-left","label": "Left"},
+        {"value": "text-center","label": "Centered"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Image with text"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "label": "Text size",
+          "min": 1,
+          "max": 15,
+          "step": 1,
+          "default": 8
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "label": "Text size",
+          "min": 1,
+          "max": 15,
+          "step": 1,
+          "default": 4
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "font-body",
+          "options": [
+            {"value": "font-heading", "label": "Heading"},
+            {"value": "font-body", "label": "Body"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Text",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "button_type",
+          "label": "Color",
+          "default": "btn--primary",
+          "options": [
+            {"value": "btn--primary", "label": "Primary"},
+            {"value": "btn--secondary", "label": "Secondary"},
+            {"value": "btn--white", "label": "White"},
+            {"value": "btn--black", "label": "Black"}
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Size",
+          "default": "",
+          "options": [
+            { "label": "Small", "value": "btn--small" },
+            { "label": "Medium", "value": "" },
+            { "label": "Large", "value": "btn--large" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Style",
+          "default": "btn--solid",
+          "options": [
+            { "label": "Solid", "value": "btn--solid" },
+            { "label": "Outline", "value": "btn--outline" },
+            { "label": "Text", "value": "btn--text" }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_arrow",
+          "label": "Show arrow",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_line",
+          "label": "Show line",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding top",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding bottom",
+          "default": 20
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

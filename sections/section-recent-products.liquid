@@ -1,0 +1,135 @@
+<!-- /sections/section-recent-products.liquid -->
+{%- liquid
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+-%}
+
+{%- style -%}
+  #RecentProducts--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+      --text-light: {{ text_color | color_mix: settings.bg_color, 70 }};
+      --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<div id="RecentProducts--{{ section.id }}"
+  class="recent__container section-padding js"
+  data-section-id="{{ section.id }}"
+  data-section-type="related">
+  <div class="recent__container__inner is-hidden" data-recently-viewed-wrapper>
+    <div class="tabs-wrapper related__products" data-tabs-holder>
+      <div class="tabs__head">
+        {%- if section.settings.product_recently_heading != blank -%}
+          <ul class="tabs tabs--center" data-scrollbar data-scrollbar-slider>
+            <li class="tab-link tab-link-0 tab-link__recent current" data-tab="0" tabindex="0">
+              <span>{{ section.settings.product_recently_heading }}</span>
+            </li>
+          </ul>
+        {%- endif -%}
+
+        <button type="button" class="tabs__arrow tabs__arrow--prev is-hidden" data-scrollbar-arrow-prev>
+          {%- render 'icon-nav-arrow-left' -%}
+          <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+        </button>
+
+        <button type="button" class="tabs__arrow tabs__arrow--next is-hidden" data-scrollbar-arrow-next>
+          {%- render 'icon-nav-arrow-right' -%}
+          <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+        </button>
+      </div>
+
+      <div class="tab-content tab-content-0 tabs__recently-viewed current" data-tab-index="0">
+        {%- render 'products-recently-viewed', product: product, limit: section.settings.product_recently_limit, product_recently_minimum: section.settings.product_recently_minimum -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Recently viewed products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "product_recently_heading",
+      "label": "Heading",
+      "default": "Recently viewed"
+    },
+    {
+      "type": "range",
+      "id": "product_recently_limit",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Product limit",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "product_recently_minimum",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Display threshold",
+      "info": "Hide section until a minimum of products can be shown.",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "category": "Collection",
+      "name":"Recently viewed products"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

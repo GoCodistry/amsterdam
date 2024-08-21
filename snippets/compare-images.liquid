@@ -1,0 +1,65 @@
+{% comment %}
+    Renders "Before and after" images comparison
+
+    Accepts:
+    - image_1: {Image} Image left
+    - image_2: {Image} Image right
+    - aspect_ratio: {Number} Image aspect ratio (Optional)
+    - animation_anchor: {String} ID of the element that will trigger animations
+    - modifier: {String} Section class name
+    - wrapper: {String} Section wrapper setting
+
+    Usage:
+    {% render 'compare-images', image_1: image_1, image_2: image_2, aspect_ratio: aspect_ratio, animation_anchor: animation_anchor, modifier: modifier, wrapper: wrapper %}
+{% endcomment %}
+
+{%- liquid
+  assign modifier = modifier | default: ''
+
+  unless aspect_ratio
+    if image_1
+      assign aspect_ratio = image_1.aspect_ratio
+    elsif image_2
+      assign aspect_ratio = image_2.aspect_ratio
+    else
+      assign aspect_ratio = 1
+    endif
+  endunless
+
+  capture sizes
+    if wrapper == 'wrapper--full'
+      echo '(min-width: 750px) calc((100vw - 100px) / 2), calc(100vw - 32px)'
+    elsif wrapper == 'wrapper--narrow'
+      echo '(min-width: 750px) calc(670px / 2), calc(100vw - 32px)'
+    else
+      echo '(min-width: 750px) calc(1100px / 2), calc(100vw - 32px)'
+    endif
+  endcapture
+-%}
+
+<div
+  class="compare__outer"
+  style="--aspect-ratio: {{ aspect_ratio }};"
+  data-aos="img-in"
+  data-aos-anchor="{{ animation_anchor }}"
+  data-aos-duration="800"
+  data-aos-easing="ease-out-quart">
+  <div class="compare" data-images-holder data-start-position="50%">
+    <div class="compare__image">
+      <div class="compare__image__holder">
+        {%- render 'image', image: image_1, sizes: sizes, cover: true -%}
+      </div>
+    </div>
+    
+    <div class="compare__image{% unless image_2 != blank %} compare__image--rotate{% endunless %}" data-image-holder>
+      <div class="compare__image__holder" data-image-element>
+        {%- render 'image', image: image_2, sizes: sizes, cover: true -%}
+      </div>
+    </div>
+
+    <div class="compare__btn" data-images-button>
+      {%- render 'icon-arrow-separate' -%}
+    </div>
+  </div>
+
+</div>

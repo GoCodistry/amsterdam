@@ -1,0 +1,174 @@
+<!-- /sections/main-page.liquid -->
+{%- liquid
+  assign animation_anchor = '#page--' | append: section.id
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+-%}
+
+{%- style -%}
+  .index-page {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+{%- if section.settings.show_content or section.settings.subheading != blank or section.settings.show_title -%}
+  <section class="index-page section-padding"
+    data-section-id="{{ section.id }}"
+    data-section-type="page">
+    <div class="hero__content__wrapper {{ section.settings.align_text }} {{ section.settings.width }}">
+      <div class="hero__content hero__content--compact">
+        {%- if section.settings.subheading != blank -%}
+          {%- assign font_size_class = section.settings.subheading_size | prepend: 'body-size-' -%}
+          <p class="hero__subheading {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="1">
+            {{ section.settings.subheading }}
+          </p>
+        {%- endif -%}
+        {%- if section.settings.show_title -%}
+          {%- assign font_size_class = section.settings.heading_size | prepend: 'heading-size-' -%}
+          <h2 class="hero__title {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="2">
+            {{ page.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.show_content -%}
+          {%- assign font_size_class = section.settings.text_size | prepend: 'body-size-' -%}
+          <div class="hero__rte {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="3">
+            <div class="rte">{{ page.content }}</div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type":  "range",
+      "id":    "subheading_size",
+      "label": "Subheading size",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default":3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type":  "range",
+      "id":    "heading_size",
+      "label": "Title size",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default":8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content",
+      "label": "Show content",
+      "default": true
+    },
+    {
+      "type":  "range",
+      "id":    "text_size",
+      "label": "Text size",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default":4
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Text alignment",
+      "default": "text-left",
+      "options": [
+        { "value": "text-left","label": "Left" },
+        { "value": "text-center","label": "Centered" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper",
+      "options": [
+        { "value": "wrapper--full-padded", "label": "Full width padded" },
+        { "value": "wrapper", "label": "Normal" },
+        { "value": "wrapper--narrow", "label": "Narrow" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

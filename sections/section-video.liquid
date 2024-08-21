@@ -1,0 +1,271 @@
+<!-- /sections/section-hero.liquid -->
+<div class="index-hero wide-image"
+  data-section-id="{{ section.id }}"
+  data-section-type="featured-video"
+  data-overlay-header>
+  <div class="frame {{ section.settings.width }}">
+    {%- render 'video' -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video",
+  "class": "section-fullscreen",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "header",
+      "content": "Popup",
+      "info": "Only one popup option can be used"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video_popup",
+      "label": "Enable popup",
+      "default": false
+    },
+    {
+      "type": "video",
+      "id": "video_popup",
+      "label": "MP4/MOV"
+    },
+    {
+      "type": "video_url",
+      "id": "video_popup_social",
+      "label": "Youtube/Vimeo link",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "default": "screen-height-three-quarters",
+      "options": [
+        { "value": "image-height", "label": "Image height" },
+        { "value": "screen-height-full", "label": "Full screen height"},
+        { "value": "screen-height-three-quarters", "label": "3/4 of screen"},
+        { "value": "screen-height-two-thirds", "label": "2/3 of screen"},
+        { "value": "screen-height-one-half", "label": "1/2 of screen"},
+        { "value": "screen-height-one-third", "label": "1/3 of screen"},
+        { "value": "seven-fifty-height-hero", "label": "750px" },
+        { "value": "sixty-fifty-height-hero", "label": "650px" },
+        { "value": "five-fifty-height-hero ", "label": "550px" },
+        { "value": "four-fifty-height-hero", "label": "450px" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "default": "screen-height-three-quarters--mobile",
+      "options": [
+        { "value": "image-height--mobile", "label": "Image height" },
+        { "value": "screen-height-full--mobile", "label": "Full screen height"},
+        { "value": "screen-height-three-quarters--mobile", "label": "3/4 of screen"},
+        { "value": "screen-height-two-thirds--mobile", "label": "2/3 of screen"},
+        { "value": "screen-height-one-half--mobile", "label": "1/2 of screen"},
+        { "value": "screen-height-one-third--mobile", "label": "1/3 of screen"},
+        { "value": "seven-fifty-height-hero--mobile", "label": "750px" },
+        { "value": "sixty-fifty-height-hero--mobile", "label": "650px" },
+        { "value": "five-fifty-height-hero--mobile", "label": "550px" },
+        { "value": "four-fifty-height-hero--mobile", "label": "450px" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper--full",
+      "options": [
+        {"value": "wrapper--full", "label": "Full width"},
+        {"value": "wrapper--full-padded", "label": "Full width padded"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Opacity",
+      "info": "Increase contrast for legible text.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default":0
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay_text",
+      "label": "Overlay behind text only",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Video"
+    },
+    {
+      "type":  "range",
+      "id":    "heading_size",
+      "label": "Heading size",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default":8
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Subheading",
+      "default": "Tell your brand's story through images."
+    },
+    {
+      "type":  "range",
+      "id":    "text_size",
+      "label": "Subheading size",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default":3
+    },
+    {
+      "type": "select",
+      "id": "flex_align",
+      "label": "Block alignment",
+      "default": "align--middle-center",
+      "options": [
+        { "value": "align--top-left", "label": "Top left"},
+        { "value": "align--top-center", "label": "Top center"},
+        { "value": "align--top-right", "label": "Top right"},
+        { "value": "align--middle-left", "label": "Middle left"},
+        { "value": "align--middle-center", "label": "Absolute center"},
+        { "value": "align--middle-right", "label": "Middle right"},
+        { "value": "align--bottom-left", "label": "Bottom left"},
+        { "value": "align--bottom-center", "label": "Bottom center"},
+        { "value": "align--bottom-right", "label": "Bottom right"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Text",
+      "default": "View products",
+      "info": "Leave blank to link entire image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "label": "Color",
+      "default": "btn--primary",
+      "options": [
+        {"value": "btn--primary", "label": "Primary"},
+        {"value": "btn--secondary", "label": "Secondary"},
+        {"value": "btn--white", "label": "White"},
+        {"value": "btn--black", "label": "Black"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Size",
+      "default": "",
+      "options": [
+        { "label": "Small", "value": "btn--small" },
+        { "label": "Medium", "value": "" },
+        { "label": "Large", "value": "btn--large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "default": "btn--solid",
+      "options": [
+        { "label": "Solid", "value": "btn--solid" },
+        { "label": "Outline", "value": "btn--outline" },
+        { "label": "Text", "value": "btn--text" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show arrow",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video",
+      "category": "Image"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

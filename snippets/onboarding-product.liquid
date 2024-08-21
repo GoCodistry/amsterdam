@@ -1,0 +1,482 @@
+<!-- /snippets/onboarding-product.liquid -->
+{% comment %}
+    Renders an empty product
+
+    Accepts:
+    - section: {Object} section contianer with settings and blocks (optional)
+
+    Usage:
+    {% render 'onboarding-product', section: section, unique: unique %}
+{% endcomment %}
+
+{%- liquid
+  assign unique = unique | default: ''
+
+  if settings.currency_code_enable
+    assign onboarding_price = 1999 | money_with_currency
+  else
+    assign onboarding_price = 1999 | money
+  endif
+-%}
+
+<div class="product__wrapper">
+  <div class="product__page">
+    <div class="product__images">
+      <div class="product__slides product-single__photos">
+        <div class="product__photo product__photo--{{ image_size }}">
+          {{ 'product-5' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      </div>
+    </div>
+    <div class="product__content">
+      <div class="form__wrapper" data-form-wrapper>
+        <div class="form__width">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign padding_bottom = block.settings.padding_bottom
+              assign bg_accent = block.settings.bg_color
+
+              capture block_style
+                if padding_bottom
+                  echo '--block-padding-bottom: ' | append: block.settings.padding_bottom | append: 'px;'
+                endif
+
+                if bg_accent
+                  if block.type == 'upsell' or block.type == 'complementary-products'
+                    unless bg_accent == 'rgba(0,0,0,0)' or bg_accent == blank
+                      echo '--bg-accent: ' | append: bg_accent | append: ';'
+                    endunless
+                  endif
+                endif
+              endcapture
+
+              if block_style != blank
+                assign block_style = 'style="' | append: block_style | append: '"'
+              endif
+            -%}
+
+            {%- case block.type -%}
+              {%- when 'title' -%}
+                <div class="product__block product__head" {{ block.shopify_attributes }} {{ block_style }}>
+                  <div class="product__title__wrapper">
+                    <h1 class="product__title">{{ 'home_page.onboarding.product_title' | t }}</h1>
+                  </div>
+                </div>
+
+              {%- when 'price' -%}
+                <div class="product__block product__price__wrap" {{ block_style }}>
+                  <div class="product__price__wrap{{ margin_class }}" {{ block.shopify_attributes }}>
+                    <div class="product__price">
+                      <span>{{ onboarding_price }}</span>
+                    </div>
+                  </div>
+                </div>
+              {%- when 'variants' -%}
+                {%- if settings.show_labels == false -%}
+                  {%- assign hide_labels_class = 'variant__labels--hide' -%}
+                {%- endif -%}
+
+                <div class="product__block{% if settings.show_lines %} product__block--lines{% endif %}{% if settings.form_style == 'classic' %} product__block--classic{% endif %} product__form__holder" {{ block_style }} {{ block.shopify_attributes }}>
+                  <div class="product__form__outer {{ hide_labels_class }}"
+                  {% if animation_name %}
+                    data-animation="{{ animation_name }}"
+                    data-animation-duration="{{ animation_duration }}"
+                    data-animation-delay="{{ animation_delay }}"
+                  {% endif %}>
+                    <div class="product__selectors">
+                      <div class="selector-wrapper">
+                        <div class="radio__fieldset radio__fieldset--swatches">
+                          <legend class="radio__legend">
+                            <span class="radio__legend__label">
+                              <span class="radio__legend__option-name">{{ 'home_page.onboarding.color' | t }}</span>
+
+                              {%- if settings.show_labels -%}
+                                <small class="radio__legend__value" data-option-value>Red</small>
+                              {%- endif -%}
+                            </span>
+                          </legend>
+
+                          <div class="radio__buttons">
+                            {%- for i in (1..3) -%}
+                              {%- capture current_value -%}{%- cycle 'Red', 'Green', 'Blue' -%}{%- endcapture -%}
+
+                              <span class="swatch__button swatch__button--{{ settings.swatch_style }}" data-tooltip="{{ current_value | escape_once | capitalize }}">
+                                <input type="radio"
+                                  id="{{ block.id | append: current_value }}"
+                                  name="{{ block.id }}-{{ 'home_page.onboarding.color' | t | handle }}"
+                                  data-single-option-selector
+                                  value="{{ current_value | escape_once }}"
+                                  {% if forloop.first %}checked{% endif %}
+                                >
+                                <label for="{{ block.id | append: current_value }}" data-swatch="{{ current_value | escape_once }}">
+                                  <span class="visually-hidden">{{ current_value | escape_once }}</span>
+                                </label>
+                              </span>
+                            {%- endfor -%}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="selector-wrapper">
+                        {%- if settings.variant_lines -%}
+                          <div class="radio__fieldset">
+                            <legend class="radio__legend">
+                              <span class="radio__legend__label">
+                                <span class="radio__legend__option-name">{{ 'home_page.onboarding.size' | t }}</span>
+
+                                {%- if settings.show_labels -%}
+                                  <small class="radio__legend__value" data-option-value>Small</small>
+                                {%- endif -%}
+                              </span>
+                            </legend>
+
+                            <div class="radio__buttons">
+                              {%- for i in (1..3) -%}
+                                {%- capture current_value -%}{%- cycle 'Small', 'Medium', 'Large' -%}{%- endcapture -%}
+
+                                <span class="radio__button">
+                                  <input
+                                    type="radio"
+                                    name="{{ 'home_page.onboarding.size' | t }}"
+                                    value="{{ current_value | escape_once }}" id="{{ block.id | append: current_value }}"
+                                    {% if forloop.first %}checked{% endif %}>
+                                  <label for="{{ block.id | append: current_value }}">
+                                    <span>{{ current_value | escape_once }}</span>
+                                  </label>
+                                </span>
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                        {%- else -%}
+                          <div class="select__fieldset">
+                            <legend class="radio__legend">
+                              <span class="radio__legend__label">
+                                <span class="radio__legend__option-name">{{ 'home_page.onboarding.size' | t }}</span>
+
+                                {%- if settings.show_labels -%}
+                                  <small class="radio__legend__value" data-option-value>Small</small>
+                                {%- endif -%}
+                              </span>
+                            </legend>
+
+                            <div class="select-popout" data-popout data-popout-prevent="true">
+                              <button type="button"
+                                class="select-popout__toggle"
+                                aria-expanded="false"
+                                aria-controls="{{ unique }}-select-{{ 'home_page.onboarding.size' | t }}"
+                                aria-labelledby="{{ unique }}-select-{{ 'home_page.onboarding.size' | t }}-label"
+                                data-select-soldout=" - {{ 'products.product.sold_out' | t }}"
+                                data-select-unavailable=" - {{ 'products.product.unavailable' | t }}"
+                                data-popout-toggle>
+                                <span data-popout-toggle-text>Small</span>
+                                {%- render 'icon-nav-arrow-down' -%}
+                              </button>
+
+                              <ul id="{{ unique }}-select-{{ 'home_page.onboarding.size' | t }}" class="select-popout__list" data-popout-list>
+                                {%- for i in (1..3) -%}
+                                  {%- capture current_value -%}{%- cycle 'Small', 'Medium', 'Large' -%}{%- endcapture -%}
+                                  <li class="select-popout__item{% if forloop.first %} is-active{% endif %}">
+                                    <a class="select-popout__option"
+                                      href="#"
+                                      data-popout-option
+                                      {% if forloop.first %}aria-current="true"{% endif %}
+                                      data-value="{{ current_value }}">
+                                      <span>{{ current_value }}</span>
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              {%- when 'buttons' -%}
+                {%- liquid
+                  assign show_quantity = block.settings.show_quantity
+                  assign buybutton_setting = block.settings.show_payment_button
+                  assign btn_atc_class = 'btn--solid'
+                  if buybutton_setting
+                    assign btn_atc_class = 'btn--outline'
+                  endif
+                -%}
+                <div class="product__block product__block--buttons" {{ block_style }} {{ block.shopify_attributes }}>
+                  <div class="product__submit{% if block.settings.show_payment_button %} product__submit--spb{% endif %}"
+                    {% if animation_name %}
+                      data-animation="{{ animation_name }}"
+                      data-animation-duration="{{ animation_duration }}"
+                      data-animation-delay="{{ animation_delay }}"
+                    {% endif %}
+                  >
+                    <div class="product__submit__buttons{% if buybutton_setting and show_quantity == false %} product__submit__buttons--inline{% endif %}">
+                      <div class="product__submit__item{% if show_quantity %} product__submit__item--inline{% endif %}">
+                        {%- if show_quantity -%}
+                          <div class="select-popout" data-popout data-popout-prevent="true">
+                            <button type="button" class="select-popout__toggle" aria-expanded="false" aria-controls="{{ unique }}-select-quantity-onboarding" aria-labelledby="{{ unique }}-select-quantity-label" data-popout-toggle>
+                              <span data-popout-toggle-text>1</span>
+                              {%- render 'icon-nav-arrow-down' -%}
+                            </button>
+
+                            <ul id="{{ unique }}-select-quantity-onboarding" class="select-popout__list" data-popout-list>
+                              {%- for idx in (1..10) -%}
+                                <li class="select-popout__item{% if forloop.index == 1 %} is-active{% endif %}">
+                                  <a class="select-popout__option" href="#" {% if forloop.index == 1 %}aria-current="true"{% endif %} data-value="{{ forloop.index }}" data-popout-option>
+                                    <span>
+                                      {{ forloop.index }} {% if forloop.last %}+{% endif %}
+                                    </span>
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+
+                            <div class="quantity-selector" data-quantity-holder>
+                              <label for="Quantity" class="label-hidden">{{ 'products.product.quantity' | t }}</label>
+
+                              <button type="button" class="quantity__minus" data-quantity-minus data-quantity-button tabindex="0"
+                              title="{{ 'cart.general.decrease_quantity_label' | t }} - {{ product.title | strip_html -}}">{% render "icon-minus" %}</button>
+
+                              <input data-popout-input type="number" class="quantity__input" value="1" min="1" aria-label="quantity" autocomplete="off" name="quantity" data-quantity-field title="{{- 'cart.general.quantity_field_label' | t }} - {{ product.title | strip_html -}}">
+
+                              <button type="button" class="quantity__plus" data-quantity-plus data-quantity-button tabindex="0" title="
+                                {{- 'cart.general.increase_quantity_label' | t }} - {{ product.title | strip_html -}}">{%- render "icon-plus" -%}</button>
+                            </div>
+                          </div>
+                        {%- endif -%}
+
+                        <button type="button" class="btn btn--primary {{ btn_atc_class }}">
+                            <span>{{ 'products.product.add_to_cart' | t }}</span>
+                        </button>
+                      </div>
+
+                      {%- if block.settings.show_payment_button -%}
+                        <div class="product__submit__item">
+                          <div class="shopify-payment-button">
+                            <div>
+                              <div>
+                                <div>
+                                  <button type="button" class="btn shopify-payment-button__button shopify-payment-button__button--unbranded">Buy it now</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+
+              {%- when 'tab_richtext' -%}
+                {%- assign product_description_content = 'home_page.onboarding.no_description' | t -%}
+
+                {%- if block.settings.style == 'inline' -%}
+                  <div class="product__description gutter-top rte" {{ block.shopify_attributes }}>
+                    {{ product_description_content }}
+                  </div>
+                {%- else -%}
+                  <div class="product__tabs tabs-wrapper product-tabs-wrapper{% if block.settings.style == 'tabs' %} product-tabs-wrapper--tabs{% elsif block.settings.style == 'accordions' %} product-tabs-wrapper--accordion{% endif %}" {{ block.shopify_attributes }}>
+                    {%- render 'product-tabs', block: block -%}
+                  </div>
+                {%- endif -%}
+              {%- when 'inventory_countdown' -%}
+                {%- liquid
+                  assign max_inventory = 10
+                  assign show_remaining_class = 'count-is-low'
+                  assign current_inventory = 5
+                -%}
+
+                {%- capture inventory -%}<span data-remaining-max="{{ max_inventory }}" data-remaining-count>{{ current_inventory | default: 0 }}</span>{%- endcapture -%}
+                <p class="product__block variant__countdown {{ show_remaining_class }}" data-remaining-wrapper {{ block.shopify_attributes }}>
+                  <span class="variant__countdown__low">{{ 'products.product.remaining_html' | t: inventory: inventory }}</span>
+                </p>
+              {%- when 'liquid' -%}
+                <div class="product__block product__liquid" {{ block.shopify_attributes }}>
+                  {{- block.settings.custom_liquid -}}
+                </div>
+
+              {%- when 'text' -%}
+                {%- if block.settings.title != blank or block.settings.text != blank -%}
+  <div class="product__block product__text" {{ block.shopify_attributes }} {{ block_style }}>
+    {%- if block.settings.title != blank -%}
+      <p class="product__heading strong">
+        {{- block.settings.title -}}
+      </p>
+    {%- endif -%}
+
+    {%- if block.settings.text != blank -%}
+      <div class="product__subheading">
+        {{- block.settings.text -}}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+              {%- when 'icon' -%}
+                {%- liquid
+  assign image = block.settings.image
+  assign prev_index = forloop.index0 | minus: 1
+  assign next_index = forloop.index0 | plus: 1
+  assign prev_block = section.blocks[prev_index]
+  assign next_block = section.blocks[next_index]
+  assign icon_color = block.settings.icon_color
+  if icon_color != blank and icon_color != 'rgba(0,0,0,0)'
+    assign block_style = ' style="--text: ' | append: icon_color | append: '"'
+  endif
+  assign width = block.settings.width
+-%}
+
+{%- if forloop.index0 == 0 or prev_block.type != 'icon' -%}
+  <div class="product__block product__icon__row" style="--block-padding-bottom: {{ block.settings.padding_bottom }}px;">
+{%- endif -%}
+
+<div class="product__icon__container product__icon__container--{{ width }}"{{ block_style }} {{ block.shopify_attributes }}>
+  {%- liquid
+    assign icon_size = block.settings.icon_size
+    assign icon_color = block.settings.icon_color
+    capture icon_style
+      echo 'style="'
+      echo '--icon-size: ' | append: icon_size | append: 'px;'
+      if icon_color != blank and icon_color != 'rgba(0,0,0,0)'
+        echo ' --text: ' | append: icon_color | append: ';'
+      endif
+      echo '"'
+    endcapture
+  -%}
+  <div class="product__icon" data-aos="img-in" {{ icon_style }}>
+    {%- liquid
+      if image
+        assign icon_width = icon_size
+        assign icon_width_retina = icon_width | times: 2
+        assign icon_sizes = icon_width | append: 'px'
+        assign icon_widths = icon_width | append: ', ' | append: icon_width_retina
+
+        render 'image' image: image, width: icon_width_retina, sizes: icon_sizes, widths: icon_widths, show_backfill: false
+      else
+        render 'animated-icon', filename: block.settings.icon_name
+      endif
+    -%}
+  </div>
+
+  {%- if block.settings.title != blank -%}
+    <div class="product__icon__text" data-aos="fade" data-aos-duration="500">
+      <p>{{ block.settings.title }}</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{%- if forloop.index == section.blocks.size or next_block.type != 'icon' -%}
+  </div>
+{%- endif -%}
+
+              {%- when 'sharing' -%}
+                <div class="product__block" {{ block.shopify_attributes }} {{ block_style }}>
+                  {%- render 'share-button' share_url: request.origin -%}
+                </div>
+
+              {%- when 'upsell' -%}
+                <div class="product__block product__upsell" {{ block.shopify_attributes }} {{ block_style }}>
+                  {%- render 'upsell-product' -%}
+                </div>
+              {%- when 'divider' -%}
+                {%- render 'divider' block: block, modifier: 'product__block product__block--divider' -%}
+
+              {%- when 'features' -%}
+                                    {%- liquid
+                      assign block_id = block.id
+                      assign text = block.settings.text
+                      assign title = block.settings.title
+                      assign prev_index = forloop.index0 | minus: 1
+                      assign next_index = forloop.index0 | plus: 1
+                      assign prev_block = section.blocks[prev_index]
+                      assign next_block = section.blocks[next_index]
+                      assign width = block.settings.width
+                      assign image = block.settings.icon_alt
+                      assign bg_color = block.settings.bg_color
+                      assign text_color = block.settings.color
+
+                      comment
+                        Always force dots style to be "line" except if "Circle" is chosen from the global settings
+                      endcomment
+                      assign dots_style = 'line'
+                      if settings.dots_style == 'circle'
+                        assign dots_style = 'circle'
+                      endif
+
+                      capture style
+                        if bg_color != 'rgba(0,0,0,0)' and bg_color != blank
+                          echo '--bg: ' | append: bg_color | append: ';'
+                        endif
+
+                        if text_color != 'rgba(0,0,0,0)' and text_color != blank
+                          echo '--text: ' | append: text_color | append: ';'
+                        endif
+                      endcapture
+                    -%}
+
+                    {%- if forloop.index0 == 0 or prev_block.type != 'features' -%}
+                      {%- assign slide_index = 0 -%}
+                      <div class="product__block product__features"
+                        {{ block_style }}
+                        data-slider
+                        data-slider-fullwidth
+                        data-dots="{{ dots_style }}"
+                        data-options='{"pageDots": true, "adaptiveHeight": true, "autoPlay": false, "prevNextButtons": false, "fade": false, "draggable": ">1"}'
+                      >
+                    {%- endif -%}
+
+                    <div class="product__feature"
+                      data-slide="{{ block_id }}"
+                      data-slide-index="{{ slide_index }}"
+                      data-block-id="{{ block_id }}"
+                      {% if style != blank %}
+                        style="{{ style }}"
+                      {% endif %}
+                      {{ block.shopify_attributes }}>
+
+                      <div class="product__feature__content">
+                        <div class="product__icon__container product__feature__heading">
+                          {%- assign icon_size = block.settings.icon_size -%}
+                          <div class="product__icon" style="--icon-size: {{ icon_size }}px;">
+                            {%- liquid
+                              if image
+                                assign icon_width = icon_size
+                                assign icon_width_retina = icon_width | times: 2
+                                assign icon_sizes = icon_width | append: 'px'
+                                assign icon_widths = icon_width | append: ', ' | append: icon_width_retina
+                                render 'image' image: image, width: icon_width_retina, sizes: icon_sizes, widths: icon_widths, show_backfill: false
+                              else
+                                render 'animated-icon', filename: block.settings.icon_name
+                              endif
+                            -%}
+                          </div>
+
+                          {%- if title != blank -%}
+                            <div class="product__icon__text">
+                              <p>{{ title }}</p>
+                            </div>
+                          {%- endif -%}
+                        </div>
+
+                        {%- if text != blank -%}
+                          <div class="rte">
+                            {{ text }}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+
+                    {%- if forloop.index == section.blocks.size or next_block.type != 'features' -%}
+                      </div>
+                    {%- endif -%}
+
+                    {%- assign slide_index = slide_index | plus: 1 -%}
+            {%- endcase -%}
+          {%- endfor -%}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+{%- comment -%}
+  * A cropped image that fills the container width using object-fit: cover
+
+  *  image {object} - The Image we will use
+  *  width {Int} - The default image width (Optional)
+  *  height {Int} - The default image height (Optional)
+  *  sizes {String} - A set of media conditions (Optional)
+  *  widths {Array} - An array of the image widths for srcset (Optional)
+  *  aspect_ratio {Float} - The aspect ratio of the image in the format {ratio}:1 (Optional)
+  *  modifier {String} - Additional classes attached to the image wrapper tag (Optional)
+  *  attributes {String} - Additional attributes attached to the image wrapper tag (Optional)
+  *  alt {String} - Overrides image alt value (Optional)
+  *  loading {String} - Default: "lazy" (Optional)
+  *  preload {String} - "true" or "false". Default: "false" (Optional)
+  *  fetchpriority {String} - "auto", "high" or "low". Default: "auto" (Optional)
+  *  show_backfill {Boolean} - Default: true (Optional)
+  *  cover {Boolean} - Whether or not we want the image wrapper to fill its container height. Default: false (Optional)
+
+  {% render 'image', image: image, width: width, height: height, sizes: sizes, widths: widths, aspect_ratio: aspect_ratio modifier: modifier, attributes: attributes, loading: 'lazy', preload: 'false', fetchpriority: 'auto', show_backfill: true, cover: cover %}
+{%- endcomment -%}
+
+{%- liquid
+  assign aspect_ratio = aspect_ratio | default: image.aspect_ratio | default: 1
+  assign image_width = image.width | at_most: 5760 | default: 5760
+  assign width = width | default: image_width
+  assign height = height | default: nil
+  assign sizes = sizes | default: '100vw'
+  assign widths = widths | default: '180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1950, 2100, 2260, 2450, 2700, 3000, 3350, 3750, 4100, 4450, 4800, 5150, 5500, 5760'
+  assign loading = loading | default: 'lazy'
+  assign alt = alt | default: image.alt
+  assign alt = alt | escape
+  assign attributes = attributes | default: nil
+  assign modifier = modifier | default: nil
+  assign fetchpriority = fetchpriority | default: nil
+  assign preload = preload | default: nil
+  assign cover = cover | default: false
+  assign fill = false
+
+  if aspect_ratio != image.aspect_ratio
+    assign fill = true
+  endif
+
+  if show_backfill == nil
+    assign show_backfill = true
+  endif
+
+  capture wrapper_classes
+    if modifier
+      echo modifier | append: ' '
+    endif
+
+    echo 'image-wrapper'
+
+    if cover
+      echo ' image-wrapper--cover'
+    endif
+
+    echo ' lazy-image'
+
+    if show_backfill
+      echo ' lazy-image--backfill'
+    endif
+
+    echo ' is-loading'
+  endcapture
+
+  capture wrapper_attributes
+    echo 'style="'
+    echo '--aspect-ratio: ' | append: aspect_ratio | append: ';'
+    echo '"'
+
+    if attributes != blank
+      echo ' ' | append: attributes
+    endif
+  endcapture
+
+  capture img_class
+    if fill
+      echo 'fit-cover '
+    endif
+
+    echo 'is-loading'
+  endcapture
+-%}
+
+<figure class="{{ wrapper_classes }}" {{ wrapper_attributes }}>
+  {%- if image contains 'blank.svg' or image == blank -%}
+    <img src="{{ 'blank.svg' | asset_url }}" loading="lazy" class="{{ img_class }}">
+  {%- else -%}
+    {{ image | image_url: width: width, height: height | image_tag:
+      loading: loading,
+      widths: widths,
+      sizes: sizes,
+      alt: alt,
+      fetchpriority: fetchpriority,
+      preload: preload,
+      class: img_class
+    }}
+  {%- endif -%}
+</figure>

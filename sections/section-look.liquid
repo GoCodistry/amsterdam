@@ -1,0 +1,370 @@
+<!-- /sections/section-look.liquid -->
+
+{%- liquid
+  assign look_dots = ''
+  assign look_slider = ''
+  assign enable_aspect_ratio = section.settings.enable_aspect_ratio
+  assign image_aspect_ratio = 1 | divided_by: section.settings.image_aspect_ratio
+  assign image = section.settings.image
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign dot_color = section.settings.dot_color
+  assign dot_background = section.settings.dot_background
+  assign show_dots = section.settings.show_dots
+
+  unless enable_aspect_ratio
+    if image
+      assign image_aspect_ratio = image.aspect_ratio
+    else
+      assign image_aspect_ratio = 1
+    endif
+  endunless
+-%}
+
+{%- style -%}
+  #IndexLook--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+      --text-light: {{ text_color | color_mix: settings.bg_color, 70 }};
+      --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+    {%- endunless -%}
+  }
+
+  {%- if dot_background != 'rgba(0,0,0,0)' and dot_background != '' -%}
+    #IndexLook--{{ section.id }} .look__dot { --bg: {{ dot_background }}; }
+  {%- endif -%}
+
+  {%- if dot_color != 'rgba(0,0,0,0)' and dot_color != '' -%}
+    #IndexLook--{{ section.id }} .look__dot__button { --primary: {{ dot_color }}; }
+  {%- endif -%}
+{%- endstyle -%}
+
+
+<section id="IndexLook--{{ section.id }}"
+  class="index-look section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="look">
+  <div class="wrapper--full">
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- capture style -%}
+          --dot-top: {{ block.settings.position_y }}%;
+          --dot-left: {{ block.settings.position_x }}%;
+        {%- endcapture -%}
+  
+        {%- capture look_dots -%}
+          {{ look_dots }}
+  
+          <button type="button" class="look__dot__button" style="{{ style }}" aria-label="{{ 'general.accessibility.scroll_to_product' | t }}" data-slider-thumb="{{ forloop.index0 }}">
+            <span class="look__dot">
+              <span class="look__dot__icon"></span>
+            </span>
+          </button>
+        {%- endcapture -%}
+  
+        {%- capture look_slider -%}
+          {{ look_slider }}
+  
+          {%- assign product = all_products[block.settings.product] -%}
+  
+          <div class="look__slide look__slide--{{ block.id }}" data-slide="{{ block.id }}" data-slide-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            {%- if product != blank -%}
+              {%- render 'product-grid-item', product: product, index: forloop.index -%}
+            {%- else -%}
+              {%- assign placeholder = 'product-' | append: forloop.index -%}
+              {%- render 'onboarding-product-grid-item', title: 'Product Title', placeholder: placeholder, index: forloop.index, animation_delay: forloop.index0 -%}
+            {%- endif -%}
+          </div>
+        {%- endcapture -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..2) -%}
+        {%- capture style -%}
+          --dot-top: {{ forloop.index | times: 30 }}%;
+          --dot-left: {{ forloop.index | times: 30 }}%;
+        {%- endcapture -%}
+        
+        {%- capture look_dots -%}
+          {{ look_dots }}
+  
+          <button type="button" class="look__dot__button" style="{{ style }}" aria-label="{{ 'general.accessibility.scroll_to_product' | t }}" data-slider-thumb="{{ forloop.index0 }}">
+            <span class="look__dot">
+              <span class="look__dot__icon"></span>
+            </span>
+          </button>
+        {%- endcapture -%}
+  
+        {%- capture look_slider -%}
+          {{ look_slider }}
+  
+          <div class="look__slide look__slide--{{ section.id }}-{{ i }}" data-slide="{{ section.id }}-{{ i }}" data-slide-index="{{ forloop.index0 }}">
+            {%- assign product_index = forloop.index | plus: 2 -%}
+            {%- assign placeholder = 'product-' | append: product_index -%}
+            {%- render 'onboarding-product-grid-item', title: 'Nomad X Sunglasses', placeholder: placeholder, index: forloop.index, animation_delay: forloop.index0 -%}
+          </div>
+        {%- endcapture -%}
+      {%- endfor -%}
+    {%- endif -%}
+  
+    <div class="look" data-slider-container>
+      <div class="look__image look__image--fullheight">
+        <div class="look__image-container" style="--aspect-ratio: {{ image_aspect_ratio }};">
+          {%- render 'image' image: section.settings.image, sizes: '(min-width: 750px) 50vw, 100vw', aspect_ratio: image_aspect_ratio, modifier: 'look__image-bg' -%}
+
+          {%- if show_dots and look_dots != blank -%}
+            <div class="look__dots desktop">
+              {{ look_dots }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="look__actions mobile">
+          <button type="button" class="btn {{ section.settings.button_size }} {{ section.settings.button_style }} {{ section.settings.button_type }}" aria-label="{{ 'general.accessibility.scroll_to_product' | t }}" data-slider-thumb="0">
+            {%- render 'icon-bag' -%}
+
+            <span>{{ 'general.shop_the_look.button' | t }}</span>
+
+            {%- if section.settings.show_arrow -%}
+              {%- render 'icon-arrow-right' -%}
+            {%- endif -%}
+          </button>
+        </div>
+      </div>
+  
+      <div class="look__aside" data-popup-container>
+        <div class="look__overlay" data-popup-close></div>
+  
+        <div class="look__content" data-popup-content body-scroll-lock-ignore>
+          {%- if section.settings.title != blank -%}
+            <p class="look__title caps">{{ section.settings.title }}</p>
+          {%- endif -%}
+  
+          <button type="button" 
+            data-popup-close 
+            class="look__close mobile" 
+            aria-label="{{ 'general.accessibility.close' | t }}">
+            {%- render 'icon-cancel' -%}
+          </button>
+          
+          <div class="look__slider"
+            data-slider-mobile="{{ section.id }}"
+            data-arrow-position-middle
+            body-scroll-lock-ignore
+            {% if request.design_mode %}data-block-scroll{% endif %}>
+            {{ look_slider }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shop the look",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop the look"
+    },
+    {
+      "id": "show_dots",
+      "type": "checkbox",
+      "label": "Show dots",
+      "default": true,
+      "info": "Desktop only"
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "id": "enable_aspect_ratio",
+      "type": "checkbox",
+      "label": "Set custom aspect ratio",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "image_aspect_ratio",
+      "label": "Aspect ratio",
+      "min": 0.5,
+      "max": 1.5,
+      "step": 0.1,
+      "unit": ":1",
+      "default": 1.0
+    },
+    {
+      "type": "header",
+      "content": "Button",
+      "info": "Applies on mobile only"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "label": "Color",
+      "default": "btn--white",
+      "options": [
+        {"value": "btn--primary", "label": "Primary"},
+        {"value": "btn--secondary", "label": "Secondary"},
+        {"value": "btn--white", "label": "White"},
+        {"value": "btn--black", "label": "Black"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Size",
+      "default": "",
+      "options": [
+        { "label": "Small", "value": "btn--small" },
+        { "label": "Medium", "value": "" },
+        { "label": "Large", "value": "btn--large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "default": "btn--outline",
+      "options": [
+        { "label": "Solid", "value": "btn--solid" },
+        { "label": "Outline", "value": "btn--outline" },
+        { "label": "Text", "value": "btn--text" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show arrow",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Icon"
+    },
+    {
+      "type": "color",
+      "id": "dot_background",
+      "label": "Dot background"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Product displayed in the photo"
+        },
+        {
+          "type": "header",
+          "content": "Dot position"
+        },
+        {
+          "type":    "range",
+          "id":      "position_x",
+          "min":     0,
+          "max":     100,
+          "step":    1,
+          "label":   "Horizontal",
+          "unit":    "%",
+          "default": 50
+        },
+        {
+          "type":    "range",
+          "id":      "position_y",
+          "min":     0,
+          "max":     100,
+          "step":    1,
+          "label":   "Vertical",
+          "unit":    "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop the look",
+      "category": "Collection",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "position_x": 14,
+            "position_y": 37
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "position_x": 45,
+            "position_y": 60
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,101 @@
+<!-- /sections/custom-html.liquid -->
+{%- liquid
+  assign html = section.settings.html
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+-%}
+
+{%- style -%}
+  #CustomHtml--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<section id="CustomHtml--{{ section.id }}"
+  class="custom-html-section section-padding {{ section.settings.width }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="custom-html">
+  {% comment %}
+    HTML added through the Theme Editor renders on the next line. You can also add code before/after this comment.
+  {% endcomment %}
+  {{ html }}
+</section>
+
+{% schema %}
+{
+  "name": "Custom HTML",
+  "settings": [
+    {
+      "type": "html",
+      "id": "html",
+      "label": "Custom HTML",
+      "default": "<p>Once you write some HTML, it will render right here.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper",
+      "options": [
+        {"value": "wrapper--full", "label": "Full width"},
+        {"value": "wrapper--full-padded", "label": "Full width padded"},
+        {"value": "wrapper", "label": "Normal"},
+        {"value": "wrapper--narrow", "label": "Narrow"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "category": "Text",
+      "name": "Custom HTML"
+    }
+  ]
+}
+{% endschema %}

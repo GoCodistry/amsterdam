@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "featured": {
+      "type": "featured-posts",
+      "blocks": {
+        "feat": {
+          "type": "featured_post",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "feat"
+      ],
+      "settings": {
+      }
+    },
+    "main": {
+      "type": "blog",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "featured",
+    "main"
+  ]
+}

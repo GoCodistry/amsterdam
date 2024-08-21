@@ -1,0 +1,27 @@
+
+{% comment %}
+    Renders script template for product quick add modal used on Product grid items, Product siblings and Product upsell
+
+    Accepts:
+    - product_id: {String} Product ID (required)
+
+    Usage:
+    {% render 'product-quick-add-modal-template', product_id: product.id %}
+{% endcomment %}
+
+<template data-quick-add-modal-template>
+  <div class="product-quick-add" data-quick-add-modal id="{{ product_id }}" aria-hidden="true">
+    <div class="product-quick-add__overlay" data-micromodal-close tabindex="-1"></div>
+
+    <div class="product-quick-add__content" role="dialog" aria-modal="true" data-product-upsell-container>
+
+      <div class="loader cart__loader"><div class="loader-indeterminate"></div></div>
+
+      <button type="button" data-micromodal-close class="product-quick-add__close" aria-label="{{ 'general.accessibility.close' | t }}">
+        {%- render 'icon-cancel' -%}
+      </button>
+
+      <div class="product-quick-add__inner" data-product-upsell-ajax></div>
+    </div>
+  </div>
+</template>

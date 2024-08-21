@@ -1,0 +1,258 @@
+{%- liquid
+  assign default_title = 'home_page.sections.news_title' | t
+  assign default_content = 'home_page.onboarding.no_content' | t
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+-%}
+
+{%- style -%}
+  #FeaturedPosts--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+{%- if section.blocks.size > 0 -%}
+  <section id="FeaturedPosts--{{ section.id }}"
+    class="featured-posts section-padding"
+    data-section-id="{{ section.id }}"
+    data-section-type="blog-section">
+    <div class="{{ section.settings.width }}">
+      <div class="blog-editorial">
+        <div class="editorial__slider" 
+          id="editorial__slider--{{ section.id }}"
+          data-slider="{{ section.id }}" 
+          data-slider-fullwidth 
+          data-options='{"watchCSS": true, "pageDots": false, "prevNextButtons": true}'>
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign article = articles[block.settings.featured_post]
+              assign subheading = block.settings.subheading
+  
+              if article != blank and article.image
+                  assign image = article.image
+                else
+                  assign image = 'blank.svg' | asset_url
+                endif
+  
+                if block.settings.image
+                  assign image = block.settings.image
+                endif
+  
+                capture sizes
+                  echo '(min-width: 750px) 50vw, 100vw'
+                endcapture
+            -%}
+  
+            <div class="editorial__slide" id="editorial__slide--{{ block.id }}" data-slide="{{ block.id }}" data-slide-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+              <div class="editorial">
+                <div class="editorial__image">
+                  {%- render 'image-hero' image: image, sizes: sizes, modifier: 'editorial__image-bg', desktop_height: section.settings.height, mobile_height: section.settings.mobile_height -%}
+                </div>
+  
+                <div class="editorial__aside"{% if subheading != blank %} data-subheading="{{ subheading }}"{% endif %}>
+                  {%- if subheading != blank -%}
+                    <p class="editorial__subheading caps">{{ subheading }}</p>
+                  {%- endif -%}
+  
+                  <div class="editorial__content">
+                    <h2 class="editorial__title">
+                      <a href="{{ article.url }}" title="{{ article.title | escape }}">
+                        {{ article.title | default: default_title }}
+                      </a>
+                    </h2>
+
+                    {%- if section.settings.show_date or section.settings.show_author -%}
+                      <h3 class="editorial__meta">
+                        {%- if section.settings.show_date -%}
+                          {%- assign published_at = article.published_at | default: 'now' | date: format: 'full_date' -%}
+                          <time datetime="{{ published_at }}">{{ published_at }}</time>
+                        {% endif %}
+  
+                        {%- if section.settings.show_author -%}
+                          {%- assign article_author = article.author | default: 'Jane Doe' -%}
+                          <span class="editorial__meta__author">{{ 'blogs.article.by_author' | t: author: article_author }} </span>
+                        {%- endif -%}
+                      </h3>
+                    {%- endif -%}
+
+                    {%- unless article != blank and article.excerpt_or_content == blank -%}
+                      <div class="editorial__excerpt">
+                        <p>{{ article.excerpt_or_content | default: default_content | strip_html | truncatewords: 30 }}</p>
+                      </div>
+                    {%- endunless -%}
+
+                    {%- if section.settings.show_button -%}
+                      <div class="editorial__link">
+                        <a href="{{ article.url }}" class="btn btn--text" aria-label="{{ 'blogs.article.read_more_descriptive' | t }}">
+                          <span>{{ 'blogs.article.read_more' | t }}</span>
+                        </a>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Featured blog posts",
+    "settings": [
+      {
+        "type": "select",
+        "id": "height",
+        "label": "Desktop height",
+        "default": "five-fifty-height-hero",
+        "options": [
+          { "value": "image-height", "label": "Image height" },
+          { "value": "screen-height-full", "label": "Full screen height"},
+          { "value": "screen-height-three-quarters", "label": "3/4 of screen"},
+          { "value": "screen-height-two-thirds", "label": "2/3 of screen"},
+          { "value": "screen-height-one-half", "label": "1/2 of screen"},
+          { "value": "screen-height-one-third", "label": "1/3 of screen"},
+          { "value": "seven-fifty-height-hero", "label": "750px" },
+          { "value": "sixty-fifty-height-hero", "label": "650px" },
+          { "value": "five-fifty-height-hero", "label": "550px" },
+          { "value": "four-fifty-height-hero", "label": "450px" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "mobile_height",
+        "label": "Mobile height",
+        "default": "screen-height-one-half--mobile",
+        "options": [
+          { "value": "image-height--mobile", "label": "Image height" },
+          { "value": "screen-height-full--mobile", "label": "Full screen height"},
+          { "value": "screen-height-three-quarters--mobile", "label": "3/4 of screen"},
+          { "value": "screen-height-two-thirds--mobile", "label": "2/3 of screen"},
+          { "value": "screen-height-one-half--mobile", "label": "1/2 of screen"},
+          { "value": "screen-height-one-third--mobile", "label": "1/3 of screen"},
+          { "value": "seven-fifty-height-hero--mobile", "label": "750px" },
+          { "value": "sixty-fifty-height-hero--mobile", "label": "650px" },
+          { "value": "five-fifty-height-hero--mobile", "label": "550px" },
+          { "value": "four-fifty-height-hero--mobile", "label": "450px" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper--full",
+        "options": [
+          {"value": "wrapper--full", "label": "Full width"},
+          {"value": "wrapper--full-padded", "label": "Full width padded"}
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_author",
+        "label": "Show author",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_date",
+        "label": "Show date",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_button",
+        "label": "Show 'Read more' button",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "type": "featured_post",
+        "name": "Featured post",
+        "settings": [
+          {
+            "type": "article",
+            "id": "featured_post",
+            "label": "Featured post"
+          },
+          {
+            "type": "text",
+            "id": "subheading",
+            "label": "Subheading",
+            "default": "Featured post"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Optional: replace the article featured image."
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured blog posts",
+        "category": "Text",
+        "blocks": [
+          {
+            "type": "featured_post"
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer", "custom.pre_footer"]
+    }
+  }
+{% endschema %}

@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "main": {
+      "type": "article",
+      "blocks": {
+        "related-products": {
+          "type": "related",
+          "settings": {
+          }
+        },
+        "recent-articles": {
+          "type": "recent",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "related-products",
+        "recent-articles"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

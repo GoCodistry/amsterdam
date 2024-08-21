@@ -1,0 +1,172 @@
+<!-- /sections/page-faq.liquid -->
+{%- liquid
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign border_color = section.settings.border_color
+-%}
+
+{%- style -%}
+  #AccordionGroup--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+
+    {%- unless border_color == 'rgba(0,0,0,0)' or border_color == blank -%}
+      --border: {{ border_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<div id="AccordionGroup--{{ section.id }}"
+  class="accordion-group section-padding"
+  data-accordion-holder>
+  {%- if section.blocks.size > 0 -%}
+    <div class="faq {{ section.settings.width }}" data-section-id="{{ section.id }}" data-section-type="faq">
+      {%- for block in section.blocks -%}
+        {%- assign current_block = block.settings -%}
+
+        {%- if block.type == 'heading' and current_block.title != blank -%}
+          <h3 class="faq__title" {{ block.shopify_attributes }}>{{ current_block.title }}</h3>
+        {%- endif -%}
+
+        {%- if block.type == 'question' and current_block.title != blank and current_block.content != blank -%}
+          <div class="accordion" data-accordion {{ block.shopify_attributes }}>
+            <h4 class="accordion__title" data-focus-element tabindex="0" data-accordion-toggle data-block-id="{{ block.id }}">
+              {{ current_block.title }}
+              
+              {%- render 'icon-plus' -%}
+              {%- render 'icon-minus' -%}
+            </h4>
+
+            <div class="rte accordion__body" data-accordion-body>
+              {{ current_block.content }}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+  {
+    "name": "Accordion group",
+    "settings": [
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper--narrow",
+        "options": [
+          {"value": "wrapper", "label": "Normal"},
+          {"value": "wrapper--narrow", "label": "Narrow"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Border"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 50
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Heading",
+        "type": "heading",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "FAQ"
+          }
+        ]
+      },
+      {
+        "name": "Question",
+        "type": "question",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Question",
+            "default": "Frequently asked question"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Answer",
+            "default": "<p>Share details about your shipping policies, item returns, or customer service.<\/p>"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Accordion group",
+        "category": "Text",
+        "blocks": [
+          {
+            "type": "heading"
+          },
+          {
+            "type": "question"
+          },
+          {
+            "type": "question"
+          },
+          {
+            "type": "question"
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer", "custom.pre_footer"]
+    }
+  }
+{% endschema %}

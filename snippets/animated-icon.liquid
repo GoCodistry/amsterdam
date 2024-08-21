@@ -1,0 +1,88 @@
+<!-- /snippets/animated-icon.liquid -->
+
+{% comment %}
+    Renders an icon because render can't accept strings as variables
+
+    Accepts:
+    - filename: {String} name of icon
+
+    Usage:
+    {% render 'animated-icon', filename: block.settings.icon_name %}
+{% endcomment %}
+
+{%- case filename -%}
+  {%- when 'icon-fast-shipment' -%}
+    {%- render 'icon-fast-shipment' -%}
+  {%- when 'icon-green-shipment' -%}
+    {%- render 'icon-green-shipment' -%}
+  {%- when 'icon-recycle' -%}
+    {%- render 'icon-recycle' -%}
+  {%- when 'icon-box' -%}
+    {%- render 'icon-box' -%}
+  {%- when 'icon-trophy' -%}
+    {%- render 'icon-trophy' -%}
+  {%- when 'icon-flower' -%}
+    {%- render 'icon-flower' -%}
+  {%- when 'icon-discount' -%}
+    {%- render 'icon-discount' -%}
+  {%- when 'icon-mail' -%}
+    {%- render 'icon-mail' -%}
+  {%- when 'icon-location' -%}
+    {%- render 'icon-location' -%}
+  {%- when 'icon-smile' -%}
+    {%- render 'icon-smile' -%}
+  {%- when 'icon-peace' -%}
+    {%- render 'icon-peace' -%}
+  {%- when 'icon-donation' -%}
+    {%- render 'icon-donation' -%}
+  {%- when 'icon-heart' -%}
+    {%- render 'icon-heart' -%}
+  {%- when 'icon-vegan' -%}
+    {%- render 'icon-vegan' -%}
+  {%- when 'icon-star' -%}
+    {%- render 'icon-star' -%}
+  {%- when 'icon-gift' -%}
+    {%- render 'icon-gift' -%}
+  {%- when 'icon-lightening' -%}
+    {%- render 'icon-lightening' -%}
+  {%- when 'icon-shield' -%}
+    {%- render 'icon-shield' -%}
+  {%- when 'icon-cloud' -%}
+    {%- render 'icon-cloud' -%}
+  {%- when 'icon-award' -%}
+    {%- render 'icon-award' -%}
+  {%- when 'icon-chat' -%}
+    {%- render 'icon-chat' -%}
+  {%- when 'icon-email' -%}
+    {%- render 'icon-email' -%}
+  {%- when 'icon-lock' -%}
+    {%- render 'icon-lock' -%}
+  {%- when 'icon-phone' -%}
+    {%- render 'icon-phone' -%}
+  {%- when 'icon-leaf' -%}
+    {%- render 'icon-leaf' -%}
+  {%- when 'icon-truck' -%}
+    {%- render 'icon-truck' -%}
+  {%- when 'icon-ruler' -%}
+    {%- render 'icon-ruler' -%}
+  {%- when 'icon-diameter' -%}
+    {%- render 'icon-diameter' -%}
+  {%- when 'icon-flare' -%}
+    {%- render 'icon-flare' -%}
+  {%- when 'icon-planet' -%}
+    {%- render 'icon-planet' -%}
+  {%- when 'icon-notes' -%}
+    {%- render 'icon-notes' -%}
+  {%- when 'icon-pin' -%}
+    {%- render 'icon-pin' -%}
+  {%- when 'icon-tree' -%}
+    {%- render 'icon-tree' -%}
+  {%- when 'icon-washing-machine' -%}
+    {%- render 'icon-washing-machine' -%}
+  {%- when 'icon-droplet' -%}
+    {%- render 'icon-droplet' -%}
+  {%- when 'icon-pants' -%}
+    {%- render 'icon-pants' -%}
+  {%- when 'icon-info-empty' -%}
+    {%- render 'icon-info-empty' -%}
+{%- endcase -%}

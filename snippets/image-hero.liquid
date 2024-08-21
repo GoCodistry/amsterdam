@@ -1,0 +1,96 @@
+{%- comment -%}
+  * Used for Hero image sections that support parallax
+  * A cropped image that fills the container width using object-fit: cover
+  * height is defined by the optional aspect ratio.  If aspect ratio is false or nil
+  * the image will use natural height and will not be cropped.
+
+  *  image {object} - The Image we will use
+  *  desktop_height {Int} - A specific height of the image on desktop (Optional)
+  *  mobile_height {Int} - A specific height of the image on mobile (Optional)
+  *  sizes {String} - A set of media conditions (Optional)
+  *  widths {Array} - An array of the image widths for srcset (Optional)
+  *  width {Int} - The default image width (Optional)
+  *  modifier {String} - Additional classes for the image container tag (Optional)
+  *  attributes {String} - Additional attributes for the image container tag (Optional)
+  *  animation_delay {Int} - A specific animation delay to set an image animation
+  *  show_backfill {Boolean} - Default: true (Optional)
+
+  {% render 'image-hero', image: image, sizes: sizes, widths: widths, modifier: modifier, attributes: attributes, animation_delay: animation_delay, show_backfill: true %}
+{%- endcomment -%}
+
+{%- liquid
+  assign aspect_ratio = aspect_ratio | default: image.aspect_ratio | default: 2.63
+  assign image_width = image.width | at_most: 5760 | default: 5760
+  assign width = width | default: image_width
+  assign sizes = sizes | default: '200vw'
+  assign widths = widths | default: '180, 200, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1950, 2100, 2260, 2450, 2700, 3000, 3350, 3750, 4100, 4450, 4800, 5150, 5500, 5760'
+  assign modifier = modifier | default: ''
+  assign fetchpriority = fetchpriority | default: nil
+  
+  if show_backfill == nil
+    assign show_backfill = true
+  endif
+
+  capture wrapper_classes
+    echo 'image__hero__frame'
+
+    if desktop_height != blank
+      echo ' ' | append: desktop_height
+    endif
+
+    if mobile_height != blank
+      echo ' ' | append: mobile_height
+    endif
+
+    if modifier != blank
+      echo ' ' | append: modifier
+    endif
+  endcapture
+
+  capture wrapper_attributes
+    echo 'style="'
+    echo '--aspect-ratio: ' | append: aspect_ratio | append: ';'
+    echo '"'
+    
+    if settings.parallax_enable
+      echo ' data-parallax-wrapper'
+    endif
+
+    if attributes != blank
+      echo ' ' | append: attributes
+    endif
+  endcapture
+-%}
+
+
+{%- capture aos_animation -%}
+  {%- if animation_delay -%}
+    data-aos="img-in"
+    data-aos-delay="{{ animation_delay | times: 150 }}"
+    data-aos-duration="800"
+    data-aos-easing="ease-out-quart"
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="{{ wrapper_classes }}" {{ wrapper_attributes }}>
+  <div class="image__hero__pane" {{ aos_animation }}>
+    <div class="image__hero__scale image__fill lazy-image{% if show_backfill %} lazy-image--backfill{% endif %} is-loading"
+      {% if settings.parallax_enable %}
+        style="height: {{ 1 | divided_by: aspect_ratio | times: 100 }}vw;"
+        data-parallax-img
+      {% endif %}>
+
+      {%- if image contains 'blank.svg' or image == blank -%}
+        <img src="{{ 'blank.svg' | asset_url }}" loading="lazy" class="is-loading">
+      {%- else -%}
+        {{ image | image_url: width: width | image_tag:
+          loading: 'lazy',
+          widths: widths,
+          sizes: sizes,
+          fetchpriority: fetchpriority,
+          class: 'is-loading'
+        }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>

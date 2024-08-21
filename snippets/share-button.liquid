@@ -1,0 +1,24 @@
+{% comment %}
+    Renders share button from Product or Article page
+
+    Accepts:
+    - share_url: {String} URL to share
+    - align: {String} Message alignment (Optional). Default: "left"
+
+    Usage:
+    {% render 'share-button', share_url: share_url, align: align %}
+{% endcomment %}
+
+<share-button class="share-holder">
+  <button type="button" class="sharing-button" data-share-button data-share-url="{{ share_url }}">
+    {%- render 'icon-share' -%}
+    
+    <span class="sharing-button__text">
+      <span>{{ 'general.share.share' | t }}</span>
+    </span>
+  </button>
+
+  <div class="share-button__message{% if align == 'right' %} share-button__message--right{% endif %}" data-share-message>
+    <span class="share-button__message-text" role="status" data-share-message-text>{{ 'general.share.success_message' | t }}</span>
+  </div>
+</share-button>

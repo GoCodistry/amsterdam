@@ -1,0 +1,101 @@
+<!-- /snippets/collection-grid-item.liquid -->
+
+{% comment %}
+    Renders a list of collections in grid format
+
+    Accepts:
+    - collection: {Object} Collction to render (required)
+    - grid_strings: {String} contains a string of grid classes
+    - animation_delay: {Int} number of miliseconds to delay for position in loop
+    - animation_anchor: Trigger animation selector
+    - aspect_ratio: Image aspect ratio
+    - index: (Int) Index in the loop
+
+    Usage:
+    {% render 'collection-grid-item', block: block, grid_strings: grid_strings, animation_delay: animation_delay, animation_anchor: animation_anchor, aspect_ratio: aspect_ratio, index: index %}
+{% endcomment %}
+
+{%- liquid
+  assign collection = collections[block.settings.collection]
+  assign collection_title = block.settings.title
+  assign additional_attributes = additional_attributes | default: ''
+  assign animation_duration = 800
+
+  assign border_class = ''
+  if settings.product_grid_outline == false
+    assign border_class = 'collection-item--borderless'
+  endif
+
+  assign alignment_class = ''
+  if settings.product_grid_center
+    assign alignment_class = 'collection-item--centered'
+  endif
+
+  capture sizes
+    if section.settings.layout == 'slider'
+      echo '(min-width: 1024px) calc((100vw - 32px) * 0.28), (min-width: 768px) calc((100vw - 32px) * 0.38), calc(100vw - 82px)'
+    else
+      echo '(min-width: 1024px) calc((100vw - 32px) / 4 - 16px), (min-width: 768px) calc((100vw - 32px) / 3 - 16px), (min-width: 480px) calc((100vw - 32px) / 3 - 16px), calc(100vw - 82px)'
+    endif
+  endcapture
+-%}
+
+{%- if collection == empty -%}
+  <div class="collection-item {{ border_class }} {{ alignment_class }} collection-item--no-image" {{ additional_attributes }} {{ block.shopify_attributes }}>
+    <div class="collection-item__image"{% unless block.settings.collection_image %} style="padding-top: {{ 1 | divided_by: aspect_ratio | times: 100 }}%;"{% endunless %}>
+      <div class="collection-item__bg{% unless block.settings.collection_image %} svg-placeholder{% endunless %}"
+        data-aos="img-in"
+        data-aos-anchor="{{ animation_anchor }}"
+        data-aos-delay="{{ animation_delay | times: 150 }}"
+        data-aos-duration="{{ animation_duration }}"
+        data-aos-easing="ease-out-quart">
+        {%- if block.settings.collection_image -%}
+          {%- render 'image', image: block.settings.collection_image, sizes: sizes, aspect_ratio: aspect_ratio -%}
+        {%- else -%}
+          <div class="image-wrapper image-wrapper--cover">
+            {{ 'collection-' | append: index | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="collection-item__info">
+      {%- if collection_title != blank -%}
+        {{ collection_title }}
+      {%- else -%}
+        {{ 'collections.general.items.heading' | t }}
+      {%- endif -%}
+    </div>
+  </div>
+{%- else -%}
+  <div class="collection-item {{ border_class }} {{ alignment_class }}" {{ additional_attributes }} {{ block.shopify_attributes }}>
+    <a aria-label="{{ collection.title | strip_html | escape }}" href="{{ collection.url | append: '?filter.v.availability=1' }}" class="collection-item__image">
+      <div class="collection-item__bg"
+        data-aos="img-in"
+        data-aos-anchor="{{ animation_anchor }}"
+        data-aos-delay="{{ animation_delay | times: 150 }}"
+        data-aos-duration="{{ animation_duration }}"
+        data-aos-easing="ease-out-quart">
+        {%- liquid
+          if block.settings.collection_image
+            assign image = block.settings.collection_image
+          elsif collection.image
+            assign image = collection.image
+          elsif collection.products.first
+            assign image = collection.products.first.featured_media.preview_image
+          endif
+
+          render 'image' image: image, sizes: sizes, aspect_ratio: aspect_ratio
+        -%}
+      </div>
+    </a>
+    <div class="collection-item__info"
+      data-aos="fade"
+      data-aos-anchor="{{ animation_anchor }}"
+      data-aos-delay="{{ animation_delay | times: 150 }}"
+      data-aos-duration="{{ animation_duration }}">
+      <a href="{{ product.url | within: collection }}" tabindex="-1">
+        <span>{{ collection_title | default: collection.title }}</span>
+      </a>
+    </div>
+  </div>
+{%- endif -%}

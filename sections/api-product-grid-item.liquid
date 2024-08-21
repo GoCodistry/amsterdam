@@ -1,0 +1,4 @@
+{% comment %} {%- render 'product-grid-item', product: product, grid_block_size: grid_block_size, grid_block_size_mobile: grid_block_size_mobile -%} {% endcomment %}
+<div data-api-content>
+  {%- render 'product-grid-item', product: product, grid_strings: 'large-up--one-quarter medium--one-quarter small--one-whole', animation_delay: 0, additional_attributes: 'data-slide="||itemIndex||" data-slide-index="||itemIndex||"', aos_image_delay: '||itemAosDelay||', aos_image_duration: '||itemAosImageDuration||', aos_text_duration: '||itemAosTextDuration||', animation_anchor: '||itemAnimationAnchor||' -%}
+</div>

@@ -1,0 +1,26 @@
+{%- assign rating_percent = product.metafields.reviews.rating.value.rating | divided_by: product.metafields.reviews.rating.value.scale_max | times: 100 -%}
+{%- assign rating_percent_rounded = rating_percent | round -%}
+{%- assign rating_percent_modulo = rating_percent_rounded | modulo: 10 -%}
+{%- if rating_percent_modulo != 0 -%}
+  {%- assign rating_percent_modulo_diff = 10 | minus: rating_percent_modulo -%}
+{%- endif -%}
+
+<div class="product-grid__rating" data-product-grid-rating>
+  {%- assign stars = '' -%}
+  {% for i in (1..5) %}
+    {%- capture stars -%}
+      {{ stars }}
+      {% render 'icon-star' %}
+    {%- endcapture -%}
+  {% endfor %}
+
+  <div class="product-grid__rating__inner">
+    <div class="product-grid__rating__stars product-grid__rating__stars--transparent">
+      {{ stars }}
+    </div>
+
+    <div class="product-grid__rating__stars product-grid__rating__stars--solid" style="width: {{ rating_percent_rounded | plus: rating_percent_modulo_diff }}%;">
+      {{ stars }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+{%- liquid
+  assign animation_name = 'drawer-items-fade'
+  assign animation_name_images = 'drawer-images-fade'
+  assign animation_duration = 500
+  assign animation_delay = 200
+  assign animation_delay_increment = 50
+  assign unique = unique | default: section.id
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+-%}
+
+<div data-api-content>
+  <div class="product-quick-add__slides"
+    data-product-single-media-group
+    {% if product.media.size > 1 %}data-product-slideshow data-options='{"prevNextButtons": true, "fade": false, "cellAlign": "left", "adaptiveHeight": false}'{% endif %}
+    data-animation="{{ animation_name_images }}"
+    data-animation-duration="{{ animation_duration }}"
+    data-animation-delay="{{ animation_delay }}"
+    {%- assign animation_delay = animation_delay | plus: animation_delay_increment -%}
+  >
+    {%- if product.media.size > 0 -%}
+      {%- for media in product.media -%}
+        {%- render 'media', media: media, featured_media: featured_media, enable_video_looping: true, sectionkey: section.id, product_api: true, image_width: '365', loading: 'eager', cover: true -%}
+      {%- endfor -%}
+
+      {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
+      {%- if first_3d_model -%}
+        <button
+          class="btn btn--outline btn--black btn--ar product-quick-add__view-in-space"
+          data-shopify-xr
+          data-shopify-model3d-id="{{ first_3d_model.id }}"
+          data-shopify-title="{{ product.title | strip_html }}"
+          data-shopify-xr-hidden>
+          {%- render 'icon-media-model' -%}
+          <span class="product-quick-add__view-in-space-text">{{ 'products.general.view_space' | t }}</span>
+        </button>
+      {%- endif -%}
+    {%- else -%}
+      <div class="product__slide">
+        <div class="product__photo">
+          {%- render 'image' image: product.featured_image, widths: '365, 550, 730, 1100, 1460', loading: 'eager', cover: true -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="product-quick-add__form">
+    <div class="product-quick-add__form__inner" data-form-wrapper>
+      {%- liquid
+        assign product_form_id = 'product-form-upsell-' | append: section.id | append: '-' | append: product.id
+
+        render 'product-title' product: product, section_id: section.id, is_title_linked: true, animation_name: animation_name, animation_delay: animation_delay, animation_duration: animation_duration
+        assign animation_delay = animation_delay | plus: animation_delay_increment
+
+        render 'product-siblings' product: product, product_form_id: product_form_id, block: block, metafields: true, product_api: true, animation_name: animation_name, animation_delay: animation_delay, animation_duration: animation_duration
+        assign animation_delay = animation_delay | plus: animation_delay_increment
+
+        render 'product-variant-options' product: product, section_id: section.id, product_form_id: product_form_id, enable_size_chart: false, animation_name: animation_name, animation_delay: animation_delay, animation_duration: animation_duration
+        assign animation_delay = animation_delay | plus: animation_delay_increment
+
+        render 'product-description'  product: product, product_api: true, animation_name: animation_name, animation_delay: animation_delay, animation_duration: animation_duration
+        assign animation_delay = animation_delay | plus: animation_delay_increment
+
+        render 'product-buttons', product: product, section_id: section.id, unique: unique, product_form_id: product_form_id, animation_name: animation_name, animation_delay: animation_delay, animation_duration: animation_duration
+      -%}
+
+      {% comment %} The input with name="id" submits to cart {% endcomment %}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" form="{{ product_form_id }}">
+    </div>
+  </div>
+
+  {% unless product == empty %}
+    <script type="application/json" data-product-json>
+      {{ product | json }}
+    </script>
+  {% endunless %}
+</div>

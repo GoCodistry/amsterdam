@@ -1,0 +1,250 @@
+{%- render 'announcement', is_top: false -%}
+
+{% schema %}
+{
+  "name": "Scrolling text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "marquee",
+      "options": [
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "marquee",
+          "label": "Marquee"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Slider"
+    },
+    {
+      "type": "range",
+      "id": "slider_speed",
+      "label": "Autoplay speed",
+      "unit": "sec",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "header",
+      "content": "Marquee"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "Autoplay speed",
+      "unit": "%",
+      "min": 50,
+      "max": 300,
+      "step": 25,
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Size",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "blocks" : [
+    {
+      "type": "text",
+      "name": "Text announcement",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p><strong>Make an announcement</strong> | More info</p>"
+        },
+        {
+          "type": "header",
+          "content": "Target device"
+        },
+        {
+          "id": "target_device_enabled",
+          "type": "checkbox",
+          "label": "Limit to desktop or mobile"
+        },
+        {
+          "type": "select",
+          "id": "target_device",
+          "label": "Device ",
+          "default": "mobile",
+          "options": [
+            {"value": "mobile", "label": "Only show on mobile"},
+            {"value": "desktop", "label": "Only show on desktop"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "name": "Free shipping message",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_wheel",
+          "label": "Show progress wheel",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "message",
+          "label": "Message",
+          "info": "Use ||amount|| to display progress towards free shipping.",
+          "default": "You are ||amount|| away from free shipping."
+        },
+        {
+          "type": "paragraph",
+          "content": "Navigate to Theme settings -> \"Cart -> Free shipping message\" to set the amount."
+        },
+        {
+          "type": "header",
+          "content": "Target device"
+        },
+        {
+          "id": "target_device_enabled",
+          "type": "checkbox",
+          "label": "Limit to desktop or mobile"
+        },
+        {
+          "type": "select",
+          "id": "target_device",
+          "label": "Device ",
+          "default": "mobile",
+          "options": [
+            {"value": "mobile", "label": "Only show on mobile"},
+            {"value": "desktop", "label": "Only show on desktop"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "name": "Custom HTML",
+      "settings": [
+        {
+          "type": "html",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Custom HTML</p>"
+        },
+        {
+          "type": "header",
+          "content": "Target device"
+        },
+        {
+          "id": "target_device_enabled",
+          "type": "checkbox",
+          "label": "Limit to desktop or mobile"
+        },
+        {
+          "type": "select",
+          "id": "target_device",
+          "label": "Device ",
+          "default": "mobile",
+          "options": [
+            {"value": "mobile", "label": "Only show on mobile"},
+            {"value": "desktop", "label": "Only show on desktop"}
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling text",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Make an announcement</strong> | Target to specific devices or referrers</p>"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Create a free shipping countdown</strong></p>"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "show_wheel": false
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Create a scrolling marquee or a simple announcement</strong></p>"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

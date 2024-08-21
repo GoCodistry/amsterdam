@@ -1,0 +1,30 @@
+<div class="{% if section.settings.include_margins %}wrapper{% endif %}">
+  {%- for block in section.blocks -%}
+    {% render block %}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Apps",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "include_margins",
+      "default": false,
+      "label": "Include margins"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apps"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+@media print {
+
+  .pickup__preview{
+    display: none;
+  }
+    
+    #print-footer {
+      visibility:visible;
+    }
+  
+    .header__logo {
+      height:.5in;
+      margin-top: .5in;
+   }
+
+  .product__wrapper{
+    margin-top:.5in;
+    margin-left:1.25in;
+    margin-right:1.25in;
+    padding-bottom:1.75in;
+  }
+
+  .image-wrapper{
+    width:100%;
+  }
+
+  .specification-title{
+    font-size:14px;
+  }
+
+  .specification-content{
+    font-size:12px;
+  }
+
+  .product__title{
+    font-size:16px;
+  }
+  
+  .logo__img{
+    margin-left:.5in;
+  }
+  
+  .hideDuringPrint {
+    display: none !important;
+  }
+}
+

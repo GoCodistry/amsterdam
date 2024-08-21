@@ -1,0 +1,291 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "subheading": "",
+        "subheading_size": 3,
+        "show_title": true,
+        "heading_size": 8,
+        "show_content": true,
+        "text_size": 4,
+        "align_text": "text-center",
+        "width": "wrapper",
+        "bg_color": "#f7f7f7",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "1d496078-d21f-46b9-97d3-ea78d72efa54": {
+      "type": "section-rich-text",
+      "blocks": {
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-0": {
+          "type": "subheading",
+          "disabled": true,
+          "settings": {
+            "subheading": "Introducing",
+            "text_size": 3
+          }
+        },
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-1": {
+          "type": "heading",
+          "settings": {
+            "title": "AMSTERDAM MODERN TRADE PROGRAM",
+            "text_size": 4
+          }
+        },
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-2": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We provide a trade discount of 10% off to interior designers and decorators currently working in the industry so long as the purchase is directly related to their work. California sales tax is always included unless the purchase is for resale. To qualify as tax-exempt, you must provide Amsterdam Modern with a valid resale license in the state of California. Apply for a wholesale account using the form below.  For any questions please feel free to contact us <a href=\"mailto:info@amsterdammodern.com\" target=\"_blank\" title=\"mailto:info@amsterdammodern.com\">info@amsterdammodern.com<\/a><\/p>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        },
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-3": {
+          "type": "buttons",
+          "disabled": true,
+          "settings": {
+            "button_text": "Learn more",
+            "button_url": "",
+            "button_type": "btn--primary",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "show_arrow": false
+          }
+        }
+      },
+      "block_order": [
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-0",
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-1",
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-2",
+        "template--14770732138631__1d496078-d21f-46b9-97d3-ea78d72efa54-168729127874c6cf8c-3"
+      ],
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-left",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 0
+      }
+    },
+    "cb8262cb-8613-4f91-8e02-735e07fe3219": {
+      "type": "section-custom-content",
+      "blocks": {
+        "098b88f4-e8fe-4e40-9ad8-d1629ca4cf7c": {
+          "type": "text",
+          "settings": {
+            "subheading": "",
+            "subheading_size": 2,
+            "title": "AMSTERDAM MODERN WAREHOUSE",
+            "heading_size": 2,
+            "text": "<p>We provide a trade discount of 10% off to interior designers and decorators currently working in the industry so long as the purchase is directly related to their work. California sales tax is always included unless the purchase is for resale. To qualify as tax-exempt, you must provide Amsterdam Modern with a valid resale license in the state of California. Apply for a wholesale account here (add link to form - form should request full name, business name, business category, business website, upload section for resale certificate, upload section for drivers license).<\/p>",
+            "text_size": 2,
+            "button_text": "",
+            "button_url": "",
+            "button_type": "btn--primary hero__btn",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "show_arrow": false,
+            "show_social_links": false,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "bg_color": "",
+            "color": ""
+          }
+        }
+      },
+      "block_order": [
+        "098b88f4-e8fe-4e40-9ad8-d1629ca4cf7c"
+      ],
+      "disabled": true,
+      "settings": {
+        "height": "screen-height-full",
+        "mobile_height": "screen-height-full--mobile",
+        "width": "wrapper--full",
+        "borders": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "bff8586a-c3e1-41de-8a80-f5b6321ce0c2": {
+      "type": "section-map",
+      "disabled": true,
+      "settings": {
+        "height": "screen-height-one-half",
+        "mobile_height": "screen-height-one-half--mobile",
+        "title": "",
+        "address": "<p>MONDAY-SATURDAY 10-5<br\/><br\/>134 GLENDALE BLVD,<br\/>LOS ANGELES, CA 90026<br\/><br\/>213.221.7380<\/p>",
+        "button": "Directions",
+        "bg_color": "#f1f1f1",
+        "color": "",
+        "width": "wrapper--full",
+        "api_key": "",
+        "map_address": "134 GLENDALE BLVD,LOS ANGELES, CA 90026",
+        "zoom": 11,
+        "style": "light",
+        "image": "shopify:\/\/shop_images\/ArstYLNpHrbJS1ekpr5jp4mD.jpg",
+        "enable_latlong": false,
+        "lat": "",
+        "long": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "eee090cc-6629-4011-896b-051f87167aad": {
+      "type": "section-rich-text",
+      "blocks": {
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-1": {
+          "type": "heading",
+          "settings": {
+            "title": "TRADE DISCOUNT APPLICATION",
+            "text_size": 2
+          }
+        },
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-3": {
+          "type": "buttons",
+          "settings": {
+            "button_text": "INFO@AMSTERDAMMODERN.COM",
+            "button_url": "mailto:info@amsterdammodern.com",
+            "button_type": "btn--primary hero__btn",
+            "button_size": "",
+            "button_style": "btn--text",
+            "show_arrow": false
+          }
+        }
+      },
+      "block_order": [
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-1",
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-3"
+      ],
+      "disabled": true,
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-center",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "55cca5bb-6790-4af1-aac8-2a17418959d9": {
+      "type": "custom-html",
+      "settings": {
+        "html": "<script type=\"text\/javascript\" src=\"https:\/\/form.jotform.com\/jsform\/231620505239045\"><\/script>",
+        "width": "wrapper",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 0,
+        "padding_bottom": 50
+      }
+    },
+    "contact": {
+      "type": "contact-form",
+      "blocks": {
+        "Name": {
+          "type": "text",
+          "settings": {
+            "title": "Full Name",
+            "required": true
+          }
+        },
+        "Email": {
+          "type": "email",
+          "settings": {
+            "title": "Business Email",
+            "required": true
+          }
+        },
+        "396d06ba-41a7-4e8b-931d-cff1e1ea9abb": {
+          "type": "text",
+          "settings": {
+            "title": "Business Name",
+            "required": true
+          }
+        },
+        "394b4da6-9f32-431e-b359-36325bbb6fa1": {
+          "type": "text",
+          "settings": {
+            "title": "Business Category",
+            "required": false
+          }
+        },
+        "723cddec-642e-44e2-97d2-96ba90b53aba": {
+          "type": "text",
+          "settings": {
+            "title": "Business Website",
+            "required": true
+          }
+        },
+        "Message": {
+          "type": "body",
+          "settings": {
+            "title": "Message",
+            "required": true
+          }
+        },
+        "Optional-text": {
+          "type": "formHeading",
+          "disabled": true,
+          "settings": {
+            "title": "Optional"
+          }
+        },
+        "Urgent-checkbox": {
+          "type": "checkbox",
+          "disabled": true,
+          "settings": {
+            "title": "This is urgent",
+            "required": false
+          }
+        },
+        "Options-select": {
+          "type": "select",
+          "disabled": true,
+          "settings": {
+            "title": "Select an option",
+            "label-one": "- Pick an option -",
+            "label-two": "Option one",
+            "label-three": "Option two",
+            "label-four": "Option three",
+            "label-five": "Option four",
+            "label-six": "Option five"
+          }
+        }
+      },
+      "block_order": [
+        "Name",
+        "Email",
+        "396d06ba-41a7-4e8b-931d-cff1e1ea9abb",
+        "394b4da6-9f32-431e-b359-36325bbb6fa1",
+        "723cddec-642e-44e2-97d2-96ba90b53aba",
+        "Message",
+        "Optional-text",
+        "Urgent-checkbox",
+        "Options-select"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "terms": true,
+        "width": "wrapper--narrow",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 12,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1d496078-d21f-46b9-97d3-ea78d72efa54",
+    "cb8262cb-8613-4f91-8e02-735e07fe3219",
+    "bff8586a-c3e1-41de-8a80-f5b6321ce0c2",
+    "eee090cc-6629-4011-896b-051f87167aad",
+    "55cca5bb-6790-4af1-aac8-2a17418959d9",
+    "contact"
+  ]
+}

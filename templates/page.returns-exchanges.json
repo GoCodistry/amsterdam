@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "66662d33-e5b9-414b-93aa-803bf0575a50": {
+      "type": "section-rich-text",
+      "blocks": {
+        "template--14796851970183__66662d33-e5b9-414b-93aa-803bf0575a50-16841786980d1214bb-1": {
+          "type": "heading",
+          "settings": {
+            "title": "RETURN AND EXCHANGE POLICY",
+            "text_size": 4
+          }
+        },
+        "77a56028-0b6a-4614-9b42-33e790b0ca63": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Because all of our inventory is vintage and sold as is, we do not accept returns or exchanges. If you have recently purchased an item(s) from us and have any questions regarding our policy please email us at <a href=\"mailto:info@amsterdammodern.com\" title=\"mailto:info@amsterdammodern.com\"><span style=\"text-decoration:underline\">info@amsterdammodern.com<\/span><\/a>.<\/p>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        }
+      },
+      "block_order": [
+        "template--14796851970183__66662d33-e5b9-414b-93aa-803bf0575a50-16841786980d1214bb-1",
+        "77a56028-0b6a-4614-9b42-33e790b0ca63"
+      ],
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-left",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "subheading": "",
+        "subheading_size": 3,
+        "show_title": true,
+        "heading_size": 8,
+        "show_content": true,
+        "text_size": 4,
+        "align_text": "text-left",
+        "width": "wrapper",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "58577579-51dc-4dad-a967-fcf7eeadfc81": {
+      "type": "section-divider",
+      "settings": {
+        "show_line": false,
+        "width": "wrapper",
+        "border_color": "",
+        "bg_color": "",
+        "padding_top": 0,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "66662d33-e5b9-414b-93aa-803bf0575a50",
+    "main",
+    "58577579-51dc-4dad-a967-fcf7eeadfc81"
+  ]
+}

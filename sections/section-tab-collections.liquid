@@ -1,0 +1,594 @@
+<!-- /sections/section-tab-collection.liquid -->
+{%- liquid
+  assign mobile_slider = 'product-grid--mobile-slider'
+  assign layout_grid = 'product-grid--slider'
+  assign title = section.settings.title
+  assign text = section.settings.text
+  assign layout = section.settings.layout
+  assign product_grid_outline = settings.product_grid_outline
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign animation_order = 0
+  assign animation_anchor = '#TabCollections--' | append: section.id
+  assign has_content = false
+  if title != blank or text != blank
+    assign has_content = true
+  endif
+
+  assign color_brightness = text_color | color_brightness
+  assign text_color_class = ''
+
+  if color_brightness > 127
+    assign text_color_class = 'text-light'
+  else
+    assign text_color_class = 'text-dark'
+  endif
+
+  if product_grid_outline == false
+    assign border_class = ' product-item--borderless'
+  endif
+
+  capture onboarding_products_one
+    for i in (1..6)
+      capture index
+        cycle 1, 2, 3, 4, 5, 6
+      endcapture
+      assign layout_slide_attributes = 'data-slide="' | append: forloop.index0 | append: '" data-slide-index="' | append: forloop.index0 | append: '"'
+      render 'onboarding-product-grid-item', additional_attributes: layout_slide_attributes, index: index, animation_delay: forloop.index0, placeholder_root: 'product-', grid_strings: 'one-quarter small--one-whole'
+    endfor
+  endcapture
+
+  capture onboarding_products_two
+    for i in (1..6)
+      capture index
+        cycle 6, 5, 4, 3, 2, 1
+      endcapture
+      assign layout_slide_attributes = 'data-slide="' | append: forloop.index0 | append: '" data-slide-index="' | append: forloop.index0 | append: '"'
+      render 'onboarding-product-grid-item', additional_attributes: layout_slide_attributes, index: index, animation_delay: forloop.index0, placeholder_root: 'product-', grid_strings: 'one-quarter small--one-whole'
+    endfor
+  endcapture
+-%}
+
+{%- capture section_text -%}
+  {%- if has_content -%}
+    <div class="grid__heading-text">
+      {%- if title != blank -%}
+        {%- assign animation_order = animation_order | plus: 1 -%}
+        <h2 class="grid__heading heading-size-5"
+          data-aos="hero"
+          data-aos-anchor="{{ animation_anchor }}"
+          data-aos-order="{{ animation_order }}">{{ title }}</h2>
+      {%- endif -%}
+
+      {%- if text != blank -%}
+        {%- assign animation_order = animation_order | plus: 1 -%}
+        <div class="grid__description"
+          data-aos="hero"
+          data-aos-anchor="{{ animation_anchor }}"
+          data-aos-order="{{ animation_order }}">
+          {{ text }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- style -%}
+  #TabCollections--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- if has_content -%}
+      --PT-MOBILE: max({{ section.settings.padding_top }}px, calc(var(--gutter) * 2));
+    {%- endif -%}
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+      --text-light: {{ text_color | color_mix: settings.bg_color, 70 }};
+      --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<section id="TabCollections--{{ section.id }}"
+  class="index-tab-collections section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="product-grid">
+  {%- if section.blocks.size > 0 -%}
+    {%- liquid
+      assign current_idx = 0
+      assign current_idx_mobile = 0
+
+      if section.blocks.size > 2 and layout == 'stacked'
+        assign current_idx = 1
+        assign current_idx_mobile = 1
+      elsif section.blocks.size > 2 and layout == 'inline'
+        if section_text == blank
+          assign current_idx = 1
+        endif
+
+        assign current_idx_mobile = 1
+      endif
+
+      assign tabs = ''
+      assign tabs_navigation = ''
+      assign animation_order = animation_order | plus: 1
+    -%}
+
+    <div class="tabs-collections" data-tabs-holder data-start-index="{{ current_idx }}" data-start-index-mobile="{{ current_idx_mobile }}">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign featured_collection = collections[block.settings.featured_collection]
+          assign featured_collection_title = block.settings.title | default: featured_collection.title | default: 'Collection'
+          assign products_count = featured_collection.products_count | default: 6
+          assign show_image = block.settings.show_image
+        -%}
+
+        {%- capture tabs_navigation -%}
+          {{ tabs_navigation }}
+
+          <li class="tab-link tab-link-{{ forloop.index0 }}"
+            data-focus-element
+            data-tab="{{ forloop.index0 }}"
+            data-block-id="{{ block.id }}"
+            tabindex="0"
+            data-aos="hero"
+            data-aos-order="{{ animation_order }}"
+            {{ block.shopify_attributes }}>
+            <span
+              data-aos="hero"
+              data-aos-anchor="{{ animation_anchor }}"
+              data-aos-order="{{ animation_order }}">{{ featured_collection_title }}</span>
+          </li>
+        {%- endcapture -%}
+
+        {%- capture tabs -%}
+          {{ tabs }}
+
+          <div id="tab--{{ block.id }}" class="tab-content tab-content-{{ forloop.index0 }}">
+            <div class="grid-container">
+              {%- assign grid_strings = 'one-quarter small--one-whole' -%}
+
+              {%- capture featured_image -%}
+                {%- if show_image -%}
+                  {%- liquid
+                    assign grid_strings = ''
+                    assign overlay_opacity = block.settings.overlay_opacity | times: 0.01
+                    assign overlay_color = block.settings.overlay_color
+                    assign link = block.settings.link | default: featured_collection.url | append: '?filter.v.availability=1' 
+                    assign link_text = block.settings.link_text
+                    assign align_with_image = block.settings.align_with_product_images
+                    assign featured_animation_order = 1
+                    assign image = block.settings.image
+                    if image == blank
+                      assign image = featured_collection.image | default: featured_collection.products.first.featured_media.preview_image
+                    endif
+                  -%}
+
+                  {%- capture products_counter -%}
+                    {%- if products_count > 0 and section.settings.show_product_count -%}
+                      <span class="grid__counter"
+                        data-aos="hero"
+                        data-aos-anchor="{{ animation_anchor }}"
+                        data-aos-order="{{ featured_animation_order }}">{{ 'general.products_with_count' | t: count: products_count }}</span>
+                    {%- endif -%}
+                  {%- endcapture -%}
+
+                  {%- if link_text == blank and link != blank -%}
+                    <a href="{{ link }}" class="grid__heading-holder {{ text_color_class }}">
+                  {%- else -%}
+                    <div class="grid__heading-holder {{ text_color_class }}">
+                  {%- endif -%}
+
+                    <div class="grid__heading-image {{ text_color_class }}"
+                      data-aos="img-in"
+                      data-aos-duration="800"
+                      data-aos-anchor="{{ animation_anchor }}"
+                      data-aos-easing="ease-out-quart">
+                      {%- liquid
+                        assign sizes = '(min-width: 990px) 28vw, (min-width: 750px) 38vw, calc(100vw - 32px - 50px)'
+                        render 'image' image: image, sizes: sizes, cover: true
+                      -%}
+                    </div>
+
+                    <div class="image-overlay" style="--bg: {{ overlay_color }}; --overlay-opacity: {{ overlay_opacity }};"></div>
+
+                    <div class="grid__content">
+                      {{- products_counter -}}
+
+                      {%- if block.settings.description != blank -%}
+                        {%- assign featured_animation_order = featured_animation_order | plus: 1 -%}
+                        <div class="grid__heading-text text-left">
+                          <div class="grid__description"
+                            data-aos="hero"
+                            data-aos-anchor="{{ animation_anchor }}"
+                            data-aos-order="{{ featured_animation_order }}">
+                            {{ block.settings.description }}
+                          </div>
+                        </div>
+                      {%- endif -%}
+
+                      {%- if link_text != blank -%}
+                        {%- assign featured_animation_order = featured_animation_order | plus: 1 -%}
+                        <div class="grid__heading-actions"
+                          data-aos="hero"
+                          data-aos-anchor="{{ animation_anchor }}"
+                          data-aos-order="{{ featured_animation_order }}">
+                          <a class="btn {{ block.settings.button_size }} {{ block.settings.button_style }} {{ block.settings.button_type }}"
+                            href="{{ link | default: '#' }}">
+                            <span>{{ link_text | escape }}</span>
+
+                            {%- if block.settings.show_arrow -%}
+                              {%- render 'icon-arrow-right' -%}
+                            {%- endif -%}
+                          </a>
+                        </div>
+                      {%- endif -%}
+                    </div>
+
+                  {%- if link_text == blank and link != blank -%}
+                    </a>
+                  {%- else -%}
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endcapture -%}
+
+              <div class="product-grid-outer">
+                <div class="product-grid {{ mobile_slider }} {{ layout_grid }}
+                  {% unless product_grid_outline %} product-grid--borderless{% endunless %}"
+                  data-options='{"watchCSS": true, "cellAlign": "left", "wrapAround": false, "groupCells": true, "prevNextButtons": true, "pageDots": false}'
+                  data-equalize-height="true"
+                  data-arrow-position-middle
+                  data-slider="Slider--{{ section.id }}">
+                  {%- if show_image -%}
+                    {%- assign text_color_block = block.settings.color -%}
+                    <div class="product-item product-item--featured{{ border_class }}{% if align_with_image %} product-item--aligned{% endif %}"
+                      {% unless text_color_block == 'rgba(0,0,0,0)' or text_color_block == blank %}style="--text: {{ text_color_block }};"{% endunless %}>
+                      {{ featured_image }}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if featured_collection != blank -%}
+                    {%- if featured_collection.products_count > 0 -%}
+                      {%- for product in featured_collection.products limit: 12 -%}
+                        {%- assign layout_slide_attributes = 'data-slide="' | append: forloop.index0 | append: '" data-slide-index="' | append: forloop.index0 | append: '"' -%}
+                        {%- assign animation_index = forloop.index0 | modulo: 4 -%}
+                        {%- render 'product-grid-item', product: product, animation_delay: animation_index, additional_attributes: layout_slide_attributes, index: forloop.index, grid_strings: grid_strings -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      <div class="no-results">
+                        <p><strong>{{ 'collections.general.no_matches' | t }}</strong></p>
+                      </div>
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- assign tab_index = forloop.index | modulo: 2 -%}
+                    {%- if tab_index == 0 -%}
+                      {{ onboarding_products_one | replace: 'one-quarter small--one-whole', grid_strings }}
+                    {%- else -%}
+                      {{ onboarding_products_two | replace: 'one-quarter small--one-whole', grid_strings }}
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endcapture -%}
+      {%- endfor -%}
+
+      {%- liquid
+        assign show_tabs_navigation = false
+        if tabs_navigation != '' and section.blocks.size > 1
+          assign show_tabs_navigation = true
+        endif
+
+        if section_text != blank
+          case layout
+            when 'inline'
+              assign text_layout = ' grid__heading-holder--inline'
+            when 'stacked'
+              assign text_layout = ' text-center'
+            when 'left'
+              assign text_layout = ' text-left'
+          endcase
+        endif
+      -%}
+
+      {%- if show_tabs_navigation or section_text != blank -%}
+        <div class="tabs__head tabs-collections__head"
+          data-aos="hero"
+          data-aos-anchor="{{ animation_anchor }}"
+          data-aos-order="1">
+          <div class="grid__heading-holder{{ text_layout }}">
+            {%- if section_text != blank -%}
+              {{ section_text }}
+            {%- endif -%}
+
+            {%- if show_tabs_navigation -%}
+              <div class="grid__heading-actions">
+                <div class="tabs__nav">
+                  <ul class="tabs{% if layout == 'stacked' %} tabs--center{% endif %}" data-scrollbar data-scrollbar-slider>
+                    {{ tabs_navigation }}
+                  </ul>
+
+                  <button type="button" class="tabs__arrow tabs__arrow--prev tabs-collections__arrow tabs-collections__arrow--prev is-hidden" data-scrollbar-arrow-prev>
+                    {%- render 'icon-nav-arrow-left' -%}
+                    <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+                  </button>
+
+                  <button type="button" class="tabs__arrow tabs__arrow--next tabs-collections__arrow tabs-collections__arrow--next is-hidden" data-scrollbar-arrow-next>
+                    {%- render 'icon-nav-arrow-right' -%}
+                    <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+                  </button>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {{ tabs }}
+    </div>
+  {%- else -%}
+    {%- assign animation_order = animation_order | plus: 1 -%}
+    <div class="grid-container text-center"
+      data-aos="hero"
+      data-aos-anchor="{{ animation_anchor }}"
+      data-aos-order="{{ animation_order }}">
+      {%- if section_text != blank -%}
+        <div class="grid__heading-holder">
+          {{ section_text }}
+        </div>
+      {%- endif -%}
+
+      {% render 'no-blocks' %}
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Tab collections",
+  "settings": [
+    {
+      "label": "Heading",
+      "id": "title",
+      "type": "text"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "inline",
+          "label": "In-line"
+        },
+        {
+          "value": "stacked",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "stacked"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "info": "Applies if featured image is enabled on the block level",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 32
+    }
+  ],
+  "blocks":[
+    {
+      "type": "collection",
+      "name": "Collection",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Collection"
+        },
+        {
+          "label": "Heading",
+          "id": "title",
+          "type": "text"
+        },
+        {
+          "type": "collection",
+          "id": "featured_collection",
+          "label": "Collection"
+        },
+        {
+          "type": "header",
+          "content": "Featured image"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_image",
+          "label": "Show image",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "align_with_product_images",
+          "label": "Align with product images",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Overlay"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Opacity",
+          "info": "Increase contrast for legible text.",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default":0
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay color",
+          "default": "#000"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Text"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text",
+          "default": "#fff"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Text",
+          "default": "View products",
+          "info": "Leave blank to link entire image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "button_type",
+          "label": "Color",
+          "default": "btn--white",
+          "options": [
+            {"value": "btn--primary", "label": "Primary"},
+            {"value": "btn--secondary", "label": "Secondary"},
+            {"value": "btn--white", "label": "White"},
+            {"value": "btn--black", "label": "Black"}
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size",
+          "label": "Size",
+          "default": "",
+          "options": [
+            { "label": "Small", "value": "btn--small" },
+            { "label": "Medium", "value": "" },
+            { "label": "Large", "value": "btn--large" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Style",
+          "default": "btn--outline",
+          "options": [
+            { "label": "Solid", "value": "btn--solid" },
+            { "label": "Outline", "value": "btn--outline" },
+            { "label": "Text", "value": "btn--text" }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_arrow",
+          "label": "Show arrow",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Collection",
+      "name": "Tab collections",
+      "blocks": [
+        {
+          "type": "collection",
+          "settings": {
+            "title": "First collection"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Second collection"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

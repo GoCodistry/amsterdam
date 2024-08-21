@@ -1,0 +1,282 @@
+<!-- /sections/section-collections-list.liquid -->
+
+{%- liquid
+  assign title = section.settings.title
+  assign description = section.settings.description
+  assign has_content = false
+  if title != blank or description != blank
+    assign has_content = true
+  endif
+
+  assign aspect_ratio = 1 | divided_by: section.settings.aspect_ratio
+
+  assign grid_columns = section.settings.grid
+  assign limit_onboarding = grid_columns
+
+  assign columns_desktop = grid_columns | plus: 0
+  assign columns_mobile = 1
+  assign columns_tablet = 3
+  assign columns_small = 2
+
+	if columns_desktop == 1
+    assign columns_tablet = 1
+    assign columns_small = 1
+  endif
+
+  assign mobile_slider = 'product-grid--vertical'
+  assign block_scroll_attr = ''
+  if section.settings.enable_slider
+    assign mobile_slider = 'product-grid--mobile-slider'
+    assign block_scroll_attr = 'data-block-scroll'
+  endif
+
+  assign grid_modifier = ''
+  assign layout_grid = ''
+  assign layout_grid_attributes = ''
+  if section.settings.layout == 'slider'
+    assign grid_modifier = ' grid-container--inline'
+    assign layout_grid = 'product-grid--slider'
+    assign layout_grid_attributes = 'data-slider="' | append: section.id | append: '"'
+  endif
+
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+
+  assign animation_anchor = '#CollectionsList--' | append: section.id
+-%}
+
+{%- style -%}
+  #CollectionsList--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    --grid: repeat({{ columns_desktop }}, minmax(0, 1fr));
+    --grid-tablet: repeat({{ columns_tablet }}, minmax(0, 1fr));
+    --grid-small: repeat({{ columns_small }}, minmax(0, 1fr));
+    --grid-mobile: repeat({{ columns_mobile }}, minmax(0, 1fr));
+
+    {%- if has_content -%}
+      --PT-MOBILE: max({{ section.settings.padding_top }}px, calc(var(--gutter) * 2));
+    {%- endif -%}
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<section id="CollectionsList--{{ section.id }}"
+  class="index-collections-list section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="list-collections">
+  <div class="grid-container{{ grid_modifier }}">
+    {%- if has_content -%}
+      <div class="grid__heading-holder{% if section.settings.layout == 'grid' %} text-center{% else %} grid__heading-holder--sticky{% endif %}">
+        <div class="grid__heading-text">
+          {%- if title != blank -%}
+            <h2 class="grid__heading heading-size-5">{{ title }}</h2>
+          {%- endif -%}
+  
+          {%- if description != blank -%}
+            <div class="grid__description">
+              {{ description }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="grid__items-holder">
+      <div class="product-grid-outer collection-list-outer">
+        <div
+          class="collection-list product-grid {{ mobile_slider }} {{ layout_grid }}{% unless settings.product_grid_outline %} product-grid--borderless{% endunless %}"
+          {{ layout_grid_attributes }}
+          {{ block_scroll_attr }}
+          data-options='{"watchCSS": true, "cellAlign": "left", "pageDots": false, "prevNextButtons": true, "adaptiveHeight": false, "wrapAround": false, "groupCells": true}'
+          data-arrow-position-middle>
+          {%- liquid
+            if section.blocks.size > 0
+              for block in section.blocks
+                assign animation_delay = forloop.index0 | times: 1
+                assign layout_slide_attributes = 'data-slide="' | append: block.id | append: '" data-slide-index="' | append: forloop.index0 | append: '"'
+                capture index
+                  cycle 1, 2, 3
+                endcapture
+                render 'collection-grid-item', block: block, aspect_ratio: aspect_ratio, animation_delay: animation_delay, animation_anchor: animation_anchor, additional_attributes: layout_slide_attributes, index: index
+              endfor
+            else
+              for i in (1..limit_onboarding)
+                assign animation_delay = forloop.index0 | times: 1
+                assign layout_slide_attributes = 'data-slide="' | append: forloop.index0 | append: '" data-slide-index="' | append: forloop.index0 | append: '"'
+                capture index
+                  cycle 1, 2, 3
+                endcapture
+                render 'collection-grid-item', block: block, aspect_ratio: aspect_ratio, animation_delay: animation_delay, animation_anchor: animation_anchor, additional_attributes: layout_slide_attributes, index: index
+              endfor
+            endif
+          -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collection list"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Slider"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "aspect_ratio",
+      "min": 0.5,
+      "max": 1.5,
+      "step": 0.1,
+      "unit": ":1",
+      "label": "Photo aspect ratio",
+      "info": "Wide to tall",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Grid",
+      "info": "Applies only when layout is set to Grid"
+    },
+    {
+      "type":    "range",
+      "id":      "grid",
+      "label":   "Collections per row",
+      "min":     2,
+      "max":     6,
+      "step":    1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "Enable slider",
+      "default": true,
+      "info": "Horizontal slider in mobile layout."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "limit": 12,
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "collection_image",
+          "label": "Image"
+        },
+        {
+          "label": "Heading",
+          "id": "title",
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Collection",
+      "name": "Collection list",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.pre_footer"]
+  }
+}
+{% endschema %}

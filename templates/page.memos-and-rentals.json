@@ -1,0 +1,93 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "subheading": "",
+        "subheading_size": 3,
+        "show_title": true,
+        "heading_size": 8,
+        "show_content": true,
+        "text_size": 4,
+        "align_text": "text-left",
+        "width": "wrapper",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "abcb6692-fb2d-4c28-bc61-e0330723b94d": {
+      "type": "section-rich-text",
+      "blocks": {
+        "template--14781443408007__abcb6692-fb2d-4c28-bc61-e0330723b94d-168729127874c6cf8c-1": {
+          "type": "heading",
+          "disabled": true,
+          "settings": {
+            "title": "Memos & Rentals policy",
+            "text_size": 2
+          }
+        },
+        "bf932a1b-4db8-454f-a0bc-983023f38e89": {
+          "type": "heading",
+          "settings": {
+            "title": "Memos",
+            "text_size": 4
+          }
+        },
+        "template--14781443408007__abcb6692-fb2d-4c28-bc61-e0330723b94d-168729127874c6cf8c-2": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>Memos are a 24 hour trial period to view item(s) in the space with the intention of purchasing. Any pieces used in a photo shoot or staging project will be charged our standard rental fee of 25% of the full listed price. Amsterdam Modern reserves the right to deny a memo on any item(s) for any reason. For memos exceeding 10 items, or exceeding $10,000 there is a non-refundable deposit of 10% of the total price for the order.<\/li><li>All memoed items are to be returned 24 hours after pickup or delivery, unless otherwise specified by Amsterdam Modern prior to the memo. Damaged or lost item(s) will result in full value being charged to the credit card on file. *If damaged or lost item(s) is part of a set, full set price will be charged.<\/li><li>Clients must agree to and sign our Memo Agreement and Credit Card Authorization Form. We require a credit card and photo ID of the card holder, to hold on file for all memos. <\/li><li>Memo clients must make necessary arrangements for transportation. Amsterdam Modern will assist in these arrangements upon request; however, all delivery, packing, unpacking, assembly and installation fees are to be paid by the memo client. \t\t\t<br\/>\t\t\t\t<\/li><\/ul>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        },
+        "8320aa85-ada8-43b9-97f1-e3a40f72dc2d": {
+          "type": "divider",
+          "settings": {
+            "show_line": false,
+            "padding_top": 20,
+            "padding_bottom": 20
+          }
+        },
+        "cb87ac9b-57f0-432c-b7b3-4548b532de66": {
+          "type": "heading",
+          "settings": {
+            "title": "Rentals",
+            "text_size": 4
+          }
+        },
+        "8f22a447-a5ed-4f54-b105-d80b56e1d711": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>Amsterdam Modern’s rental fee is 25% of the item’s listed retail price per week. Amsterdam Modern reserves the right to deny a rental on any item(s) for any reason. <br\/><\/li><li>In order to rent from Amsterdam Modern, the client must pay the rental invoice and fill out our Rental Agreement and Credit Card Authorization Form 48 hours prior to pick up. We require a credit card and photo ID of the card holder, to hold on file for all rentals. The credit card provided at the time of rental will be charged an additional 25% for any items kept after 1 week (7 days) and will continue to be charged the same amount per week until item(s) are returned.<br\/><\/li><li>Rental clients must make necessary arrangements for transportation. Amsterdam Modern will assist in these arrangements upon request; however, all delivery, packing, unpacking, assembly and installation fees are to be paid by the rental client. <br\/><\/li><li>Damaged or lost item(s) will result in full value being charged to the credit card on file. *If damaged or lost item(s) is part of a set, full set price will be charged.<\/li><\/ul>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        }
+      },
+      "block_order": [
+        "template--14781443408007__abcb6692-fb2d-4c28-bc61-e0330723b94d-168729127874c6cf8c-1",
+        "bf932a1b-4db8-454f-a0bc-983023f38e89",
+        "template--14781443408007__abcb6692-fb2d-4c28-bc61-e0330723b94d-168729127874c6cf8c-2",
+        "8320aa85-ada8-43b9-97f1-e3a40f72dc2d",
+        "cb87ac9b-57f0-432c-b7b3-4548b532de66",
+        "8f22a447-a5ed-4f54-b105-d80b56e1d711"
+      ],
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-left",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "main",
+    "abcb6692-fb2d-4c28-bc61-e0330723b94d"
+  ]
+}

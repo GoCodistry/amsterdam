@@ -1,0 +1,10 @@
+{% comment %}
+  This overwrites defautl values with high-contrast equivalents
+{% endcomment %}
+
+--COLOR-TEXT-DARK: {{ settings.text_color | color_saturate: 15 | color_darken: 25 }};
+--COLOR-TEXT:{{ settings.text_color | color_saturate: 10 | color_darken: 15 }};
+--COLOR-TEXT-LIGHT: {{ settings.text_color }};
+
+
+

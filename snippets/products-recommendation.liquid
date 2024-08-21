@@ -1,0 +1,25 @@
+<!-- /snippets/products-recommendation.liquid -->
+{%- if recommendations.performed -%}
+  {%- if recommendations.products_count > 0 -%}
+    <div class="product-grid-outer">
+      <div class="product-grid product-grid--slider product-grid--slider-alt product-grid--mobile-slider{% unless settings.product_grid_outline %} product-grid--borderless{% endunless %}"
+        id="product-recommendations"
+        data-slider
+        data-options='{"watchCSS": true, "cellAlign": "left", "pageDots": false, "prevNextButtons": true, "adaptiveHeight": false, "wrapAround": false, "groupCells": true}'
+        data-arrow-position-middle
+        data-equalize-height="true">
+        {%- liquid
+          assign grid_strings = 'large-up--one-quarter medium--one-quarter small--one-whole'
+
+          for product in recommendations.products
+            assign animation_delay = forloop.index0 | times: 1
+            assign layout_slide_attributes = 'data-slide="' | append: forloop.index0 | append: '" data-slide-index="' | append: forloop.index0 | append: '"'
+            render 'product-grid-item', product: product, grid_strings: grid_strings, animation_delay: animation_delay, additional_attributes: layout_slide_attributes, animation_anchor: '#product-recommendations'
+          endfor
+        -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- else -%}
+  <div class="related__placeholder"></div>
+{%- endif -%}

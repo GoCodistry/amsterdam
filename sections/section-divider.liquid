@@ -1,0 +1,99 @@
+<!-- /sections/section-divider.liquid -->
+{%- liquid
+  assign section_width = section.settings.width
+  assign bg_color = section.settings.bg_color
+  assign border_color = section.settings.border_color
+-%}
+
+{%- capture style -%}
+  --PT: {{ section.settings.padding_top | append: 'px' }};
+  --PB: {{ section.settings.padding_bottom | append: 'px' }};
+
+  {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+    --bg: {{ bg_color }};
+  {%- endunless -%}
+
+  {%- unless border_color == 'rgba(0,0,0,0)' or border_color == blank -%}
+    --border: {{ border_color }};
+  {%- endunless -%}
+{%- endcapture -%}
+
+<section id="Divider--{{ section.id }}"
+  class="divider-section section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="divider"
+  style="{{ style }}">
+  <div class="divider-holder {{ section_width }}">
+    {%- if section.settings.show_line -%}
+      <hr class="divider">
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Divider",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_line",
+        "label": "Show line",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper",
+        "options": [
+          {"value": "wrapper--full", "label": "Full width"},
+          {"value": "wrapper--full-padded", "label": "Full width padded"},
+          {"value": "wrapper", "label": "Normal"},
+          {"value": "wrapper--narrow", "label": "Narrow"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Border"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 50
+      }
+    ],
+   "presets": [
+      {
+        "name":"Divider"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer", "custom.pre_footer"]
+    }
+  }
+{% endschema %}

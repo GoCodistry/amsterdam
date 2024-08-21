@@ -1,0 +1,254 @@
+{%- liquid
+  assign animation_order = 0
+  assign animation_anchor = '#SectionBeforeAfter--' | append: section.id
+  assign aspect_ratio = 1 | divided_by: section.settings.aspect_ratio
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+-%}
+
+{%- style -%}
+  #SectionBeforeAfter--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+{%- if section.settings.link_text != blank -%}
+  {%- capture button_html -%}
+    <a class="btn {{ section.settings.button_type }} {{ section.settings.button_size }} {{ section.settings.button_style }}"
+      href="{{ section.settings.link_url | default: '#!' }}">
+      <span>{{ section.settings.link_text | escape }}</span>
+
+      {%- if section.settings.show_arrow -%}
+        {%- render 'icon-arrow-right' -%}
+      {%- endif -%}
+    </a>
+  {%- endcapture -%}
+{%- endif -%}
+
+<section id="SectionBeforeAfter--{{ section.id }}"
+  class="section-before-after section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="before-after">
+  <div class="{{ section.settings.width }}">
+    <div class="compare__body">
+      {%- if section.settings.heading != blank or section.settings.description != blank or button_html != blank -%}
+        <div class="compare__content">
+          {%- if section.settings.heading != blank -%}
+            {%- assign animation_order = animation_order | plus: 1 -%}
+            <h2 class="h5 section__title"
+              data-aos="hero"
+              data-aos-order="{{ animation_order }}"
+              data-aos-anchor="{{ animation_anchor }}">
+              {{ section.settings.heading }}
+            </h2>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            {%- assign animation_order = animation_order | plus: 1 -%}
+            <div class="hero__description h5--body section__description"
+              data-aos="hero"
+              data-aos-order="{{ animation_order }}"
+              data-aos-anchor="{{ animation_anchor }}">
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+
+          {%- if button_html != blank -%}
+            {%- assign animation_order = animation_order | plus: 1 -%}
+            <div class="compare__buttons desktop"
+              data-aos="hero"
+              data-aos-order="{{ animation_order }}"
+              data-aos-anchor="{{ animation_anchor }}">
+              {{ button_html }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="compare__images">
+        {%- render 'compare-images', image_1: section.settings.image_1, image_2: section.settings.image_2, image_position: section.settings.image_position, animation_anchor: animation_anchor, aspect_ratio: aspect_ratio, wrapper: section.settings.width -%}
+      </div>
+    </div>
+
+    {%- if button_html != blank -%}
+      <div class="compare__buttons mobile">
+        {{ button_html }}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Before and after",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Real People, Real Results"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Text",
+        "default": "<p>Share success stories using before and after images to demonstrate how effective your products are.</p>"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "link_text",
+        "label": "Text",
+        "default": "Shop now"
+      },
+      {
+        "type": "url",
+        "id": "link_url",
+        "label": "Link"
+      },
+      {
+        "type": "select",
+        "id": "button_type",
+        "label": "Color",
+        "default": "btn--primary",
+        "options": [
+          {"value": "btn--primary", "label": "Primary"},
+          {"value": "btn--secondary", "label": "Secondary"},
+          {"value": "btn--white", "label": "White"},
+          {"value": "btn--black", "label": "Black"}
+        ]
+      },
+      {
+        "type": "select",
+        "id": "button_size",
+        "label": "Size",
+        "default": "",
+        "options": [
+          { "label": "Small", "value": "btn--small" },
+          { "label": "Medium", "value": "" },
+          { "label": "Large", "value": "btn--large" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Style",
+        "default": "btn--solid",
+        "options": [
+          { "label": "Solid", "value": "btn--solid" },
+          { "label": "Outline", "value": "btn--outline" },
+          { "label": "Text", "value": "btn--text" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_arrow",
+        "label": "Show arrow",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Images"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_1",
+        "label": "Image 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_2",
+        "label": "Image 2"
+      },
+      {
+        "type": "range",
+        "id": "aspect_ratio",
+        "min": 0.5,
+        "max": 1.5,
+        "step": 0.1,
+        "unit": ":1",
+        "label": "Image aspect ratio",
+        "info": "Wide to tall",
+        "default": 1
+      },
+      {
+        "type": "header",
+        "content": "Style"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper",
+        "options": [
+          {"value": "wrapper--full", "label": "Full width"},
+          {"value": "wrapper--full-padded", "label": "Full width padded"},
+          {"value": "wrapper", "label": "Normal"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 50
+      }
+    ],
+    "presets": [
+      {
+        "name": "Before and after",
+        "category": "Text"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer", "custom.pre_footer"]
+    }
+  }
+{% endschema %}

@@ -1,0 +1,193 @@
+<!-- /section/predictive-search.liquid -->
+
+{% comment %}
+  Renders predictive search results
+{% endcomment %}
+
+{%- liquid
+  assign animation_anchor = '#predictive-search-results'
+  assign animation_delay = 0
+  assign animation_duration = 800
+
+  comment
+    Get each resource's result count
+  endcomment
+  assign query_count = predictive_search.resources.queries.size
+  assign product_count = predictive_search.resources.products.size
+  assign collection_count = predictive_search.resources.collections.size
+  assign article_count = predictive_search.resources.articles.size
+  assign page_count = predictive_search.resources.pages.size
+
+  assign first_column_results_size = query_count | plus: collection_count | plus: page_count | plus: article_count
+
+  comment
+    Product grid items classes
+  endcomment
+  assign product_item_classes = ''
+  if settings.product_grid_outline == false
+    assign product_item_classes = product_item_classes | append: ' product-item--borderless'
+  endif
+
+  if settings.product_grid_center
+    assign product_item_classes = product_item_classes | append: ' product-item--centered'
+  else
+    assign product_item_classes = product_item_classes | append: ' product-item--left'
+  endif
+
+  if settings.overlay_text
+    assign product_item_classes = product_item_classes | append: ' product-item--overlay-text'
+  else
+    assign product_item_classes = product_item_classes | append: ' product-item--outer-text'
+  endif
+-%}
+
+{%- if predictive_search.performed -%}
+  <div class="wrapper">
+    <div id="predictive-search-results" role="listbox">
+      {%- if first_column_results_size > 0 or product_count > 0 -%}
+        <div class="predictive-search__layout{% unless product_count > 0 %} predictive-search__layout--no-products{% endunless %}{% unless query_count > 0 or collection_count > 0 %} predictive-search__layout--no-suggestions{% endunless %}" data-search-results-groups-wrapper>
+      {%- endif -%}
+
+      {%- if first_column_results_size > 0 -%}
+        <div class="predictive-search__column">
+          {%- if query_count > 0 or collection_count > 0 -%}
+            {%- assign animation_delay = animation_delay | plus: 100 -%}
+            <div class="predictive-search__group"
+              data-aos="fade"
+              data-aos-delay="{{ animation_delay }}"
+              data-aos-duration="{{ animation_duration }}"
+              data-aos-anchor="{{ animation_anchor }}">
+              <p class="predictive-search__heading">{{ 'general.search.suggestions' | t }}</p>
+
+              {%- if query_count > 0 -%}
+                {%- for query in predictive_search.resources.queries -%}
+                  <div class="predictive-search__item" id="predictive-search-option-query-{{ forloop.index }}" role="option" aria-selected="false">
+                    <a class="predictive-search__link" href="{{ query.url }}" tabindex="-1">
+                      <span aria-label="{{ query.text }}">{{ query.styled_text }}</span>
+                    </a>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- if collection_count > 0 -%}
+                {%- for collection in predictive_search.resources.collections -%}
+                  <div class="predictive-search__item" id="predictive-search-option-collection-{{ forloop.index }}" role="option" aria-selected="false">
+                    <a class="predictive-search__link" href="{{ collection.url | append:'?filter.v.availability=1' }}" tabindex="-1">{{ collection.title }}</a>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if page_count > 0 -%}
+            {%- assign animation_delay = animation_delay | plus: 100 -%}
+            <div class="predictive-search__group"
+              data-aos="fade"
+              data-aos-delay="{{ animation_delay }}"
+              data-aos-duration="{{ animation_duration }}"
+              data-aos-anchor="{{ animation_anchor }}">
+              <p class="predictive-search__heading">{{ 'general.search.pages' | t }}</p>
+
+              {%- for page in predictive_search.resources.pages -%}
+                <div class="predictive-search__item" id="predictive-search-option-page-{{ forloop.index }}" role="option" aria-selected="false">
+                  <a class="predictive-search__link" href="{{ page.url }}" tabindex="-1">{{ page.title }}</a>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if article_count > 0 -%}
+            {%- assign animation_delay = animation_delay | plus: 100 -%}
+            <div class="predictive-search__group"
+              data-aos="fade"
+              data-aos-delay="{{ animation_delay }}"
+              data-aos-duration="{{ animation_duration }}"
+              data-aos-anchor="{{ animation_anchor }}">
+              <p class="predictive-search__heading">{{ 'general.search.articles' | t }}</p>
+
+              {%- for article in predictive_search.resources.articles -%}
+                <div class="predictive-search__item" id="predictive-search-option-article-{{ forloop.index }}"  role="option" aria-selected="false">
+                  <a href="{{ article.url }}" class="predictive-search__link" tabindex="-1">{{ article.title }}</a>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if product_count > 0 -%}
+        {%- assign animation_delay = animation_delay | plus: 100 -%}
+        <div class="predictive-search__column">
+          <div class="predictive-search__group"
+            data-aos="fade"
+            data-aos-delay="{{ animation_delay }}"
+            data-aos-duration="{{ animation_duration }}"
+            data-aos-anchor="{{ animation_anchor }}">
+            <p class="predictive-search__heading">{{ 'general.search.products' | t }}</p>
+          
+            <div class="predictive-search__products__list product-grid{% unless settings.product_grid_outline %} product-grid--borderless{% endunless %}" role="listbox" aria-labelledby="predictive-search-products" data-search-results>
+              {%- for product in predictive_search.resources.products -%}
+                {%- render 'search-product-item',
+                  product: product, 
+                  animation_delay: animation_delay, 
+                  animation_duration: animation_duration, 
+                  animation_anchor: animation_anchor, 
+                  product_item_classes: product_item_classes
+                  index: forloop.index -%}
+                {%- assign animation_delay = animation_delay | plus: 150 -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if first_column_results_size > 0 or product_count > 0 -%}
+        </div>
+      {%- endif -%}
+
+      {%- assign animation_delay = animation_delay | plus: 100 -%}
+        <div class="predictive-search__actions"
+          data-aos="fade"
+          data-aos-delay="{{ animation_delay }}"
+          data-aos-duration="{{ animation_duration }}"
+          data-aos-anchor="{{ animation_anchor }}">
+          <button class="btn btn--outline btn--primary"
+            tabindex="-1"
+            role="option"
+            aria-selected="false">
+            <span data-predictive-search-search-for-text>{{ 'general.search.search_for' | t: terms: predictive_search.terms }}</span>
+            {%- render 'icon-arrow-right' -%}
+          </button>
+        </div>
+
+      <div class="predictive-search__loading-state">
+        <div class="predictive-search__loader loader"><div class="loader-indeterminate"></div></div>
+      </div>
+
+      <span class="hidden" data-predictive-search-live-region-count-value aria-live="polite">
+        {%- liquid
+          assign total_results = predictive_search.resources.products.size | plus: first_column_results_size
+          if total_results == 0
+            echo 'general.search.no_results' | t: terms: predictive_search.terms
+          else
+            echo 'general.search.results_with_count' | t: count: total_results | append: ': '
+
+            if predictive_search.resources.queries.size > 0
+              assign count = predictive_search.resources.queries.size | plus: predictive_search.resources.collections.size
+              echo 'general.search.results_suggestions_with_count' | t: count: count | append: ', '
+            endif
+
+            if predictive_search.resources.pages.size > 0
+              assign count = predictive_search.resources.pages.size | plus: predictive_search.resources.articles.size
+              echo 'general.search.results_pages_with_count' | t: count: count | append: ', '
+            endif
+
+            if predictive_search.resources.products.size > 0
+              echo 'general.search.results_products_with_count' | t: count: predictive_search.resources.products.size
+            endif
+          endif
+        -%}
+      </span>
+    </div>
+  </div>
+{%- endif -%}

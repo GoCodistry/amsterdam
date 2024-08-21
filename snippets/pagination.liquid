@@ -1,0 +1,47 @@
+<!-- /snippets/pagination-custom.liquid -->
+{% comment %}
+  * This snippet renders a custom widget based on the current 'paginate' context,
+  {% render 'pagination-custom', paginate: paginate %}
+{% endcomment %}
+
+{% if paginate.pages > 1 %}
+  <nav class="pagination-custom">
+    {%- if paginate.previous -%}
+      <a class="pagination-custom__prev" href="{{ paginate.previous.url }}" title="{{ 'general.pagination.prev' | t }}">
+        <span>{{ 'general.pagination.prev' | t }}</span>
+        {%- render 'icon-arrow-left' -%}
+      </a>
+    {%- else -%}
+      <span class="pagination-custom__prev is-hidden">
+        <span>{{ 'general.pagination.prev' | t }}</span>
+        {%- render 'icon-arrow-left' -%}
+      </span>
+    {%- endif -%}
+
+    <div class="pagination-custom__inner">
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}
+          <a href="{{ part.url }}" title="{{ part.title }}" class="pagination-custom__page">{{ part.title }}</a>
+        {%- else -%}
+          {%- if part.title == paginate.current_page -%}
+            <span class="pagination-custom__page pagination-custom__page--active">{{ part.title }}</span>  
+          {%- else -%}
+            <span class="pagination-custom__sep">{{ part.title }}</span>  
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.next -%}
+      <a class="pagination-custom__next" href="{{ paginate.next.url }}" title="{{ 'general.pagination.next' | t }}">
+        <span>{{ 'general.pagination.next' | t }}</span>
+        {%- render 'icon-arrow-right' -%}
+      </a>
+    {%- else -%}
+    <span class="pagination-custom__next is-hidden">
+      <span>{{ 'general.pagination.next' | t }}</span>
+      {%- render 'icon-arrow-right' -%}
+    </span>
+    {%- endif -%}
+  </nav>
+{% endif %}

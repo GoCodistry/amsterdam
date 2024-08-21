@@ -1,0 +1,283 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "subheading": "",
+        "subheading_size": 3,
+        "show_title": true,
+        "heading_size": 8,
+        "show_content": true,
+        "text_size": 4,
+        "align_text": "text-center",
+        "width": "wrapper",
+        "bg_color": "#f7f7f7",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "705d14f1-a4c1-4df1-9f53-5583a6795e07": {
+      "type": "section-custom-content",
+      "blocks": {
+        "template--14751914197127__705d14f1-a4c1-4df1-9f53-5583a6795e07-1678057874e9b43e03-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Photo_Apr_22_3_48_51_PM.jpg",
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "show_overlay_text": false,
+            "title": "",
+            "heading_size": 7,
+            "description": "",
+            "text_size": 3,
+            "flex_align": "align--middle-center",
+            "bg_color": "",
+            "color": "#ffffff",
+            "link_text": "",
+            "link": "",
+            "button_type": "btn--primary hero__btn",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "show_arrow": false
+          }
+        }
+      },
+      "block_order": [
+        "template--14751914197127__705d14f1-a4c1-4df1-9f53-5583a6795e07-1678057874e9b43e03-0"
+      ],
+      "settings": {
+        "height": "screen-height-one-half",
+        "mobile_height": "screen-height-one-half--mobile",
+        "width": "wrapper--full",
+        "borders": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "8eac62b2-61d7-4669-8645-315cf19bef35": {
+      "type": "section-custom-content",
+      "blocks": {
+        "template--14751914197127__8eac62b2-61d7-4669-8645-315cf19bef35-1678057874e9b43e03-1": {
+          "type": "text",
+          "settings": {
+            "subheading": "",
+            "subheading_size": 2,
+            "title": "AMSTERDAM MODERN WAREHOUSE",
+            "heading_size": 4,
+            "text": "<p>We are located in a 10,000 square feet warehouse in the Hi-Fi district, adjacent to Downtown Los Angeles, California. While we primarily sell to the trade, decorators and film productions, we also sell directly to the public and ship to collectors, dealers, and retail stores around the world.<\/p>",
+            "text_size": 3,
+            "button_text": "BOOK AN APPOINTMENT",
+            "button_url": "https:\/\/calendly.com\/amsterdammodern",
+            "button_type": "btn--primary hero__btn",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "show_arrow": false,
+            "show_social_links": false,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "bg_color": "",
+            "color": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--14751914197127__8eac62b2-61d7-4669-8645-315cf19bef35-1678057874e9b43e03-1"
+      ],
+      "settings": {
+        "height": "screen-height-one-half",
+        "mobile_height": "screen-height-one-half--mobile",
+        "width": "wrapper",
+        "borders": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "bff8586a-c3e1-41de-8a80-f5b6321ce0c2": {
+      "type": "section-map",
+      "settings": {
+        "height": "screen-height-one-half",
+        "mobile_height": "screen-height-one-half--mobile",
+        "title": "",
+        "address": "<p>MONDAY-SATURDAY 10-5<br\/><br\/>134 GLENDALE BLVD,<br\/>LOS ANGELES, CA 90026<br\/><br\/>213.221.7380<\/p>",
+        "button": "Directions",
+        "bg_color": "#f1f1f1",
+        "color": "",
+        "width": "wrapper--full",
+        "api_key": "",
+        "map_address": "134 GLENDALE BLVD,LOS ANGELES, CA 90026",
+        "zoom": 11,
+        "style": "light",
+        "image": "shopify:\/\/shop_images\/ArstYLNpHrbJS1ekpr5jp4mD.jpg",
+        "enable_latlong": false,
+        "lat": "",
+        "long": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "eee090cc-6629-4011-896b-051f87167aad": {
+      "type": "section-rich-text",
+      "blocks": {
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-1": {
+          "type": "heading",
+          "settings": {
+            "title": "QUESTIONS?  PLEASE FILL OUT THE FORM BELOW OR EMAIL US DIRECTLY.",
+            "text_size": 4
+          }
+        },
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-3": {
+          "type": "buttons",
+          "settings": {
+            "button_text": "INFO@AMSTERDAMMODERN.COM",
+            "button_url": "mailto:info@amsterdammodern.com",
+            "button_type": "btn--primary hero__btn",
+            "button_size": "",
+            "button_style": "btn--text",
+            "show_arrow": false
+          }
+        }
+      },
+      "block_order": [
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-1",
+        "template--14751914197127__eee090cc-6629-4011-896b-051f87167aad-1678060306c029d5c1-3"
+      ],
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-center",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 12
+      }
+    },
+    "contact": {
+      "type": "contact-form",
+      "blocks": {
+        "Name": {
+          "type": "text",
+          "settings": {
+            "title": "Full Name",
+            "required": true
+          }
+        },
+        "Email": {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "required": true
+          }
+        },
+        "Message": {
+          "type": "body",
+          "settings": {
+            "title": "Message",
+            "required": true
+          }
+        },
+        "Optional-text": {
+          "type": "formHeading",
+          "disabled": true,
+          "settings": {
+            "title": "Optional"
+          }
+        },
+        "Urgent-checkbox": {
+          "type": "checkbox",
+          "disabled": true,
+          "settings": {
+            "title": "This is urgent",
+            "required": false
+          }
+        },
+        "Options-select": {
+          "type": "select",
+          "disabled": true,
+          "settings": {
+            "title": "Select an option",
+            "label-one": "- Pick an option -",
+            "label-two": "Option one",
+            "label-three": "Option two",
+            "label-four": "Option three",
+            "label-five": "Option four",
+            "label-six": "Option five"
+          }
+        }
+      },
+      "block_order": [
+        "Name",
+        "Email",
+        "Message",
+        "Optional-text",
+        "Urgent-checkbox",
+        "Options-select"
+      ],
+      "settings": {
+        "title": "",
+        "terms": true,
+        "width": "wrapper--narrow",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 12,
+        "padding_bottom": 50
+      }
+    },
+    "faq": {
+      "type": "page-faq",
+      "disabled": true,
+      "blocks": {
+        "heading-0": {
+          "type": "heading",
+          "settings": {
+            "title": "FAQ"
+          }
+        },
+        "question-1": {
+          "type": "question",
+          "settings": {
+            "title": "Frequently asked question",
+            "content": "<p>Share details about your shipping policies, item returns, or customer service.<\/p>"
+          }
+        },
+        "question-2": {
+          "type": "question",
+          "settings": {
+            "title": "Frequently asked question",
+            "content": "<p>Share details about your shipping policies, item returns, or customer service.<\/p>"
+          }
+        },
+        "question-3": {
+          "type": "question",
+          "settings": {
+            "title": "Frequently asked question",
+            "content": "<p>Share details about your shipping policies, item returns, or customer service.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading-0",
+        "question-1",
+        "question-2",
+        "question-3"
+      ],
+      "settings": {
+        "width": "wrapper--narrow",
+        "bg_color": "#fafafa",
+        "color": "",
+        "border_color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "main",
+    "705d14f1-a4c1-4df1-9f53-5583a6795e07",
+    "8eac62b2-61d7-4669-8645-315cf19bef35",
+    "bff8586a-c3e1-41de-8a80-f5b6321ce0c2",
+    "eee090cc-6629-4011-896b-051f87167aad",
+    "contact",
+    "faq"
+  ]
+}

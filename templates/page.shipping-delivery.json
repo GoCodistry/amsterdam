@@ -1,0 +1,104 @@
+{
+  "sections": {
+    "4603efa0-402c-49a1-a90c-56027b985123": {
+      "type": "section-rich-text",
+      "blocks": {
+        "95bea49d-6c37-4781-8298-b3b66c1fac6a": {
+          "type": "heading",
+          "settings": {
+            "title": "SHIPPING AND DELIVERY",
+            "text_size": 4
+          }
+        },
+        "80435b70-c907-4390-bde3-54f7c3c37439": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Amsterdam Modern does not offer white-glove delivery, however we are happy to assist in connecting clients with 3rd party local delivery drivers and shipping companies. <\/p><p>Clients can pay shippers directly and choose the ‘pickup’ option at checkout <span style=\"text-decoration:underline\">or<\/span> upon request, Amsterdam Modern can add delivery charges to client invoices and pay 3rd party shipping companies on the clients behalf for an additional fee (please <a href=\"mailto:info@amsterdammodern.com\" target=\"_blank\" title=\"mailto:info@amsterdammodern.com\">contact us<\/a> for a shipping quote)<\/p><p>- Amsterdam Modern is not responsible or liable for any damage to orders during transportation.<\/p><p>- Amsterdam Modern is not responsible for delivery times, delivery communication, delivery customer service, etc. Any complaints about delivery should be taken to the delivery company responsible, which will be listed on the client invoice. <\/p><p>- If clients are arranging their own delivery\/transportation, please see our <a href=\"https:\/\/amsterdammodern.myshopify.com\/pages\/pick-up-policy\" title=\"https:\/\/amsterdammodern.myshopify.com\/pages\/pick-up-policy\">PICK UP POLICY<\/a>.<\/p>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        }
+      },
+      "block_order": [
+        "95bea49d-6c37-4781-8298-b3b66c1fac6a",
+        "80435b70-c907-4390-bde3-54f7c3c37439"
+      ],
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-left",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 62,
+        "padding_bottom": 0
+      }
+    },
+    "3ff078f3-aa3f-4306-9d83-ef0acd0d768b": {
+      "type": "section-rich-text",
+      "blocks": {
+        "ebb94302-9a0b-4f1a-b118-5c58cc46e10f": {
+          "type": "heading",
+          "settings": {
+            "title": "IMPORTANT TO NOTE",
+            "text_size": 2
+          }
+        },
+        "60c24478-d272-4fd1-96f0-46cd11c5bc5d": {
+          "type": "text",
+          "settings": {
+            "text": "<p>All of our inventory is vintage. We sell the majority of pieces the way we found them, to keep true to their authenticity and charm; that means there may be scratches, dents, chips, patina, etc. and we like it that way ;) Please keep this in mind when buying from us as all sales are FINAL. Amsterdam Modern is not liable or responsible for <em>any inventory<\/em>– including damage caused through use of the pieces sold or pieces on display in the warehouse. Feel free to contact <a href=\"mailto:info@amsterdammodern.com\" target=\"_blank\" title=\"mailto:info@amsterdammodern.com\">info@amsterdammodern.com<\/a> about the condition of any items before purchasing.<\/p><p>Please keep in mind when shopping with Amsterdam Modern:<\/p><p>- Children and pets MUST be supervised at all times! For their own safety.<\/p><p>- DO NOT try to lift any furniture, for your own safety - ask for assistance. We are here to help you! <\/p><p>If you would like to see a specific item(s), please plan your visit by <a href=\"http:\/\/calendly.com\/amsterdammodern\"><span style=\"text-decoration:underline\">https:\/\/calendly.com\/amsterdammodern<\/span><\/a> so we can make sure the item(s) you would like to view is easily accessible– when booking your appointment online, there is a notes field to specify item(s) you’d like to view. You may also reach our front desk at 213-221-7380 to schedule a visit. Walk-ins are always welcome, just ring the doorbell when you arrive. We look forward to seeing you!<\/p>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        }
+      },
+      "block_order": [
+        "ebb94302-9a0b-4f1a-b118-5c58cc46e10f",
+        "60c24478-d272-4fd1-96f0-46cd11c5bc5d"
+      ],
+      "disabled": true,
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-left",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 0,
+        "padding_bottom": 10
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "subheading": "",
+        "subheading_size": 3,
+        "show_title": true,
+        "heading_size": 8,
+        "show_content": true,
+        "text_size": 4,
+        "align_text": "text-left",
+        "width": "wrapper",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "58577579-51dc-4dad-a967-fcf7eeadfc81": {
+      "type": "section-divider",
+      "settings": {
+        "show_line": false,
+        "width": "wrapper",
+        "border_color": "",
+        "bg_color": "",
+        "padding_top": 0,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "4603efa0-402c-49a1-a90c-56027b985123",
+    "3ff078f3-aa3f-4306-9d83-ef0acd0d768b",
+    "main",
+    "58577579-51dc-4dad-a967-fcf7eeadfc81"
+  ]
+}

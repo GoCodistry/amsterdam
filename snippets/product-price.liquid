@@ -1,0 +1,101 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign units = product.variants | map: 'unit_price' | compact
+  if units[0]
+    assign has_units = true
+  else
+    assign has_units = false
+  endif
+-%}
+
+<div class="product-price-sku">
+  <div class="product__block" {{ block_style }}>
+    <div class="product__price__wrap">
+      {% unless product.metafields.custom.on_hold %}
+        <div class="product__price{% if has_units %} product__price--has-units{% endif %}" data-price-wrapper>
+          <span data-product-price {% if current_variant.compare_at_price > current_variant.price %} class="product__price--sale"{% endif %}>
+            {%- if current_variant.price == 0 -%}
+              {{ 'general.money.free' | t }}
+            {%- else -%}
+              {{ current_variant.price | money }}
+            {%- endif -%}
+          </span>
+          {% if product.title contains 'Set of'  %}
+            {% assign titleSplit = product.title | split: 'Set of ' %}
+            {% assign setNumber = titleSplit | last | split:' ' | first %}
+            <span class="set-count"> (Set of {{setNumber}})</span>
+          {% elsif product.title contains 'Pair of'  %}
+            {% assign titleSplit = product.title | split: 'Pair of ' %}
+            {% assign setNumber = titleSplit | last | split:' ' | first %}
+            <span class="set-count"> (Pair of {{setNumber}})</span>
+          {% endif %}
+
+          {%- if product.compare_at_price_max > product.price -%}
+            <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
+            <s class="product__price--strike" data-compare-price>
+              {%- if current_variant.compare_at_price > current_variant.price -%}
+                {{ current_variant.compare_at_price | money }}
+              {%- endif -%}
+            </s>
+          {%- endif -%}
+
+          {%- if has_units -%}
+            {%- capture show_units -%}
+              {%- unless current_variant.unit_price -%}style="display: none;"{%- endunless -%}
+            {%- endcapture -%}
+
+            {%- capture unit_price_separator -%}
+              <span aria-hidden="true">/</span><span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+            {%- endcapture -%}
+
+            {%- capture unit_price_base_unit -%}
+              <span>
+                {% if current_variant.unit_price_measurement %}
+                  {% if current_variant.unit_price_measurement.reference_value != 1 %}
+                    {{ current_variant.unit_price_measurement.reference_value }}
+                  {%- endif -%}
+                  {{ current_variant.unit_price_measurement.reference_unit }}
+                {% endif %}
+              </span>
+            {%- endcapture -%}
+
+            <div class="product__price__meta">
+              <span data-product-unit {{ show_units }} class="product__price--unit">
+                <span class="visually-hidden visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
+                <span data-product-unit-price id="unit-price-{{ section_id }}">{{ current_variant.unit_price | money }}</span>
+                {{ unit_price_separator }}
+                <span data-product-base id="unit-price-base-{{ section_id }}">{{ unit_price_base_unit }}</span>
+              </span>
+              <span data-price-each class="product__price--unit hidden">
+                {{ 'products.product.each' | t }}
+                <span data-price-each-amount></span>
+              </span>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if settings.sale_badge -%}
+          <span data-price-off class="product__price--off hidden">
+            <span data-price-off-amount></span>
+            {{ 'products.product.off' | t }}
+          </span>
+        {%- endif -%}
+      {% endunless %}
+    </div>
+
+    {% comment %} Shop pay split payment terms {% endcomment %}
+    {% unless product.metafields.custom.on_hold %}
+      <div class="shop-pay-terms">
+        {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+        {%- form 'product', product, id: product_form_installment_id, class: 'installment' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          {{ form | payment_terms }}
+        {%- endform -%}
+      </div>
+    {% endunless %}
+  </div>
+  <div class="product__sku">
+    <span>{{ product.selected_or_first_available_variant.sku }}</span>
+  </div>
+</div>
+

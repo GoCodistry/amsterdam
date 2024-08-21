@@ -1,0 +1,50 @@
+{%- if product_api -%}
+  <div class="product__block"
+    {% if animation_name %}
+      data-animation="{{ animation_name }}"
+      data-animation-duration="{{ animation_duration }}"
+      data-animation-delay="{{ animation_delay }}"
+    {% endif %}>
+    <div class="product-quick-add__description rte">
+      {{ product.description | strip_html | truncatewords: 30, '...' }}
+    </div>
+  </div>
+{%- else -%}
+  {%- if block.settings.style == 'inline' -%}
+    <div class="product__block product__description rte" {{ block.shopify_attributes }}>
+      {%- if product.description != blank -%}
+        {%- liquid
+  assign product_description_content = product.description | strip
+  assign truncate_string = 'products.general.read_more' | t
+  assign show_more_button = block.settings.show_read_more
+  assign truncate_html = '<button type="button" class="caps--link" data-truncated-button>' | append: truncate_string | append: '</button>'
+
+  assign truncated_holder = ''
+  if show_more_button
+    assign truncated_holder = 'data-truncated-holder'
+  endif
+  -%}
+
+<div class="product__description__content rte">
+  <div class="product__description__content__holder" {{ truncated_holder }}>
+    <div class="product__description__content__inner">
+      <div class="product__description__content__entry" data-truncated-content="product__description__content__entry--truncate">
+        {{ product_description_content }}
+      </div>
+    </div>
+
+    <div class="product__description__content__actions">
+      {%- if show_more_button -%}
+        {{ truncate_html }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="product__block product__tabs tabs-wrapper product-tabs-wrapper{% if block.settings.style == 'tabs' %} product-tabs-wrapper--tabs{% elsif block.settings.style == 'accordions' %} product-tabs-wrapper--accordion{% endif %}" {{ block.shopify_attributes }} {{ block_style }}>
+      {%- render 'product-tabs', product: product, block: block -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}
