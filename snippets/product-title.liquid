@@ -106,6 +106,9 @@
     {% assign country = "" %}
     {% assign redUrl = vendor_split[0] %} 
   {% endif %} 
+  {% if redUrl == 'Amsterdam Modern' %}
+    {% assign redUrl = 'amsterdam-modern-2' %} 
+  {% endif %} 
   <a href="{{ shop.url }}/collections/{{ redUrl | handle }}"> {{ designer }}</a>
   {% if manufacturer != blank and country != blank and designer != blank %}
     /
