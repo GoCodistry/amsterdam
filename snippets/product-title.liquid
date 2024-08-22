@@ -88,7 +88,38 @@
   /
 {% endif %}
 
+{% if producer == blank and countryyy == blank and designerss == blank %}
+  {% assign vendor_split = product.vendor | split:'/' %}
+  {% if vendor_split.size == 3 %}
+      {% assign designer = vendor_split[0] %}
+      {% assign manufacturer = vendor_split[1] %}
+      {% assign country = vendor_split[2] %} 
+      {% assign redUrl = vendor_split[2] %} 
+  {% elsif vendor_split.size == 2 %}
+    {% assign designer = vendor_split[0] %}
+    {% assign manufacturer = "" %}
+    {% assign country = vendor_split[1] %}
+    {% assign redUrl = vendor_split[1] %} 
+  {% elsif vendor_split.size == 1 %}
+    {% assign designer = vendor_split[0] %}
+    {% assign manufacturer = "" %}
+    {% assign country = "" %}
+    {% assign redUrl = vendor_split[0] %} 
+  {% endif %} 
+  <a href="{{ shop.url }}/collections/{{ redUrl | handle }}"> {{ designer }}</a>
+  {% if manufacturer != blank and country != blank and designer != blank %}
+    /
+    <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ manufacturer }}</a>
+    /
+    <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ country }}</a>
+  {% endif %}
+  {% if manufacturer == blank and designer != blank and country != blank %}
+    /
+    <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ country }}</a>
+  {% endif %}
 
+
+  {% else %}
 <a href="{{ shop.url }}/collections/{{ designerss | handle }}"> {{ product.metafields.custom.designer_namen_new }}</a>
 {% if producer != blank and countryyy != blank and designerss == blank %}
   /
@@ -97,6 +128,7 @@
   /
 {% endif %}
 <a href="{{ shop.url }}/collections/{{ countryyy | handle | strip }}">{{  product.metafields.custom.country1 }}</a>
+{% endif %} 
 </span>
 
 
