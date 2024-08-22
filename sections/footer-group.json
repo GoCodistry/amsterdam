@@ -1,26 +1,111 @@
 {
-  "name": "t:sections.footer.name",
   "type": "footer",
+  "name": "Footer",
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "09a73e88-da7d-4ef3-a8b9-860213c1ece5": {
+          "type": "text",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/seal.svg",
+            "image_width": 150,
+            "title": "",
+            "text": "",
+            "column_width": 17
+          }
+        },
+        "footer-1": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "footer-1",
+            "title": "COMPANY",
+            "column_width": 25
+          }
+        },
+        "68d67115-1634-40af-8fb3-33681d73aeb8": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "policies",
+            "title": "SUPPORT",
+            "column_width": 25
+          }
+        },
+        "footer-0": {
+          "type": "newsletter",
+          "settings": {
+            "title": "NEWSLETTER",
+            "text": "<p>Subscribe to our email list for the latest inventory, updates, and sales.<\/p>",
+            "show_name": false,
+            "button_text": "Join",
+            "show_arrow": false,
+            "terms": false,
+            "button_type": "btn--primary",
+            "button_size": "btn--small",
+            "button_style": "btn--solid",
+            "show_social_links": true,
+            "column_width": 33
+          }
+        }
+      },
+      "block_order": [
+        "09a73e88-da7d-4ef3-a8b9-860213c1ece5",
+        "footer-1",
+        "68d67115-1634-40af-8fb3-33681d73aeb8",
+        "footer-0"
+      ],
       "settings": {
-        "color_scheme": "scheme-1",
-        "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
-        "enable_follow_on_shop": true,
-        "show_social": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
-        "payment_enable": true,
-        "show_policy": true,
-        "margin_top": 0,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "logo_image_width": 50,
+        "overlay_opacity": 75,
+        "overlay_color": "#ffffff",
+        "footer_secondary_linklist": "site-credit",
+        "footer_payment_enable": false,
+        "show_locale_selector": true,
+        "show_currency_selector": true,
+        "type": "currency",
+        "padding_top": 25,
+        "padding_bottom": 25
+      }
+    },
+    "popups": {
+      "type": "popups",
+      "blocks": {
+        "9636b010-8c78-40c7-b62f-f35699d232d7": {
+          "type": "popup",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/06_0e23d0d5-79f8-4b70-a3a0-3f8d172bc73a.jpg",
+            "subheading": "AMSTERDAM MODERN",
+            "title": "NEWSLETTER",
+            "text": "<p>Subscribe to our email list for the latest inventory, updates, and sales.<\/p>",
+            "bg_color": "#fcfcfc",
+            "color": "",
+            "newsletter_enable": true,
+            "show_name": false,
+            "button_text": "Get notified",
+            "show_arrow": false,
+            "terms": true,
+            "button_type": "btn--primary",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "trigger": "delayed_10",
+            "target_url_enabled": false,
+            "target_url": "",
+            "target_referrer_enabled": false,
+            "target_referrer": "",
+            "target_device_enabled": false,
+            "target_device": "desktop"
+          }
+        }
+      },
+      "block_order": [
+        "9636b010-8c78-40c7-b62f-f35699d232d7"
+      ],
+      "settings": {
       }
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "popups"
   ]
 }

@@ -1,4 +1,4 @@
-<div class="{% if section.settings.include_margins %}page-width{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+<div class="{% if section.settings.include_margins %}wrapper{% endif %}">
   {%- for block in section.blocks -%}
     {% render block %}
   {%- endfor -%}
@@ -6,15 +6,14 @@
 
 {% schema %}
 {
-  "name": "t:sections.apps.name",
+  "name": "Apps",
   "tag": "section",
-  "class": "section",
   "settings": [
     {
       "type": "checkbox",
       "id": "include_margins",
-      "default": true,
-      "label": "t:sections.apps.settings.include_margins.label"
+      "default": false,
+      "label": "Include margins"
     }
   ],
   "blocks": [
@@ -24,7 +23,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.apps.presets.name"
+      "name": "Apps"
     }
   ]
 }

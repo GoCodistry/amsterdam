@@ -1,0 +1,243 @@
+<!-- /sections/related.liquid -->
+{%- liquid
+  assign animation_anchor = '#RelatedProducts--' | append: section.id
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign border_color = section.settings.border_color
+  assign enable_tabs = section.settings.enable_tabs
+
+  assign has_related_products = false
+  assign has_recently_products = false
+-%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == 'related' and product.collections.size > 0 -%}
+    {%- assign has_related_products = true -%}
+
+    {%- capture related -%}
+      <div id="api-product-recommendation" data-related-section data-limit="{{ block.settings.limit }}" data-product-id="{{ product.id }}" style="--column-count: {{ block.settings.limit | at_most: 4 }};" {{ block.shopify_attributes }}></div>
+    {%- endcapture -%}
+
+    {%- capture related_title -%}
+      {%- if block.settings.product_recommendations_heading != blank -%}
+        {{ block.settings.product_recommendations_heading }}
+      {%- endif -%}
+    {%- endcapture -%}
+  {%- endif -%}
+
+  {%- if block.type == 'recent' -%}
+    {%- assign has_recently_products = true -%}
+    {%- assign product_recently_limit = block.settings.product_recently_limit -%}
+
+    {%- capture recent -%}
+      {%- render 'products-recently-viewed', product: product, limit: product_recently_limit, block: block -%}
+    {%- endcapture -%}
+
+    {%- capture recent_title -%}
+      {%- if block.settings.product_recently_heading != blank -%}
+        {{ block.settings.product_recently_heading }}
+      {%- endif -%}
+    {%- endcapture -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- capture style -%}
+  --PT: {{ section.settings.padding_top }}px;
+  --PB: {{ section.settings.padding_bottom }}px;
+
+  {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+    --bg: {{ bg_color }};
+  {%- endunless -%}
+
+  {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+    --text: {{ text_color }};
+    --text-light: {{ text_color | color_mix: settings.bg_color, 70 }};
+    --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+  {%- endunless -%}
+
+  {%- unless border_color == 'rgba(0,0,0,0)' or border_color == blank -%}
+    --border: {{ border_color }};
+  {%- endunless -%}
+{%- endcapture -%}
+
+<div style="margin-top:100px" class="related__wrapper js"
+  id="RelatedProducts--{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="related"
+  style="{{ style }}">
+  {%- if has_related_products or has_recently_products -%}
+    <div class="tabs-wrapper related__products section-padding"{% if enable_tabs %} data-tabs-holder{% endif %}>
+      {%- if enable_tabs -%}
+        <div class="tabs__head"
+          data-aos="hero"
+          data-aos-anchor="{{ animation_anchor }}"
+          data-aos-order="1">
+          <div class="grid__heading-holder">
+            <div class="grid__heading-actions">
+              <ul class="tabs tabs--center" data-scrollbar data-scrollbar-slider>
+                {%- if related -%}
+                  <li class="tab-link tab-link-0 current" data-tab="0" tabindex="0">
+                    {%- if related_title -%}
+                      <span>{{ related_title }}</span>
+                    {%- endif -%}
+                  </li>
+                {%- endif -%}
+
+                {%- if recent -%}
+                  <li class="tab-link tab-link-1 tab-link__recent{% if related == nil %} current{% endif %}" data-tab="1" tabindex="0">
+                    {%- if recent_title -%}
+                      <span>{{ recent_title }}</span>
+                    {%- endif -%}
+                  </li>
+                {%- endif -%}
+              </ul>
+
+              <button type="button" class="tabs__arrow tabs__arrow--prev is-hidden" data-scrollbar-arrow-prev>
+                {%- render 'icon-nav-arrow-left' -%}
+                <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+              </button>
+
+              <button type="button" class="tabs__arrow tabs__arrow--next is-hidden" data-scrollbar-arrow-next>
+                {%- render 'icon-nav-arrow-right' -%}
+                <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if related -%}
+        <div class="tab-content tab-content-0 current tabs__recommendation" data-tab-index="0">
+          {%- if related_title != blank and enable_tabs != true -%}
+            <h6 class="tab__title"
+              data-aos="hero"
+              data-aos-anchor="{{ animation_anchor }}"
+              data-aos-order="1">{{ related_title }}</h6>
+          {%- endif -%}
+
+          {{ related }}
+        </div>
+      {%- endif -%}
+
+      {%- if recent -%}
+        <div class="tab-content tab-content-1 tabs__recently-viewed{% if enable_tabs == false or related == nil %} current{% endif %}" data-tab-index="1" style="--column-count: {{ product_recently_limit }}">
+          {%- if recent_title != blank and enable_tabs == false -%}
+            <h6 class="tab__title"
+              data-aos="hero"
+              data-aos-anchor="{{ animation_anchor }}"
+              data-aos-order="1">{{ recent_title }}</h6>
+          {%- endif -%}
+
+          {{ recent }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="section-padding">
+      <p class="center">{{ 'home_page.onboarding.no_content' | t }}</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+  {
+    "name": "Product recommendations",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_tabs",
+        "label": "Enable tabs",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Border"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "type": "related",
+        "name": "Related products",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "product_recommendations_heading",
+            "label": "Heading",
+            "default": "Related products"
+          },
+          {
+            "type": "range",
+            "id": "limit",
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "label": "Product limit",
+            "default": 4
+          }
+        ]
+      },
+      {
+        "type": "recent",
+        "name": "Recently viewed products",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "product_recently_heading",
+            "label": "Heading",
+            "default": "Recently viewed"
+          },
+          {
+            "type": "range",
+            "id": "product_recently_limit",
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "label": "Product limit",
+            "default": 4
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

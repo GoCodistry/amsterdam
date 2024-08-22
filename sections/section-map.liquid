@@ -1,0 +1,310 @@
+<!-- /sections/section-map.liquid -->
+
+{%- liquid
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign desktop_height = section.settings.height
+  assign mobile_height = section.settings.mobile_height
+-%}
+
+{%- style -%}
+  #Map--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign display_map = false
+  if section.settings.api_key != blank and section.settings.map_address
+    assign display_map = true
+  endif
+
+  assign animation_anchor = '#Map--' | append: section.id
+
+  capture columns_container_class
+    echo 'homepage-columns frame'
+    echo ' ' | append: desktop_height
+    echo ' ' | append: mobile_height
+    if section.settings.image == blank
+      if desktop_height == 'image-height'
+        echo ' auto-height'
+      endif
+
+      if mobile_height == 'image-height--mobile'
+        echo ' auto-height--mobile'
+      endif
+    endif
+  endcapture
+
+  assign animation_order = 0
+-%}
+
+<div id="Map--{{ section.id }}"
+  class="map-section section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="map"
+  data-zoom="{{ section.settings.zoom }}"
+  data-style="{{ section.settings.style }}"
+  data-address="{{ section.settings.map_address | escape }}"
+  data-latlong-correction="{{ section.settings.enable_latlong }}"
+  data-lat="{{ section.settings.lat }}"
+  data-long="{{ section.settings.long }}"
+  data-api-key="{{ section.settings.api_key }}">
+  <div class="{{ section.settings.width }}">
+    <div class="{{ columns_container_class }}">
+      <div class="column__block column__block--content frame__item" {{ block.shopify_attributes }}>
+        <div class="hero__content__wrapper align--middle-center">
+          <div class="hero__content hero__content--compact text-center">
+            {%- if section.settings.title != blank -%}
+              {%- assign animation_order = animation_order | plus: 1 -%}
+              <h2 class="hero__title h4"
+                data-aos="hero"
+                data-aos-anchor="{{ animation_anchor }}"
+                data-aos-order="{{ animation_order }}">
+                {{ section.settings.title | escape }}
+              </h2>
+            {%- endif -%}
+
+            {%- if section.settings.address != blank -%}
+              {%- assign animation_order = animation_order | plus: 1 -%}
+              <div class="hero__rte rte"
+                data-aos="hero"
+                data-aos-anchor="{{ animation_anchor }}"
+                data-aos-order="{{ animation_order }}">
+                {{ section.settings.address }}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.button != blank and section.settings.map_address != blank -%}
+              {%- assign animation_order = animation_order | plus: 1 -%}
+              <div class="hero__button"
+                data-aos="hero"
+                data-aos-anchor="{{ animation_anchor }}"
+                data-aos-order="{{ animation_order }}">
+                <a href="https://maps.google.com?daddr={{ section.settings.map_address | escape }}" rel="noopener" target="_blank" class="btn btn--outline btn--black">
+                  <span>{{ section.settings.button | escape }}</span>
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    
+      <div class="column__block column__block--map frame__item">
+        {%- capture sizes -%}
+          (min-width: 990px) 66.66vw, 50vw
+        {%- endcapture -%}
+        {%- render 'image-hero' image: section.settings.image, desktop_height: desktop_height, mobile_height: mobile_height, sizes: sizes -%}
+  
+        {%- if display_map -%}
+          <div class="map-section__container {{ desktop_height }} {{ mobile_height }}" data-map-container>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Map",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "select",
+        "id": "height",
+        "label": "Desktop height",
+        "default": "screen-height-one-half",
+        "options": [
+          { "value": "image-height", "label": "Image height" },
+          { "value": "screen-height-full", "label": "Full screen height"},
+          { "value": "screen-height-three-quarters", "label": "3/4 of screen"},
+          { "value": "screen-height-two-thirds", "label": "2/3 of screen"},
+          { "value": "screen-height-one-half", "label": "1/2 of screen"},
+          { "value": "screen-height-one-third", "label": "1/3 of screen"},
+          { "value": "seven-fifty-height-hero", "label": "750px" },
+          { "value": "sixty-fifty-height-hero", "label": "650px" },
+          { "value": "five-fifty-height-hero ", "label": "550px" },
+          { "value": "four-fifty-height-hero", "label": "450px" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "mobile_height",
+        "label": "Mobile height",
+        "default": "screen-height-one-half--mobile",
+        "options": [
+          { "value": "image-height--mobile", "label": "Image height" },
+          { "value": "screen-height-full--mobile", "label": "Full screen height"},
+          { "value": "screen-height-three-quarters--mobile", "label": "3/4 of screen"},
+          { "value": "screen-height-two-thirds--mobile", "label": "2/3 of screen"},
+          { "value": "screen-height-one-half--mobile", "label": "1/2 of screen"},
+          { "value": "screen-height-one-third--mobile", "label": "1/3 of screen"},
+          { "value": "seven-fifty-height-hero--mobile", "label": "750px" },
+          { "value": "sixty-fifty-height-hero--mobile", "label": "650px" },
+          { "value": "five-fifty-height-hero--mobile", "label": "550px" },
+          { "value": "four-fifty-height-hero--mobile", "label": "450px" }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Address & Directions"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Map"
+      },
+      {
+        "type": "richtext",
+        "id": "address",
+        "label": "Address and hours",
+        "default": "<p>123 Fake St.<br>Vancouver, Canada</p><p>Mon - Fri, 10am - 9pm<br>Weekends, 11am - 4pm</p>"
+      },
+      {
+        "type": "text",
+        "id": "button",
+        "label": "Map link label",
+        "default": "Directions"
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper--full",
+        "options": [
+          {"value": "wrapper--full", "label": "Full width"},
+          {"value": "wrapper--full-padded", "label": "Full width padded"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Map"
+      },
+      {
+        "id": "api_key",
+        "type": "text",
+        "label": "Google Maps API key",
+        "info": "You’ll need to [register a Google Maps API Key](https://help.shopify.com/manual/using-themes/troubleshooting/map-section-api-key) to display the map"
+      },
+      {
+        "id": "map_address",
+        "type": "text",
+        "label": "Map address",
+        "info": "Google Maps will use this address to get latitude and longitude",
+        "default": "404 Beach Avenue, Vancouver, BC"
+      },
+      {
+        "type": "range",
+        "id": "zoom",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "label": "Zoom",
+        "info":"Low levels cover a wide area, while higher levels cover a smaller area.",
+        "default": 11
+      },
+      {
+        "type": "select",
+        "id": "style",
+        "label": "Map style",
+        "default": "light",
+        "options": [
+          { "value": "default", "label": "Default" },
+          { "value": "light", "label": "Minimal"},
+          { "value": "white_label", "label": "Light"},
+          { "value": "dark_label", "label": "Dark"}
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "Displayed if the map isn’t loaded"
+      },
+      {
+        "type": "header",
+        "content": "Location correction"
+      },
+      {
+        "type": "paragraph",
+        "content": "Correct the pin position if Google shows an incorrect location for your address."
+      },
+      {
+          "type": "checkbox",
+          "id": "enable_latlong",
+          "label": "Enable location correction",
+          "default": false
+      },
+      {
+        "type": "text",
+        "id": "lat",
+        "label": "Latitude",
+        "info": "Example: 49.281670"
+      },
+      {
+        "type": "text",
+        "id": "long",
+        "label": "Longitude",
+        "info": "Example: -123.139640"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 0
+      }
+    ],
+    "presets": [
+      {
+        "name": "Map",
+        "category": "Image"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer", "custom.pre_footer"]
+    }
+  }
+{% endschema %}

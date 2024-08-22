@@ -1,0 +1,125 @@
+<!-- /snippets/localization.liquid -->
+{%- liquid
+  assign class = class | default: 'default'
+  assign parent_class = 'popout-' | append: class
+  assign default_uniq_id = 'localization-' | append: section.id
+  assign uniq_id = uniq_id | default: default_uniq_id
+  assign form_id = 'localization-form-' | append: uniq_id
+  assign short_country_name = short_country_name | default: false
+  assign position_reverse = position_reverse | default: false
+  assign show_icon = show_icon | default: false
+  assign languages_code = ''
+  assign languages = false
+  assign currencies = false
+
+  if section.settings.show_locale_selector and shop.published_locales.size > 1
+    assign languages = true
+  endif
+
+  if section.settings.show_currency_selector and shop.enabled_currencies.size > 1
+    assign currencies = true
+  endif
+-%}
+
+{%- if languages or currencies -%}
+  {%- form 'localization', class: parent_class, id: form_id -%}
+    {%- if languages -%}
+      {%- capture languages_code -%}
+        <div class="{{ parent_class }}__holder">
+          <h2 class="visually-hidden" id="lang-heading-{{ uniq_id }}">
+            {{ 'layout.footer.language' | t }}
+          </h2>
+
+          <div class="popout" data-popout>
+            <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="lang-list-{{ uniq_id }}" aria-describedby="lang-heading-{{ uniq_id }}" data-popout-toggle>
+              <span data-popout-toggle-text>
+                {{ localization.language.iso_code }}
+              </span>
+              {%- if show_icon -%}
+                {%- render 'icon-nav-arrow-down' -%}
+              {%- endif -%}
+            </button>
+
+            <ul id="lang-list-{{ uniq_id }}" class="popout-list" data-popout-list>
+              {% for language in localization.available_languages %}
+                <li class="popout-list__item{% if language == localization.language %} is-active{% endif %}">
+                  <a class="popout-list__option" href="#" lang="{{ locale.iso_code }}" {% if language == localization.language %}aria-current="true"{% endif %} data-value="{{ language.iso_code }}" data-popout-option>
+                    <span>{{ language.endonym_name }}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            <input type="hidden" name="locale_code" id="LocaleSelector-{{ uniq_id }}" value="{{ localization.language.iso_code }}" data-popout-input>
+          </div>
+        </div>
+      {%- endcapture -%}
+    {%- endif -%}
+
+    {%- if languages_code != '' and position_reverse != true -%}
+      {{ languages_code }}
+    {%- endif -%}
+
+    {%- if currencies -%}
+      <div class="{{ parent_class }}__holder">
+        <h2 class="visually-hidden" id="currency-heading-{{ uniq_id }}">
+          {{ 'layout.footer.currency' | t }}
+        </h2>
+
+        <div class="popout" data-popout>
+          {% if section.settings.type == 'currency' %}
+            <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="currency-list-{{ uniq_id }}" aria-describedby="currency-heading-{{ uniq_id }}" data-popout-toggle>
+              <span data-popout-toggle-text>{{ form.current_currency.iso_code }} {%- if form.current_currency.symbol -%}{{ form.current_currency.symbol }}{%- endif -%}</span>
+              {%- if show_icon -%}
+                {%- render 'icon-nav-arrow-down' -%}
+              {%- endif -%}
+            </button>
+
+            <ul id="currency-list-{{ uniq_id }}" class="popout-list" data-popout-list>
+              {% for currency in form.available_currencies %}
+                <li class="popout-list__item{% if currency.iso_code == form.current_currency.iso_code %} is-active{% endif %}">
+                  <a class="popout-list__option" href="#" {% if currency.iso_code == form.current_currency.iso_code %}aria-current="true"{% endif %} data-value="{{ currency.iso_code }}" data-popout-option>
+                    <span>{{ currency.iso_code }} {%- if currency.symbol -%}{{ currency.symbol }}{%- endif -%}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            <input type="hidden" name="currency_code" id="CurrencySelector-{{ uniq_id }}" value="{{ form.current_currency.iso_code }}" data-popout-input>
+          {% endif %}
+
+          {% if section.settings.type == 'country' %}
+            <button type="button" class="popout__toggle" aria-expanded="false" aria-controls="currency-list-{{ uniq_id }}" aria-describedby="currency-heading-{{ uniq_id }}" data-popout-toggle>
+              <span data-popout-toggle-text>
+                {%- if short_country_name -%}
+                  {{ localization.country.iso_code }} ({% if localization.country.currency.symbol %}{{ localization.country.currency.symbol }}{% endif %}{{ form.current_currency.iso_code }})
+                {%- else -%}
+                  {{ localization.country }} ({{ localization.country.iso_code }}){% if localization.country.currency.symbol %} - {{ localization.country.currency.symbol }}{% endif %}
+                {%- endif -%}
+              </span>
+              {%- if show_icon -%}
+                {%- render 'icon-nav-arrow-down' -%}
+              {%- endif -%}
+            </button>
+
+            <ul id="currency-list-{{ uniq_id }}" class="popout-list" data-popout-list>
+              {% for country in localization.available_countries %}
+                <li class="popout-list__item{% if country == localization.country %} is-active{% endif %}">
+                  <a class="popout-list__option" href="#" {% if country == localization.country %}aria-current="true"{% endif %} data-value="{{ country.iso_code }}" data-popout-option>
+                    <span>{{ country.name }} ({{ country.iso_code }}) - {{ country.currency.symbol }}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            <input type="hidden" name="country_code" id="CurrencySelector-{{ uniq_id }}" value="{{ localization.country.iso_code }}" data-popout-input>
+          {% endif %}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if languages_code != '' and position_reverse -%}
+      {{ languages_code }}
+    {%- endif -%}
+  {%- endform -%}
+{%- endif -%}

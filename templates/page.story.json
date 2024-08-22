@@ -1,0 +1,116 @@
+{
+  "sections": {
+    "custom-content-1": {
+      "type": "section-custom-content",
+      "blocks": {
+        "image-1-1": {
+          "type": "image",
+          "settings": {
+            "title": "Our Story",
+            "description": "",
+            "link_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "image-1-1"
+      ],
+      "settings": {
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {
+      }
+    },
+    "custom-content-2": {
+      "type": "section-custom-content",
+      "blocks": {
+        "image-2-1": {
+          "type": "image",
+          "settings": {
+            "title": "How it started",
+            "description": "",
+            "link_text": ""
+          }
+        },
+        "image-2-2": {
+          "type": "image",
+          "settings": {
+            "title": "How it's going",
+            "description": "",
+            "link_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "image-2-1",
+        "image-2-2"
+      ],
+      "settings": {
+      }
+    },
+    "custom-content-3": {
+      "type": "section-custom-content",
+      "blocks": {
+        "text-3-1": {
+          "type": "text",
+          "settings": {
+            "button_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "text-3-1"
+      ],
+      "settings": {
+      }
+    },
+    "custom-content-4": {
+      "type": "section-custom-content",
+      "blocks": {
+        "text-4-1": {
+          "type": "text",
+          "settings": {
+            "button_text": ""
+          }
+        },
+        "image-4-2": {
+          "type": "image",
+          "settings": {
+            "link_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "text-4-1",
+        "image-4-2"
+      ],
+      "settings": {
+      }
+    },
+    "custom-content-5": {
+      "type": "section-custom-content",
+      "blocks": {
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "newsletter"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "custom-content-1",
+    "main",
+    "custom-content-2",
+    "custom-content-3",
+    "custom-content-4",
+    "custom-content-5"
+  ]
+}

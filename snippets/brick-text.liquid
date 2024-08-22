@@ -1,0 +1,91 @@
+{% comment %}
+    Renders text block for custom content or newsletter sections
+
+    Accepts:
+    - block: {Object} Block object
+    - style: {String} Block inline style
+    - padding_class: {String} Set class "has-padding" if background colors of the block and the body are different
+    - animation_anchor: {String} ID of the element that will trigger animations
+
+    Usage:
+    {% render 'brick-text', block: block, style: style, padding_class: padding_class, animation_anchor: animation_anchor %}
+{% endcomment %}
+
+{%- liquid
+  assign subheading = block.settings.subheading
+  assign title = block.settings.title
+  assign text = block.settings.text
+  assign button_text = block.settings.button_text
+  assign show_social_links = block.settings.show_social_links
+  assign bg_color = block.settings.bg_color
+  assign text_color = block.settings.color
+  assign animation_order = 0
+-%}
+
+{%- capture style -%}
+  {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+    --bg: {{ bg_color }};
+  {%- endunless -%}
+
+  {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+    --text: {{ text_color }};
+    --text-light: {{ text_color | color_mix: settings.bg_color, 70 }};
+    --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+  {%- endunless -%}
+{%- endcapture -%}
+
+<div class="brick__block frame__item"{% if style != blank %} style="{{ style }}"{% endif %} data-prevent-transparent-header {{ block.shopify_attributes }}>
+  <div class="brick__block__text{{ padding_class }}" data-overflow-frame>
+    <div class="brick__block__text__inner" data-overflow-content>
+      <div class="hero__content {{ block.settings.align_text }}">
+        {%- if subheading != blank -%}
+          {%- assign font_size_class = block.settings.subheading_size | prepend: 'body-size-' -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <p class="hero__subheading {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">{{ subheading }}</p>
+        {%- endif -%}
+
+        {%- if title != blank -%}
+          {%- assign font_size_class = block.settings.heading_size | prepend: 'heading-size-' -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <h2 class="hero__title {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">{{ title }}</h2>
+        {%- endif -%}
+
+        {%- if text != blank -%}
+          {%- assign font_size_class = block.settings.text_size | prepend: 'body-size-' -%}
+          {%- assign text_columns_class = block.settings.text_columns | prepend: 'columns--' -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <div class="hero__rte {{ font_size_class }} {{ text_columns_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">{{ text }}</div>
+        {%- endif -%}
+
+        {%- if button_text != blank -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <div
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">
+            <a href="{{ block.settings.button_url }}" class="btn {{ block.settings.button_size }} {{ block.settings.button_style }} {{ block.settings.button_type }}">
+              <span>{{ button_text }}</span>
+
+              {%- if block.settings.show_arrow -%}
+                {%- render 'icon-arrow-right' -%}
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+
+        {%- if show_social_links -%}
+          {%- render 'social-icons', animation_anchor: animation_anchor, animation_order: 5 -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

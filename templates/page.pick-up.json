@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "1ef88dce-b82b-4472-bd0b-07535dc1d9a2": {
+      "type": "section-rich-text",
+      "blocks": {
+        "c4f8f78a-e210-426e-af8e-118115fb60b5": {
+          "type": "heading",
+          "settings": {
+            "title": "PICK UP POLICY",
+            "text_size": 2
+          }
+        },
+        "7e18fc34-4c23-4a00-af42-04773200feb6": {
+          "type": "text",
+          "settings": {
+            "text": "<p>For purchased, memoed or rented orders, clients may pick up or arrange for a 3rd party to pick up on behalf of the client at our warehouse located at 134 Glendale Blvd. Los Angeles, CA 90026.<\/p><p>Clients must arrange a time\/day with Amsterdam Modern in advance to pick up orders within 1 week (7 days) of purchasing. A storage fee of 25% will be added after 7 days. Any orders left here over 30 days will be forfeited back to Amsterdam Modern, no refund will be issued. <\/p><p>Clients or delivery drivers MUST have one of the following in order to pick up:<\/p><p>1. Name on the invoice<\/p><p>2. Invoice number <\/p><p>3. Copy of the packing slip<\/p><p>Clients are responsible for transportation of purchases, memos and rentals. Amsterdam Modern may assist clients or delivery drivers in packing and loading vehicles however, Amsterdam Modern is not responsible nor liable for any damages to the vehicle or to the pieces during transportation. By purchasing from Amsterdam Modern, you agree to take full responsibility for transportation of purchased, memoed, or rented pieces. <\/p>",
+            "text_size": 2,
+            "text_style": "font-body"
+          }
+        }
+      },
+      "block_order": [
+        "c4f8f78a-e210-426e-af8e-118115fb60b5",
+        "7e18fc34-4c23-4a00-af42-04773200feb6"
+      ],
+      "settings": {
+        "width": "wrapper",
+        "align_text": "text-left",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "subheading": "",
+        "subheading_size": 3,
+        "show_title": true,
+        "heading_size": 8,
+        "show_content": true,
+        "text_size": 4,
+        "align_text": "text-left",
+        "width": "wrapper",
+        "bg_color": "",
+        "color": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "58577579-51dc-4dad-a967-fcf7eeadfc81": {
+      "type": "section-divider",
+      "settings": {
+        "show_line": false,
+        "width": "wrapper",
+        "border_color": "",
+        "bg_color": "",
+        "padding_top": 0,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": [
+    "1ef88dce-b82b-4472-bd0b-07535dc1d9a2",
+    "main",
+    "58577579-51dc-4dad-a967-fcf7eeadfc81"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "align_text": "text-center",
+        "bg_color": "#f7f7f7"
+      }
+    },
+    "team-0": {
+      "type": "section-columns",
+      "settings": {
+      }
+    },
+    "team-1": {
+      "type": "section-columns",
+      "disabled": true,
+      "settings": {
+        "title": "Vice Presidents"
+      }
+    },
+    "team-2": {
+      "type": "section-columns",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "story": {
+      "type": "section-custom-content",
+      "blocks": {
+        "story-1": {
+          "type": "text",
+          "settings": {
+            "subheading": "HQ stories",
+            "title": "A day at the shop",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a story or some unique aspect of your business that will help customers relate to your brand.  This could be a story from the early days of your company, or some aspect of your brand that helps you to stand out.  Typically you will want this section to be about 150 words.  Not too long and not too short. The goal is to give customers a reason to buy from you and not from someone else.  A personal story or a convincing statement of brand values will help you accomplish that.  Help customers connect with your brand and they will want to buy from you. <\/p>",
+            "button_text": "",
+            "text_columns": 2,
+            "bg_color": "#f7f7f7"
+          }
+        }
+      },
+      "block_order": [
+        "story-1"
+      ],
+      "settings": {
+        "height": "image-height"
+      }
+    },
+    "office": {
+      "type": "section-custom-content",
+      "blocks": {
+        "image-0": {
+          "type": "image",
+          "settings": {
+            "title": "",
+            "description": "",
+            "link_text": ""
+          }
+        },
+        "text-1": {
+          "type": "text",
+          "settings": {
+            "subheading": "Main and Fifth",
+            "title": "Our Office",
+            "text": "<p>Do you have a physical space that is associated with your brand?  Feature it here.  It doesn't have to be a beautiful storefront. It can be where you came up with the idea for your business or where you stage products for delivery.  Help your customers connect the brand with a place and with real people.  <\/p>",
+            "button_text": "",
+            "bg_color": "#f7f7f7"
+          }
+        }
+      },
+      "block_order": [
+        "image-0",
+        "text-1"
+      ],
+      "settings": {
+        "height": "screen-height-one-half"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "team-0",
+    "team-1",
+    "team-2",
+    "story",
+    "office"
+  ]
+}

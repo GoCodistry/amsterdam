@@ -1,0 +1,342 @@
+<!-- /sections/text-promo.liquid -->
+
+{%- liquid
+  assign wrapper_width = section.settings.width
+  assign image = section.settings.image
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.color
+  assign overlay_color = section.settings.overlay_color
+  assign overlay_opacity = section.settings.overlay_opacity | times: 0.01
+  assign show_overlay_text = section.settings.show_overlay_text
+  assign color_brightness = text_color | color_brightness
+  assign text_color_class = ''
+  assign classes = ''
+  assign has_image = false
+  
+  if image != blank
+    assign has_image = true
+  endif
+
+  if section.settings.border
+    assign classes = classes | append: ' text-promo-inner--border'
+  endif
+
+  if color_brightness > 127
+    assign text_color_class = 'text-light'
+  else
+    assign text_color_class = 'text-dark'
+  endif
+
+  assign content_for_text_overlay = false
+  for block in section.blocks
+    case block.type
+      when 'button'
+        if block.settings.button_url != blank and block.settings.button_text != blank
+          assign content_for_text_overlay = true
+        endif
+      when 'heading'
+        if block.settings.title != blank
+          assign content_for_text_overlay = true
+        endif
+      when 'text'
+        if block.settings.content != blank
+          assign content_for_text_overlay = true
+        endif
+    endcase
+  endfor
+  if section.blocks.size == 0
+    assign content_for_text_overlay = true
+  endif
+
+  assign show_backdrop = false
+  if has_image and show_overlay_text and content_for_text_overlay
+    assign show_backdrop = true
+  endif
+-%}
+
+{%- style -%}
+  #TextPromo--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+      --bg: {{ bg_color }};
+    {%- endunless -%}
+
+    {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+      --text: {{ text_color }};
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<section id="TextPromo--{{ section.id }}"
+  class="text-promo section-padding {{ wrapper_width }} {{ text_color_class }}"
+  data-section-type="promo"
+  data-section-id="{{ section.id }}">
+  <div class="text-promo-inner text-center{{ classes }}{% if show_backdrop %} backdrop--radial{% endif %}"
+    {%- if has_image -%}
+      style="{% if show_backdrop %} --bg: {{ overlay_color }}; --overlay-opacity: {{ overlay_opacity }};{% endif %}"
+    {%- endif -%}>
+
+    {%- liquid
+      if has_image
+        if wrapper_width == ''
+          assign sizes = '100vw'
+        elsif wrapper_width == 'wrapper--narrow'
+          assign sizes = '670px'
+        elsif wrapper_width == 'wrapper--full'
+          assign sizes = '(min-width: 1400px) calc(100vw - 100px), (min-width: 750px) calc(100vw - 50px), calc(100vw - 32px)'
+        else
+          assign sizes = '(min-width: 1400px) 1100px, (min-width: 750px) calc(100vw - 50px), calc(100vw - 32px)'
+        endif
+
+        render 'image' image: image, sizes: sizes, cover: true
+      endif
+    -%}
+
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            <div class="hero__app" {{ block.shopify_attributes }}>
+              {%- render block -%}
+            </div>
+
+          {%- when 'button' -%}
+            {%- if block.settings.button_text != blank -%}
+              <a href="{{ block.settings.button_url | default: '#' }}"
+                class="btn {{ block.settings.button_size }} {{ block.settings.button_style }} {{ block.settings.button_type }}" {{ block.shopify_attributes }}>
+                <span>{{ block.settings.button_text }}</span>
+
+                {%- if block.settings.show_arrow -%}
+                  {%- render 'icon-arrow-right' -%}
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+
+          {%- when 'heading' -%}
+            {%- if block.settings.title != blank -%}
+              <h2 class="hero__title h4" {{ block.shopify_attributes }}>
+                {{ block.settings.title }}
+              </h2>
+            {%- endif -%}
+
+          {%- when 'text' -%}
+            {%- if block.settings.content != blank -%}
+              <div class="hero__rte" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+              </div>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- render 'no-blocks' -%}
+    {%- endif -%}
+
+    {%- if has_image and show_overlay_text != true -%}
+      <div class="image-overlay" style="--bg: {{ overlay_color }}; --overlay-opacity: {{ overlay_opacity }};"></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Text promo",
+    "settings": [
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper--full-padded",
+        "options": [
+          {"value": "wrapper--full", "label": "Full width"},
+          {"value": "wrapper--full-padded", "label": "Full width padded"},
+          {"value": "wrapper", "label": "Normal"}
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "border",
+        "label": "Show border",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "header",
+        "content": "Background image (optional)"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "range",
+        "id": "overlay_opacity",
+        "label": "Overlay opacity",
+        "info": "Increase contrast for legible text.",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "default":0
+      },
+      {
+        "type": "color",
+        "id": "overlay_color",
+        "label": "Overlay color",
+        "default": "#000"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_overlay_text",
+        "label": "Overlay behind text only",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 50
+      }
+    ],
+    "max_blocks": 3,
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "settings": [
+          {
+            "type":"text",
+            "id":"button_text",
+            "label":"Text",
+            "default":"Shop now"
+          },
+          {
+            "type":"url",
+            "id":"button_url",
+            "label":"Link"
+          },
+          {
+            "type": "select",
+            "id": "button_type",
+            "label": "Color",
+            "default": "btn--primary",
+            "options": [
+              {"value": "btn--primary", "label": "Primary"},
+              {"value": "btn--secondary", "label": "Secondary"},
+              {"value": "btn--white", "label": "White"},
+              {"value": "btn--black", "label": "Black"}
+            ]
+          },
+          {
+            "type": "select",
+            "id": "button_size",
+            "label": "Size",
+            "default": "",
+            "options": [
+              { "label": "Small", "value": "btn--small" },
+              { "label": "Medium", "value": "" },
+              { "label": "Large", "value": "btn--large" }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "button_style",
+            "label": "Style",
+            "default": "btn--solid",
+            "options": [
+              { "label": "Solid", "value": "btn--solid" },
+              { "label": "Outline", "value": "btn--outline" },
+              { "label": "Text", "value": "btn--text" }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "id": "show_arrow",
+            "label": "Show arrow",
+            "default": false
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "name": "Heading",
+        "settings": [
+          {
+            "type": "textarea",
+            "id": "title",
+            "label": "Heading",
+            "default": "Text promo"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "Text",
+            "default": "Advertise a promotion or a sale"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "category": "Text",
+        "name": "Text promo",
+        "blocks": [
+          {
+            "type": "heading"
+          },
+          {
+            "type": "text"
+          },
+          {
+            "type": "button"
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer", "custom.pre_footer"]
+    }
+  }
+{% endschema %}

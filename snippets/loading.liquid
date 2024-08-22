@@ -1,0 +1,44 @@
+{%- liquid
+  assign image_1 = settings.loading_image_1
+  assign image_2 = settings.loading_image_2
+  assign image_width = settings.loading_image_width
+  assign image_width_retina = settings.loading_image_width | times: 2
+  assign two_images_exist = false
+  if image_1 != blank and image_2 != blank
+    assign two_images_exist = true
+  endif
+
+  assign sizes = image_width | append: 'px'
+  assign widths = image_width | append: ', ' | append: image_width_retina
+-%}
+{%- if image_1 != blank or image_2 != blank -%}
+  <div class="loading{% if two_images_exist %} loading--animate{% endif %}">
+    {%- if image_1 != blank -%}
+      <div class="loading__image__holder">
+        {{ image_1 | image_url: width: image_width_retina | image_tag:
+          preload: true,
+          width: image_width_retina,
+          widths: widths,
+          sizes: sizes,
+          loading: 'eager',
+          class: 'loading__image',
+          fetchpriority: 'high'
+        }}
+      </div>
+    {%- endif -%}
+
+    {%- if image_2 != blank -%}
+      <div class="loading__image__holder">
+        {{ image_2 | image_url: width: image_width_retina | image_tag:
+          preload: true,
+          width: image_width_retina,
+          widths: widths,
+          sizes: sizes,
+          loading: 'eager',
+          class: 'loading__image',
+          fetchpriority: 'high'
+        }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

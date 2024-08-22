@@ -1,0 +1,227 @@
+<!-- /sections/list-collections.liquid -->
+
+{%- liquid
+  assign mobile_class = 'small--one-whole'
+  if section.settings.layout_mobile == '2'
+  assign mobile_class = 'small--one-half'
+  endif
+
+  case section.settings.grid
+    when 1
+      assign grid_strings = 'large-up--one-half medium--one-half ' | append: mobile_class
+    when 2
+      assign grid_strings = 'large-up--one-half medium--one-half ' | append: mobile_class
+    when 3
+      assign grid_strings = 'large-up--one-third medium--one-third ' | append: mobile_class
+    when 4
+      assign grid_strings = 'large-up--one-quarter medium--one-half ' | append: mobile_class
+    when 5
+      assign grid_strings = 'large-up--one-fifth medium--one-third ' | append: mobile_class
+    else
+      assign grid_strings = 'large-up--one-sixth medium--one-third ' | append: mobile_class
+  endcase
+
+  assign limit = section.settings.grid | times: section.settings.rows
+  assign heading = section.settings.title
+
+  assign columns_desktop = section.settings.grid | plus: 0
+  assign columns_mobile = section.settings.layout_mobile | plus: 0
+  assign columns_tablet = 3
+  assign columns_small = 2
+  if columns_desktop == 1
+    assign columns_tablet = 1
+    assign columns_small = 1
+  endif
+
+  assign excluded_collections_strict = settings.exclude_collections_strict | split: ','
+  assign excluded_collections = settings.exclude_collections_contain | split: ','
+-%}
+
+{%- style -%}
+  .index-list-collections {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+
+    --grid: repeat({{ columns_desktop }}, minmax(0, 1fr));
+    --grid-tablet: repeat({{ columns_tablet }}, minmax(0, 1fr));
+    --grid-small: repeat({{ columns_small }}, minmax(0, 1fr));
+    --grid-mobile: repeat({{ columns_mobile }}, minmax(0, 1fr));
+  }
+{%- endstyle -%}
+
+<div class="index-list-collections section-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="list-collections">
+  {%- if heading != blank -%}
+    <div class="grid__heading-holder text-center">
+      <h2 class="grid__heading heading-size-5">{{ heading }}</h2>
+    </div>
+  {%- endif -%}
+
+  <div class="collection-list">
+    {%- if section.settings.display_type == 'all' -%}
+      {%- for collection in collections -%}
+        {%- assign skip_collection = false -%}
+
+        {%- for exclude in excluded_collections_strict -%}
+          {%- assign exclude_handle = exclude | handle -%}
+
+          {%- if exclude_handle == collection.handle -%}
+            {%- assign skip_collection = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- for exclude in excluded_collections -%}
+          {%- assign exclude_handle = exclude | handle -%}
+
+          {%- if collection.handle contains exclude_handle -%}
+            {%- assign skip_collection = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if skip_collection == false and collection.products.size > 0 -%}
+          <div class="collection-block__wrapper collection-block__wrapper--{{ collection.handle }}">
+            {%- render 'collection-block', section: section, collection: collection, block: block, grid_strings: grid_strings, limit: limit -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for block in section.blocks -%}
+        {%- assign collection = collections[block.settings.collection] -%}
+
+        <div class="collection-block__wrapper collection-block__wrapper--{{ block.id }}" {{ block.shopify_attributes }}>
+          {%- render 'collection-block', section: section, collection: collection, block: block, grid_strings: grid_strings, limit: limit -%}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections."
+    },
+    {
+      "type": "radio",
+      "id": "display_type",
+      "label": "Select collections to show",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "All"
+        },
+        {
+          "value": "selected",
+          "label": "Selected"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type":    "range",
+      "id":      "grid",
+      "min":     1,
+      "max":     6,
+      "step":    1,
+      "label":   "Products per row",
+      "default": 4
+    },
+    {
+      "type":    "range",
+      "id":      "rows",
+      "min":     1,
+      "max":     8,
+      "step":    1,
+      "label":   "Number of rows",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 product per row"
+        },
+        {
+          "value": "2",
+          "label": "2 products per row"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "label": "Collection name",
+          "id": "collection_name",
+          "type": "text",
+          "info": "Replace the collection name with custom text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Replace the collection image with a custom image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

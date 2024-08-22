@@ -1,0 +1,156 @@
+<!-- /snippets/collection-filters-sidebar.liquid -->
+{% comment %}
+  The collection sidebar containing tag filering and link-based navigation
+
+  * collection {object} - The current collection
+  * section {object} - The current section
+
+  {% render 'collection-filters-sidebar', section: section, collection: collection %}
+{% endcomment %}
+
+{%- liquid
+  assign products_count = collection.products_count | default: search.results_count
+  assign sort_by_string = ''
+  assign filter_layout = section.settings.filter_layout
+  assign sort_by = search.sort_by | default: collection.sort_by
+  assign string_connector = '?'
+
+  if sort_by != blank
+    assign sort_by_string = '?sort_by=' | append: sort_by
+    assign string_connector = '&'
+  endif
+
+  assign filters_default = search.filters | default: collection.filters
+  assign filters_url = request.path | append: sort_by_string
+
+  if template.name == 'search' and search.performed
+    assign option_prefix = 'options[prefix]' | url_encode
+    assign filters_url = filters_url | append: string_connector | append: 'type=product&' | append: option_prefix | append: '=last&q=' | append: search.terms
+  endif
+
+  assign filter_count = 0
+  assign filter_active_count = 0
+  assign filter_exist = false
+
+  assign animation_name = 'cart-items-fade'
+  assign animation_delay = 0
+  assign animation_delay_increment = 50
+  assign animation_duration = 500
+-%}
+
+{%- capture filter_clears -%}
+  {%- for filter in filters_default -%}
+    {%- assign filter_active_count = filter_active_count | plus: filter.active_values.size -%}
+    {%- assign filter_exist = true -%}
+
+    {%- if filter.type == 'price_range' -%}
+      {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+        {%- assign filter_count = filter_count | plus: 1 -%}
+        <a class="active__filters__remove" href="{{ filter.url_to_remove }}" data-filter-update-url>
+          <small>
+            {%- liquid
+              assign min_value = filter.min_value.value | default: 0 | money_without_trailing_zeros
+              assign max_value = filter.max_value.value | default: filter.range_max | money_without_trailing_zeros
+            -%}
+
+            {{ min_value }} - {{ max_value }}
+          </small>
+          <span class="filter__x">
+            {%- render 'icon-cancel' -%}
+          </span>
+        </a>
+      {%- endif -%}
+    {%- else -%}
+      {%- for filter_value in filter.active_values -%}
+        {%- assign filter_count = filter_count | plus: 1 -%}
+        <a class="active__filters__remove" href="{{ filter_value.url_to_remove }}" data-filter-update-url>
+          <small>{{ filter_value.label }}</small>
+          <span class="filter__x">
+            {%- render 'icon-cancel' -%}
+          </span>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+<div class="collection__sidebar{% if filter_count > 0 %} collection__sidebar--has-buttons{% endif %}" {% if filter_layout == 'slide-out' %}data-collection-sidebar-slide-out{% else %}data-collection-sidebar-slider{% endif %} data-active-filters-count="{{ filter_active_count }}">
+  {%- if filter_count > 0 -%}
+    {%- assign animation_delay = animation_delay | plus: 200 -%}
+    <div class="collection__active__filters" 
+      data-animation="{{ animation_name }}"
+      data-animation-delay="{{ animation_delay }}"
+      data-animation-duration="{{ animation_duration }}">
+      {%- if filter_count > 1 -%}
+        <a href="{{ filters_url }}" class="active__filters__clear" data-filter-update-url><small>{{ 'collections.general.clear_filters' | t }}</small></a>
+      {%- endif -%}
+      {{ filter_clears }}
+    </div>
+  {%- endif -%}
+
+  {%- unless section.settings.collection_linklist == blank or section.settings.collection_linklist.empty? -%}
+    {%- liquid
+      assign custom_nav_list = section.settings.collection_linklist | handleize
+      assign animation_delay = animation_delay | plus: animation_delay_increment
+    -%}
+
+    <div class="collection__sidebar__group" 
+      data-animation="{{ animation_name }}"
+      data-animation-delay="{{ animation_delay }}" 
+      data-animation-duration="{{ animation_duration }}"
+      {{ block.shopify_attributes }}>
+      <p class="collection__sidebar__heading is-active" data-collection-sidebar-heading tabindex="0" data-focus-element>
+        <span>{{ linklists[custom_nav_list].title }}</span>
+
+        {%- render 'icon-plus' -%}
+        {%- render 'icon-minus' -%}
+      </p>
+
+      <ul class="collection-nav">
+        {%- for link in linklists[custom_nav_list].links -%}
+          {%- if link.links == blank -%}
+            <li class="sidebar__item {% if link.active %}sidebar__item--active link--remove{% else %}link--add{% endif %}{% if forloop.index > 10 %} is-hidden{% endif %}"{% if forloop.index > 10 %} data-link-hidden{% endif %}>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if linklists[custom_nav_list].links.size > 10 -%}
+        <div class="collection__sidebar__actions">
+          <a href="#" data-show-more class="collection__sidebar__link">
+            {%- render 'icon-arrow-separate-vertical' -%}
+            {{ 'collections.general.show_more' | t }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endunless -%}
+
+  {%- render 'filters' animation_delay: animation_delay, animation_duration: animation_duration, animation_name: animation_name, animation_delay_increment: animation_delay_increment -%}
+
+  {%- unless filter_exist -%}
+    <div class="no-results">
+      <p><strong>{{ 'collections.general.no_filters' | t }}</strong></p>
+    </div>
+  {%- endunless -%}
+</div>
+
+<div class="collection__sidebar__buttons">
+  {%- if filter_count > 0 -%}
+    <a class="btn btn--primary btn--outline btn--full" href="{{ filters_url }}" data-filter-update-url>
+      <span>{{ 'collections.general.reset' | t }}</span>
+    </a>
+  {%- endif -%}
+
+  {%- if filter_layout == 'slide-out' -%}
+    <a
+      class="btn btn--primary btn--outline btn--full"
+      href="#filters-group"
+      data-collection-sidebar-close
+      aria-label="{{ 'collections.general.hide_filters' | t }}"
+      tabindex="0">
+      <span>{{ 'collections.general.view_items_with_count' | t: count: products_count }}</span>
+    </a>
+  {%- endif -%}
+</div>

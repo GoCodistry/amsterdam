@@ -1,0 +1,96 @@
+<!-- /snippets/product-siblings.liquid -->
+
+{%- liquid
+  assign metafields = metafields | default: false
+  assign show_siblings = false
+  assign sibs_collection = collections[block.settings.siblings_collection].products
+  assign cutline_default = block.settings.sibling_color | default: product.metafields.theme.sibling_color.value
+  assign hide_labels_class = ''
+
+  if metafields
+    assign sibs_collection = product.metafields.theme.sibling_products.value | default: collections[product.metafields.theme.siblings.value].products
+  endif
+
+  if metafields and sibs_collection != blank
+    assign show_siblings = true
+  elsif metafields == false and sibs_collection.size > 0
+    assign show_siblings = true
+  endif
+
+  if settings.show_labels == false
+    assign hide_labels_class = ' variant__labels--hide'
+  endif
+-%}
+
+{%- if show_siblings -%}
+  <div class="product__block{% if settings.show_lines %} product__block--lines{% endif %} product__siblings{{ hide_labels_class }}"
+    {{ block_style }}
+    {% if animation_name %}
+      data-animation="{{ animation_name }}"
+      data-animation-duration="{{ animation_duration }}"
+      data-animation-delay="{{ animation_delay }}"
+    {% endif %}
+    {{ block.shopify_attributes }}>
+    {%- assign title_down = product.title | downcase -%}
+    {%- assign cutline_down = cutline_default | downcase -%}
+    {%- unless title_down contains cutline_down -%}
+      {% comment %} Form ID must match value in product-form.liquid {% endcomment %}
+      <input type="hidden" form="{{ uniq_id }}" name="properties[{{ 'general.siblings.label' | t }}]" value="{{ cutline_default }}">
+    {%- endunless -%}
+
+    {%- if sibs_collection -%}
+      <fieldset>
+        <div class="radio__fieldset radio__fieldset--swatches">
+          <legend class="radio__legend">
+            <span class="radio__legend__label">
+              <span class="radio__legend__option-name">{{ 'general.siblings.label' | t }}</span>
+
+              {%- if cutline_default != blank -%}
+                <small class="radio__legend__value">{{ cutline_default }}</small>
+              {%- endif -%}
+            </span>
+          </legend>
+
+          <div class="radio__buttons">
+            {%- for sib_product in sibs_collection limit: 50 -%}
+              {%- liquid
+                assign modifier_class = ''
+                if sib_product.handle == product.handle
+                  assign modifier_class = ' sibling__link--current'
+                endif
+
+                if sib_product.available == false
+                  assign modifier_class = modifier_class | append: ' sibling__link--sold-out'
+                endif
+
+                assign title_safe = sib_product.title | strip_html | escape
+                assign color_name = sib_product.metafields.theme.sibling_color.value | default: title_safe
+              -%}
+              <span class="swatch__button swatch__button--{{ settings.swatch_style }}" data-tooltip="{{ color_name }}">
+                {%- if product_api -%}
+                  <quick-add-product>
+                    <div data-quick-add-holder="{{ sib_product.id }}">
+                      <a href="{{ sib_product.url }}" class="sibling__link{{ modifier_class }}" data-quick-add-btn data-sibling-swapper data-popup-{{ sib_product.id }}="{{ sib_product.handle }}">
+                        {%- render 'image', image: sib_product.featured_media.preview_image, widths: '26, 52, 78, 104', aspect_ratio: 1, show_backfill: false -%}
+                        <span class="visually-hidden">{{ color_name }}</span>
+                      </a>
+
+                      {%- render 'product-quick-add-modal-template', product_id: sib_product.id -%}
+                    </div>
+                  </quick-add-product>
+                {%- else -%}
+                  <a href="{{ sib_product.url }}" class="sibling__link{{ modifier_class }}">
+                    {%- render 'image', image: sib_product.featured_media.preview_image, widths: '26, 52, 78, 104', aspect_ratio: 1, show_backfill: false -%}
+                    <span class="visually-hidden">{{ color_name }}</span>
+                  </a>
+                {%- endif -%}
+              </span>
+            {%- endfor -%}
+          </div>
+        </div>
+      </fieldset>
+    {%- endif -%}
+  </div>
+{%- elsif request.design_mode -%}
+  <div {{ block.shopify_attributes }}></div>
+{%- endif -%}

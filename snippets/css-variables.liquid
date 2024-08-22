@@ -1,0 +1,379 @@
+{% comment %}
+  This is where CSS Variables are set with values from your theme settings.
+  These values are created in settings_schema.json and stored in settings_data.json.
+  CSS variables are used to remove liquid code from your CSS file, allowing CSS to load faster.
+{% endcomment %}
+
+{%- liquid
+  assign heading_font = settings.type_heading_font
+  assign base_font = settings.type_base_font
+  assign nav_font = settings.type_nav_font
+
+  assign heading_font_bold = heading_font | font_modify: 'weight', 'bolder'
+  assign base_font_bold = base_font | font_modify: 'weight', 'bolder'
+
+  assign base_font_italic = heading_font | font_modify: 'style', 'italic'
+  assign base_font_100 = base_font | font_modify: 'weight', '+100'
+  assign base_font_200 = base_font | font_modify: 'weight', '+200'
+  assign base_font_300 = base_font | font_modify: 'weight', '+300'
+  assign base_font_400 = base_font | font_modify: 'weight', '+400'
+  if base_font_100 and base_font_100.weight > base_font.weight
+    assign base_font_bold = base_font_100
+  elsif base_font_200 and base_font_200.weight > base_font.weight
+    assign base_font_bold = base_font_200
+  elsif base_font_300 and base_font_300.weight > base_font.weight
+    assign base_font_bold = base_font_300
+  elsif base_font_400 and base_font_400.weight > base_font.weight
+    assign base_font_bold = base_font_400
+  endif
+
+  assign heading_font_italic = heading_font | font_modify: 'style', 'italic'
+  assign heading_font_100 = heading_font | font_modify: 'weight', '+100'
+  assign heading_font_200 = heading_font | font_modify: 'weight', '+200'
+  assign heading_font_300 = heading_font | font_modify: 'weight', '+300'
+  assign heading_font_400 = heading_font | font_modify: 'weight', '+400'
+  if heading_font_100 and heading_font_100.weight > heading_font.weight
+    assign heading_font_bold = heading_font_100
+  elsif heading_font_200 and heading_font_200.weight > heading_font.weight
+    assign heading_font_bold = heading_font_200
+  elsif heading_font_300 and heading_font_300.weight > heading_font.weight
+    assign heading_font_bold = heading_font_300
+  elsif heading_font_400 and heading_font_400.weight > heading_font.weight
+    assign heading_font_bold = heading_font_400
+  endif
+
+  if nav_font == 'heading'
+    assign nav_font = heading_font
+    assign nav_font_bold = heading_font_bold
+    assign nav_font_italic = heading_font_italic
+  else
+    assign nav_font = base_font
+    assign nav_font_bold = base_font_bold
+    assign nav_font_italic = base_font_italic
+  endif
+
+  assign btn_font = settings.btn_font
+-%}
+
+{% style %}
+
+:root {
+
+{%- comment -%} Scrollbar width {%- endcomment -%}
+  --scrollbar-width: 0px;
+
+{%- comment -%} Opacity for hover state on links {%- endcomment -%}
+{% assign hover_opacity = 0.70 %}
+
+{% comment %}
+  Create an appropriate poster background color
+  based on background color and brightness
+{% endcomment %}
+{%- assign color_body_bg = settings.bg_color -%}
+{%- assign color_body_bg_brightness = color_body_bg | color_brightness -%}
+{%- if color_body_bg_brightness <= 26 -%}
+  {%- assign color_bg_brighter = color_body_bg | color_lighten: 10 -%}
+{%- elsif color_body_bg_brightness <= 65 -%}
+  {%- assign color_bg_brighter = color_body_bg | color_lighten: 5 -%}
+{%- else -%}
+  {%- assign color_bg_brighter = color_body_bg | color_darken: 5 -%}
+{%- endif -%}
+--COLOR-VIDEO-BG: {{ color_bg_brighter }};
+--COLOR-BG-BRIGHTER: {{ color_bg_brighter }};
+
+--COLOR-BG: {{ settings.bg_color }};
+--COLOR-BG-TRANSPARENT: {{ settings.bg_color | color_modify: 'alpha', 0 }};
+--COLOR-BG-SECONDARY: {{ settings.secondary_bg_color }};
+--COLOR-BG-RGB: {{ settings.bg_color | color_extract: 'red' }}, {{ settings.bg_color | color_extract: 'green' }}, {{ settings.bg_color | color_extract: 'blue' }};
+
+--COLOR-TEXT-DARK: {{ settings.text_color | color_saturate: 10 | color_darken: 15 }};
+--COLOR-TEXT: {{ settings.text_color }};
+--COLOR-TEXT-LIGHT: {{ settings.text_color | color_mix: settings.bg_color, 70 }};
+
+
+/* === Opacity shades of grey ===*/
+--COLOR-A5:  {{ settings.text_color | color_modify: 'alpha', 0.05 }};
+--COLOR-A10: {{ settings.text_color | color_modify: 'alpha', 0.10 }};
+--COLOR-A15: {{ settings.text_color | color_modify: 'alpha', 0.15 }};
+--COLOR-A20: {{ settings.text_color | color_modify: 'alpha', 0.20 }};
+--COLOR-A25: {{ settings.text_color | color_modify: 'alpha', 0.25 }};
+--COLOR-A30: {{ settings.text_color | color_modify: 'alpha', 0.30 }};
+--COLOR-A35: {{ settings.text_color | color_modify: 'alpha', 0.35 }};
+--COLOR-A40: {{ settings.text_color | color_modify: 'alpha', 0.40 }};
+--COLOR-A45: {{ settings.text_color | color_modify: 'alpha', 0.45 }};
+--COLOR-A50: {{ settings.text_color | color_modify: 'alpha', 0.50 }};
+--COLOR-A55: {{ settings.text_color | color_modify: 'alpha', 0.55 }};
+--COLOR-A60: {{ settings.text_color | color_modify: 'alpha', 0.60 }};
+--COLOR-A65: {{ settings.text_color | color_modify: 'alpha', 0.65 }};
+--COLOR-A70: {{ settings.text_color | color_modify: 'alpha', 0.70 }};
+--COLOR-A75: {{ settings.text_color | color_modify: 'alpha', 0.75 }};
+--COLOR-A80: {{ settings.text_color | color_modify: 'alpha', 0.80 }};
+--COLOR-A85: {{ settings.text_color | color_modify: 'alpha', 0.85 }};
+--COLOR-A90: {{ settings.text_color | color_modify: 'alpha', 0.90 }};
+--COLOR-A95: {{ settings.text_color | color_modify: 'alpha', 0.95 }};
+
+--COLOR-BORDER: {{ settings.site_border_color | color_to_rgb }};
+--COLOR-BORDER-LIGHT: {{ settings.site_border_color | color_mix: settings.bg_color, 60 }};
+--COLOR-BORDER-HAIRLINE: {{ settings.bg_color | color_darken: 3 }};
+--COLOR-BORDER-DARK: {{ settings.site_border_color | color_darken: 20 }};
+
+{%- assign white = settings.bg_color | color_lighten: 100 -%}
+{%- assign black = settings.bg_color | color_darken: 100 -%}
+{%- assign contrast_limit = 2 -%}
+{% if settings.high_contrast %}
+  {%- assign contrast_limit = 3 -%}
+{%- endif -%}
+
+/* === Bright color ===*/
+--COLOR-PRIMARY: {{ settings.accent_bright }};
+--COLOR-PRIMARY-HOVER: {{ settings.accent_bright | color_saturate: 10 | color_darken: 15 }};
+--COLOR-PRIMARY-FADE: {{ settings.accent_bright | color_modify: 'alpha', 0.05 }};
+--COLOR-PRIMARY-FADE-HOVER: {{ settings.accent_bright | color_modify: 'alpha', 0.1 }};
+--COLOR-PRIMARY-LIGHT: {{ settings.accent_bright | color_saturate: 20 | color_lighten: 30 }};
+{%- assign opposite = white -%}
+{%- assign contrast_white = settings.accent_bright | color_contrast: white -%}
+{%- assign contrast_black = settings.accent_bright | color_contrast: black -%}
+{%- if contrast_white < contrast_limit and contrast_black > contrast_white -%}
+  {%- assign opposite = black -%}
+{%- endif -%}
+--COLOR-PRIMARY-OPPOSITE: {{ opposite }};
+
+
+
+/* === link Color ===*/
+--COLOR-LINK: {{ settings.link_color }};
+--COLOR-LINK-HOVER: {{ settings.link_color | color_modify: 'alpha', hover_opacity }};
+--COLOR-LINK-FADE: {{ settings.link_color | color_modify: 'alpha', 0.05 }};
+--COLOR-LINK-FADE-HOVER: {{ settings.link_color | color_modify: 'alpha', 0.1 }};
+{%- assign opposite = white -%}
+{%- assign contrast_white = settings.link_color | color_contrast: white -%}
+{%- assign contrast_black = settings.link_color | color_contrast: black -%}
+{%- if contrast_white < contrast_limit and contrast_black > contrast_white -%}
+  {%- assign opposite = black -%}
+{%- endif -%}
+--COLOR-LINK-OPPOSITE: {{ opposite }};
+
+
+/* === Product grid sale tags ===*/
+--COLOR-SALE-BG: {{ settings.sale_bg_color }};
+--COLOR-SALE-TEXT: {{ settings.sale_text_color }};
+{%- assign sale_text_secondary = settings.sale_bg_color -%}
+{%- assign sale_text_secondary_downcase = sale_text_secondary | downcase -%}
+{%- assign bg_color_global_downcase = settings.bg_color | downcase -%}
+{%- if sale_text_secondary_downcase == bg_color_global_downcase -%}
+  {%- assign sale_text_secondary = settings.text_color -%}
+{%- endif -%}
+--COLOR-SALE-TEXT-SECONDARY: {{ sale_text_secondary }};
+
+/* === Product grid badges ===*/
+--COLOR-BADGE-BG: {{ settings.badge_bg_color }};
+--COLOR-BADGE-TEXT: {{ settings.badge_text_color }};
+
+/* === Product sale color ===*/
+--COLOR-SALE: {{ settings.sale_color }};
+
+/* === Gray background on Product grid items ===*/
+{%- if settings.show_gray_bg -%}
+  --filter-bg: .97;
+{%- else -%}
+  --filter-bg: 1.0;
+{%- endif -%}
+
+/* === Helper colors for form error states ===*/
+--COLOR-ERROR: #721C24;
+--COLOR-ERROR-BG: #F8D7DA;
+--COLOR-ERROR-BORDER: #F5C6CB;
+
+
+{% if settings.btn_border_style == 'rounded' %}
+  --RADIUS: 3px;
+  --RADIUS-SELECT: 3px;
+{% elsif settings.btn_border_style == 'pill' %}
+  --RADIUS: 300px;
+  --RADIUS-SELECT: 22px;
+{% else %}
+  --RADIUS: 0px;
+  --RADIUS-SELECT: 0px;
+{% endif %}
+
+--COLOR-HEADER-BG: {{ settings.header_bg }};
+--COLOR-HEADER-BG-TRANSPARENT: {{ settings.header_bg | color_modify: 'alpha', 0 }};
+--COLOR-HEADER-LINK: {{ settings.header_link }};
+--COLOR-HEADER-LINK-HOVER: {{ settings.header_link | color_modify: 'alpha', hover_opacity }};
+
+--COLOR-MENU-BG: {{ settings.menu_bg_color }};
+--COLOR-MENU-LINK: {{ settings.menu_link_color }};
+--COLOR-MENU-LINK-HOVER: {{ settings.menu_link_color | color_modify: 'alpha', hover_opacity }};
+--COLOR-SUBMENU-BG: {{ settings.submenu_bg_color }};
+--COLOR-SUBMENU-LINK: {{ settings.submenu_link_color }};
+--COLOR-SUBMENU-LINK-HOVER: {{ settings.submenu_link_color | color_modify: 'alpha', hover_opacity }};
+--COLOR-SUBMENU-TEXT-LIGHT: {{ settings.submenu_link_color | color_mix: settings.submenu_bg_color, 70 }};
+--COLOR-MENU-TRANSPARENT: {{ settings.menu_transparent_color }};
+--COLOR-MENU-TRANSPARENT-HOVER: {{ settings.menu_transparent_color | color_modify: 'alpha', hover_opacity }};
+
+--COLOR-FOOTER-BG: {{ settings.footer_bg }};
+--COLOR-FOOTER-TEXT: {{ settings.footer_text }};
+--COLOR-FOOTER-LINK: {{ settings.footer_link }};
+--COLOR-FOOTER-LINK-HOVER: {{ settings.footer_link | color_modify: 'alpha', hover_opacity }};
+--COLOR-FOOTER-BORDER: {{ settings.footer_border }};
+
+--TRANSPARENT: rgba(255, 255, 255, 0);
+
+/* === Default overlay opacity ===*/
+--overlay-opacity: 0;
+--underlay-opacity: 0.4;
+--underlay-bg: #000;
+
+/* === Custom Cursor ===*/
+--ICON-ZOOM-IN: url( "{{ 'icon-zoom-in.svg' | asset_url }}" );
+--ICON-ZOOM-OUT: url( "{{ 'icon-zoom-out.svg' | asset_url }}" );
+
+/* === Custom Icons ===*/
+{% assign icon_style = settings.icon_style %}
+{% if icon_style == '2' %}
+  {% comment %} Icon style Bold {% endcomment %}
+  --ICON-ADD-BAG: url( "{{ 'icon-add-bag-bold.svg' | asset_url }}" );
+  --ICON-ADD-CART: url( "{{ 'icon-add-cart-bold.svg' | asset_url }}" );
+  --ICON-ARROW-LEFT: url( "{{ 'icon-arrow-left-bold.svg' | asset_url }}" );
+  --ICON-ARROW-RIGHT: url( "{{ 'icon-arrow-right-bold.svg' | asset_url }}" );
+  --ICON-SELECT: url("{{ 'icon-select-bold.svg' | asset_url }}");
+{% elsif icon_style == '1.5' %}
+  {% comment %} Icon style Medium {% endcomment %}
+  --ICON-ADD-BAG: url( "{{ 'icon-add-bag-medium.svg' | asset_url }}" );
+  --ICON-ADD-CART: url( "{{ 'icon-add-cart-medium.svg' | asset_url }}" );
+  --ICON-ARROW-LEFT: url( "{{ 'icon-arrow-left-medium.svg' | asset_url }}" );
+  --ICON-ARROW-RIGHT: url( "{{ 'icon-arrow-right-medium.svg' | asset_url }}" );
+  --ICON-SELECT: url("{{ 'icon-select-medium.svg' | asset_url }}");
+{% else %}
+  {% comment %} Icon style Regular {% endcomment %}
+  --ICON-ADD-BAG: url( "{{ 'icon-add-bag.svg' | asset_url }}" );
+  --ICON-ADD-CART: url( "{{ 'icon-add-cart.svg' | asset_url }}" );
+  --ICON-ARROW-LEFT: url( "{{ 'icon-arrow-left.svg' | asset_url }}" );
+  --ICON-ARROW-RIGHT: url( "{{ 'icon-arrow-right.svg' | asset_url }}" );
+  --ICON-SELECT: url("{{ 'icon-select.svg' | asset_url }}");
+{% endif %}
+
+--PRODUCT-GRID-ASPECT-RATIO: {{ settings.product_grid_aspect_ratio | times: 100 }}%;
+
+/* === Typography ===*/
+--FONT-WEIGHT-BODY: {{ base_font.weight | default: 400 }};
+--FONT-WEIGHT-BODY-BOLD: {{ base_font_bold.weight | default: 700 }};
+
+--FONT-STACK-BODY: {{ base_font.family }}, {{ base_font.fallback_families }};
+--FONT-STYLE-BODY: {{ base_font.style }};
+--FONT-STYLE-BODY-ITALIC: {{ base_font_italic.style }};
+--FONT-ADJUST-BODY: {{ settings.type_body_size | divided_by: 100.0 }};
+
+--FONT-WEIGHT-HEADING: {{ heading_font.weight | default: 400 }};
+--FONT-WEIGHT-HEADING-BOLD: {{ heading_font_bold.weight | default: 700 }};
+
+--FONT-STACK-HEADING: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+--FONT-STYLE-HEADING: {{ heading_font.style }};
+--FONT-STYLE-HEADING-ITALIC: {{ heading_font_italic.style }};
+--FONT-ADJUST-HEADING: {{ settings.type_heading_size | divided_by: 100.0 }};
+
+--FONT-STACK-NAV: {{ nav_font.family }}, {{ nav_font.fallback_families }};
+--FONT-STYLE-NAV: {{ nav_font.style }};
+--FONT-STYLE-NAV-ITALIC: {{ nav_font_italic.style }};
+--FONT-ADJUST-NAV: {{ settings.type_nav_size | divided_by: 100.0 }};
+
+--FONT-WEIGHT-NAV: {{ nav_font.weight | default: 400 }};
+--FONT-WEIGHT-NAV-BOLD: {{ nav_font_bold.weight | default: 700 }};
+
+--FONT-SIZE-BASE: {{ settings.type_body_size | divided_by: 100.0 | append: 'rem' }};
+--FONT-SIZE-BASE-PERCENT: {{ settings.type_body_size | divided_by: 100.0 }};
+
+/* === Parallax ===*/
+--PARALLAX-STRENGTH-MIN: {{ settings.parallax_strength | plus: 100.0 | append: '%' }};
+--PARALLAX-STRENGTH-MAX: {{ settings.parallax_strength | plus: 110.0 | append: '%' }};
+
+{%- comment -%} Grid Variables {%- endcomment -%}
+{%- if settings.grid_style == 'compact' -%}
+  --LAYOUT-OUTER: 32px;
+  --LAYOUT-GUTTER: 32px;
+  --LAYOUT-OUTER-MEDIUM: 22px;
+  --LAYOUT-GUTTER-MEDIUM: 22px;
+  --LAYOUT-OUTER-SMALL: 16px;
+  --LAYOUT-GUTTER-SMALL: 16px;
+{%- else -%}
+  --LAYOUT-OUTER: 50px;
+  --LAYOUT-GUTTER: 32px;
+  --LAYOUT-OUTER-MEDIUM: 30px;
+  --LAYOUT-GUTTER-MEDIUM: 22px;
+  --LAYOUT-OUTER-SMALL: 16px;
+  --LAYOUT-GUTTER-SMALL: 16px;
+{%- endif -%}
+
+{%- comment -%} Custom variabels {%- endcomment -%}
+--base-animation-delay: 0ms;
+--line-height-normal: 1.375; /* Equals to line-height: normal; */
+
+{%- comment -%} Sidebar on Collection and Search {%- endcomment -%}
+{%- if settings.grid_style == 'compact' -%}
+  --SIDEBAR-WIDTH: 270px;
+  --SIDEBAR-WIDTH-MEDIUM: 258px;
+{%- else -%}
+  --SIDEBAR-WIDTH: 288px;
+  --SIDEBAR-WIDTH-MEDIUM: 258px;
+{%- endif -%}
+
+{%- comment -%} Icon Variables {%- endcomment -%}
+--ICON-STROKE-WIDTH: {{ settings.icon_style }}px;
+
+{%- if settings.high_contrast -%}
+  {%- render 'css-variables-contrast' -%}
+{%- endif -%}
+
+/* === Button General ===*/
+--BTN-FONT-STACK: {{ btn_font.family }}, {{ btn_font.fallback_families }};
+--BTN-FONT-WEIGHT: {{ btn_font.weight | default: 400 }};
+--BTN-FONT-STYLE: {{ btn_font.style }};
+--BTN-FONT-SIZE: {{ settings.btn_size }}px;
+
+--BTN-LETTER-SPACING: {{ settings.btn_letter_spacing | divided_by: 1000.0 | append: 'em' }};
+--BTN-UPPERCASE: {% if settings.btn_caps %}uppercase{% else %}none{% endif %};
+
+/* === Button Primary ===*/
+--BTN-PRIMARY-BORDER-COLOR: {{ settings.btn_primary_border_color }};
+--BTN-PRIMARY-BG-COLOR: {{ settings.btn_primary_bg_color }};
+--BTN-PRIMARY-TEXT-COLOR: {{ settings.btn_primary_text_color }};
+{% assign btn_primary_brightness = settings.btn_primary_bg_color | color_brightness %}
+{% if btn_primary_brightness <= 65 %}
+  --BTN-PRIMARY-BG-COLOR-BRIGHTER: {{ settings.btn_primary_bg_color | color_lighten: 10 }};
+{% else %}
+  --BTN-PRIMARY-BG-COLOR-BRIGHTER: {{ settings.btn_primary_bg_color | color_darken: 5 }};
+{% endif %}
+
+/* === Button Secondary ===*/
+--BTN-SECONDARY-BORDER-COLOR: {{ settings.btn_secondary_border_color }};
+--BTN-SECONDARY-BG-COLOR: {{ settings.btn_secondary_bg_color }};
+--BTN-SECONDARY-TEXT-COLOR: {{ settings.btn_secondary_text_color }};
+{% assign btn_secondary_brightness = settings.btn_secondary_bg_color | color_brightness %}
+{% if btn_secondary_brightness <= 65 %}
+  --BTN-SECONDARY-BG-COLOR-BRIGHTER: {{ settings.btn_secondary_bg_color | color_lighten: 10 }};
+{% else %}
+  --BTN-SECONDARY-BG-COLOR-BRIGHTER: {{ settings.btn_secondary_bg_color | color_darken: 5 }};
+{% endif %}
+
+/* === Button White ===*/
+--TEXT-BTN-BORDER-WHITE: #fff;
+--TEXT-BTN-BG-WHITE: #fff;
+--TEXT-BTN-WHITE: #000;
+--TEXT-BTN-BG-WHITE-BRIGHTER: {{ '#fff' | color_darken: 5 }};
+
+/* === Button Black ===*/
+--TEXT-BTN-BG-BLACK: #000;
+--TEXT-BTN-BORDER-BLACK: #000;
+--TEXT-BTN-BLACK: #fff;
+--TEXT-BTN-BG-BLACK-BRIGHTER: {{ '#000' | color_lighten: 10 }};
+
+/* === Cart Gradient ===*/
+
+{% if settings.free_shipping_gradient != blank %}
+  --FREE-SHIPPING-GRADIENT: {{ settings.free_shipping_gradient }};
+{% else %}
+  --FREE-SHIPPING-GRADIENT: linear-gradient(to right, var(--COLOR-PRIMARY-LIGHT) 0%, var(--COLOR-PRIMARY) 100%);
+{% endif %}
+
+}
+{% endstyle %}

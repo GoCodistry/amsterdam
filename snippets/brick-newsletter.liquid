@@ -1,0 +1,84 @@
+{% comment %}
+    Renders newsletter block for custom content or newsletter sections
+
+    Accepts:
+    - block: {Object} Block object
+    - style: {String} Block inline style
+    - padding_class: {String} Set class "has-padding" if background colors of the block and the body are different
+    - animation_anchor: {String} ID of the element that will trigger animations
+
+    Usage:
+    {% render 'brick-newsletter', block: block, style: style, padding_class: padding_class, animation_anchor: animation_anchor %}
+{% endcomment %}
+
+
+{%- liquid
+  assign subheading = block.settings.subheading
+  assign heading = block.settings.heading
+  assign text = block.settings.text
+  assign show_social_links = block.settings.show_social_links
+  assign bg_color = block.settings.bg_color
+  assign text_color = block.settings.color
+  assign style = ''
+  assign animation_order = 0
+-%}
+
+{%- capture style -%}
+  {%- unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank -%}
+    --bg: {{ bg_color }};
+  {%- endunless -%}
+
+  {%- unless text_color == 'rgba(0,0,0,0)' or text_color == blank -%}
+    --text: {{ text_color }};
+    --text-light: {{ text_color | color_mix: settings.bg_color, 70 }};
+    --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+  {%- endunless -%}
+{%- endcapture -%}
+
+<div class="brick__block frame__item"{% if style != blank %} style="{{ style }}"{% endif %} data-prevent-transparent-header {{ block.shopify_attributes }}>
+  <div class="brick__block__text{{ padding_class }}">
+    <div class="brick__block__text__inner">
+      <div class="hero__content {{ block.settings.align_text }}">
+        {%- if subheading != blank -%}
+          {%- assign font_size_class = block.settings.subheading_size | prepend: 'body-size-' -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <p class="hero__subheading {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">{{ subheading }}</p>
+        {%- endif -%}
+
+        {%- if heading != blank -%}
+          {%- assign font_size_class = block.settings.heading_size | prepend: 'heading-size-' -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <h2 class="hero__title {{ font_size_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">{{ heading }}</h2>
+        {%- endif -%}
+
+        {%- if text != blank -%}
+          {%- assign font_size_class = block.settings.text_size | prepend: 'body-size-' -%}
+          {%- assign text_columns_class = block.settings.text_columns | prepend: 'columns--' -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <div class="hero__rte {{ font_size_class }} {{ text_columns_class }}"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">{{ text }}</div>
+        {%- endif -%}
+
+        {%- assign animation_order = animation_order | plus: 1 -%}
+        <div class="newsletter__wrapper"
+          data-aos="hero"
+          data-aos-anchor="{{ animation_anchor }}"
+          data-aos-order="{{ animation_order }}">
+          {%- render 'newsletter-form', block: block -%}
+        </div>
+
+        {%- if show_social_links -%}
+          {%- render 'social-icons', animation_anchor: animation_anchor, animation_order: 5 -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

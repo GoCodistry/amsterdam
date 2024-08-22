@@ -1,0 +1,281 @@
+
+{%- liquid
+
+  assign show_sort = section.settings.enable_sort
+  assign filter_layout = section.settings.filter_layout
+
+  assign show_group_filters = false
+
+
+  assign show_group_tags = false
+  if section.settings.enable_filters
+    assign show_group_tags = true
+  endif
+-%}
+
+{%- capture collection_sidebar_class -%}
+  {%- if filter_layout == 'slide-out' -%}
+    collection__sidebar__slide-out
+    {%- else -%}
+    collection__sidebar__slider{% if show_group_filters %} expanded drawer--animated no-mobile-animation{% endif %}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- style -%}
+  .search-page {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="page search-page collection section-padding"
+  data-section-type="collection"
+  data-section-id="{{ section.id }}"
+  data-sort="{{ show_sort }}">
+  <main-search>
+  <div class="search-outer">
+    <form action="{{ routes.search_url }}" class="search-form">
+      <input name="options[prefix]" type="hidden" value="last">
+      <input name="filter.v.availability" type="hidden" value="1">
+      <div class="input-holder">
+        <input
+          type="search"
+          name="q"
+          class="search-box"
+          aria-label="{{ 'general.search.placeholder' | t }}"
+          placeholder="{{ 'general.search.title' | t }}"
+          value="{{ search.terms }}">
+          <button type="reset" class="search-reset{% if search.terms == blank %} hidden{% endif %}" aria-label="{{ 'general.search.reset' | t }}">
+            {{- 'general.search.clear' | t -}}
+          </button>
+        </div>
+      <button type="submit" class="btn btn--primary btn--solid search-submit">{{ 'general.search.search' | t }}</button>
+    </form>
+  </div>
+</main-search>
+
+  {%- if search.performed -%}
+    {%- if search.results == empty -%}
+      <p class="search__caption caps">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+    {%- else -%}
+      <p class="search__caption caps">{{ 'general.search.results_with_count_and_term' | t: terms: search.terms, count: search.results_count }}</p>
+    {%- endif -%}
+
+    {%- liquid
+      assign nav_classes = ''
+      if show_sort
+        assign nav_classes = nav_classes | append: ' collection__nav--sort'
+      endif
+
+      if show_group_tags
+        assign nav_classes = nav_classes | append: ' collection__nav--filter'
+      endif
+    -%}
+
+    {%- if show_sort or show_group_tags -%}
+      {%- liquid
+        assign filter_active_count = 0
+
+        for filter in search.filters
+          assign filter_active_count = filter_active_count | plus: filter.active_values.size
+        endfor
+      -%}
+      <nav class="collection__nav{{ nav_classes }}" data-collection-nav>
+        {%- if show_group_tags -%}
+          <div class="popout--group">
+            <button
+              type="button"
+              class="popout__toggle{% unless filter_layout == 'slide-out' %} popout__toggle--filters{% endunless %}"
+              aria-expanded="{% if show_group_filters %}true{% else %}false{% endif %}"
+              aria-controls="filter-groups"
+              data-aria-toggle
+              data-group-tags-enabled>
+              {%- render 'icon-filter' -%}
+
+              {%- if filter_layout == 'slide-out' -%}
+                {{- 'collections.general.filters' | t -}}
+              {%- else -%}
+                <span class="popout__toggleable-text">
+                  <span class="popout__expanded-show">
+                    {{- 'collections.general.show_filters' | t -}}
+                    <span class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}" data-active-filters>
+                      {{- filter_active_count -}}
+                    </span>
+                  </span>
+
+                  <span class="popout__expanded-hide">
+                    {{- 'collections.general.hide_filters' | t -}}
+                    <span class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}" data-active-filters>
+                      {{- filter_active_count -}}
+                    </span>
+                  </span>
+                </span>
+              {%- endif -%}
+
+              {%- unless filter_layout == 'slide-out' -%}
+                {%- render 'icon-nav-arrow-down' -%}
+              {%- endunless -%}
+            </button>
+          </div>
+        {%- endif -%}
+        {%- if show_sort -%}
+          {% render 'collection-sorting' %}
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+
+    <div class="collection__products{% if show_group_tags %} collection__products--group-tags{% endif %}">
+     
+      {%- paginate search.results by 36 -%}
+        <div class="product-grid-outer" data-products-grid>
+          <div class="product-grid{% unless settings.product_grid_outline %} product-grid--borderless{% endunless %}" id="SearchLoop">
+            {%- if search.results == empty -%}
+              <div class="no-results">
+                <p><strong>{{ 'collections.general.no_matches' | t }}</strong></p>
+                {%- liquid
+                  assign sort_by_string = ''
+                  assign sort_by = search.sort_by
+                  assign string_connector = '?'
+
+                  if sort_by != blank
+                    assign sort_by_string = '?sort_by=' | append: sort_by
+                    assign string_connector = '&'
+                  endif
+                  assign option_prefix = 'options[prefix]' | url_encode
+
+                  assign search_parameters = string_connector | append: 'type=' | append: terms | append: '&' | append: option_prefix | append: '=last' | append: '&q=' | append: search.terms
+                -%}
+                <a class="btn btn--primary btn--solid" href="{{ request.path | append: sort_by_string | append: search_parameters }}" data-filter-update-url><span>{{ 'collections.general.reset' | t }}</span></a>
+              </div>
+            {%- else -%}
+              {%- liquid
+                for item in search.results
+                  if item.object_type == 'product'
+                    render 'product-grid-item', product: item, index: forloop.index
+                  else
+                    render 'search-results-item', item: item
+                  endif
+                endfor
+              -%}
+            {%- endif -%}
+          </div>
+          
+          {%- render 'pagination', paginate: paginate -%}
+
+          <div class="product-grid__loader">
+            <div class="loader product-grid__loader-line"><div class="loader-indeterminate"></div></div>
+          </div>
+        </div>
+      {%- endpaginate -%}
+      {%- if show_group_tags -%}
+        <div class="{{ collection_sidebar_class }}" id="filter-groups" data-collection-sidebar>
+          <div class="collection__sidebar__head{% unless filter_layout == 'slide-out' %} collection__sidebar__head--mobile{% endunless %}">
+            <h3>
+              {{- 'collections.general.filters' | t -}}
+
+              <span
+                class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}"
+                data-active-filters>
+                {{- filter_active_count -}}
+              </span>
+            </h3>
+
+            <a href="#filters-group" class="collection__sidebar__close" data-collection-sidebar-close aria-label="{{ 'collections.general.hide_filters' | t }}">
+              {%- render 'icon-cancel' -%}
+            </a>
+          </div>
+
+          {% render 'collection-filters-sidebar', section: section %}
+        </div>
+      {%- endif -%}
+
+      <span class="drawer__underlay" data-drawer-underlay></span>
+
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+  {
+    "name": "Search",
+    "templates": ["search"],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_sort",
+        "label": "Show sorting",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_filters",
+        "label": "Enable filters",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "filter_layout",
+        "label": "Filter layout",
+        "default": "inline-open",
+        "options": [
+          { "label": "Slide out", "value": "slide-out" },
+          { "label": "Inline (closed)", "value": "inline-closed" },
+          { "label": "Inline (open)", "value": "inline-open" }
+        ]
+      },
+      {
+        "type": "link_list",
+        "id": "collection_linklist",
+        "label": "Sidebar navigation",
+        "info": "This menu won't show dropdown items."
+      },
+      {
+        "type": "header",
+        "content": "Search options",
+        "info": "Displays articles, pages, and collections based on their heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "search_products",
+        "label": "Search products",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "search_pages",
+        "label": "Search pages",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "search_articles",
+        "label": "Search articles",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 50
+      }
+    ]
+  }
+{% endschema %}

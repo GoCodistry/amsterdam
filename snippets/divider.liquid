@@ -1,0 +1,40 @@
+{% comment %}
+    Renders a divider block on Product and Image with text sections
+
+    Accepts:
+    - block: {Object} The block object (required)
+    - attributes: {String} Additional attributes (optional)
+
+    Usage:
+    {% render 'divider', block: block, attributes: attributes %}
+{% endcomment %}
+
+{%- liquid
+  assign padding_top = block.settings.padding_top
+  assign padding_bottom = block.settings.padding_bottom
+  assign show_line = block.settings.show_line
+  assign attributes = attributes | default: ''
+
+  if padding_top != blank or padding_bottom != blank
+    capture block_style
+    echo 'style="'
+    if padding_top != blank
+      echo '--block-padding-top:' | append: padding_top | append: 'px; '
+    endif
+    if padding_bottom != blank
+      echo '--block-padding-bottom:' | append: padding_bottom | append: 'px;'
+    endif
+    echo '"'
+    endcapture
+  endif
+
+  if modifier != blank
+    assign modifier = modifier | append: ' '
+  endif
+-%}
+  
+<div class="{{ modifier }}divider-holder" {{ block_style }} {{ attributes }} {{ block.shopify_attributes }}>
+  {%- if show_line -%}
+    <hr class="divider">
+  {%- endif -%}
+</div>

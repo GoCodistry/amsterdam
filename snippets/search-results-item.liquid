@@ -1,0 +1,77 @@
+<!-- /snippets/search-results-item.liquid -->
+
+{%- liquid
+  assign unique = 'item--' | append: section.id | append: '-' | append: item.id
+  assign animation_duration = 800
+  assign animation_anchor = unique | prepend: '#'
+  assign animation_delay_default = animation_delay | times: 150
+  assign animation_delay = animation_delay | default: animation_delay_default
+
+  assign border_class = ''
+  if settings.product_grid_outline == false
+    assign border_class = ' product-item--borderless'
+  endif
+
+  if settings.product_grid_center == true
+    assign alignment_class = ' product-item--centered'
+  else
+    assign alignment_class = ' product-item--left'
+  endif
+-%}
+
+<div class="search-results-item {{ border_class }}{{ alignment_class }}" id="{{ unique }}" data-product-grid-item>
+  <div class="search-results-item__image" data-product-image role="option" aria-selected="false">
+    <a class="item-link" href="{{ item.url }}" aria-label="{{ item.title | strip_html | escape }}" tabindex="-1">
+      {%- if item.image -%}
+        <div class="search-results-item__bg"
+          data-aos="img-in"
+          data-aos-delay="{{ animation_delay }}"
+          data-aos-duration="{{ animation_duration }}"
+          data-aos-anchor="{{ animation_anchor }}"
+          data-aos-easing="ease-out-quart">
+          {%- liquid
+            if settings.grid_style == 'compact'
+              assign image_sizes = '(min-width: 1400px) 25vw, (min-width: 750px) 33vw, (min-width: 480px) 50vw, 100vw'
+            else
+              assign image_sizes = '(min-width: 1400px) calc(25vw - 16px), (min-width: 750px) calc(33vw - 16px), (min-width: 480px) calc(50vw - 16px), calc(100vw - 32px)'
+            endif
+
+            render 'image' image: item.image, sizes: image_sizes, cover: true
+          -%}
+        </div>
+      {%- elsif item.object_type == 'article' or item.object_type == 'page' -%}
+        <div class="search-results-item__bg search-results-item__bg--empty"
+          data-aos="img-in"
+          data-aos-delay="{{ animation_delay }}"
+          data-aos-duration="{{ animation_duration }}"
+          data-aos-anchor="{{ animation_anchor }}">
+        </div>
+
+        <span class="badge-box"
+          data-aos="fade"
+          data-aos-delay="{{ animation_delay }}"
+          data-aos-duration="{{ animation_duration }}"
+          data-aos-anchor="{{ animation_anchor }}">
+          {%- liquid
+            if item.object_type == 'article'
+              echo 'layout.search_page.singular_article' | t
+            else
+              echo 'layout.search_page.singular_page' | t
+            endif
+          -%}
+        </span>
+      {%- endif -%}
+    </a>
+  </div>
+
+  <div class="item-information{% if settings.product_grid_center %} text-center{% endif %}"
+    data-aos="fade"
+    data-aos-delay="{{ animation_delay }}"
+    data-aos-duration="{{ animation_duration }}"
+    data-aos-anchor="{{ animation_anchor }}"
+    data-product-information>
+    <a class="item-link" href="{{ item.url }}" tabindex="-1">
+      {{ item.title | strip_html | escape }}
+    </a>
+  </div>
+</div>

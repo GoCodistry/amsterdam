@@ -1,0 +1,120 @@
+<!-- /templates/customers/login.liquid -->
+
+{% if customer %}
+<p class="center">Redirecting...</p>
+<script type="text/javascript">
+  window.location = '{{ routes.account_url }}';
+</script>
+{% else %}
+<section data-account-form id="Login" class="account account--login {% if shop.checkout.guest_login %} just{% endif %}">
+  <section class="col">
+    <div data-login-form class="animates login{% if shop.checkout.guest_login %} align-left{% endif %}">
+      <h2 class="page__heading">{{ 'customer.login.title' | t }}</h2>
+
+      <p>{{ 'customer.login.create_account_prompt' | t }} <a href="{{ routes.account_register_url }}" class="text-link">{{ 'customer.login.create_account_cta' | t }}</a>.</p>
+
+      {% form 'customer_login' %}
+        <div class="form-field">{{ form.errors | default_errors }}</div>
+
+        <div class="form-field">
+          <label for="customer_email">{{ 'customer.login.email' | t }}</label>
+          <input type="email" value="" name="customer[email]" id="customer_email"
+            class="{% if form.errors contains 'email' %}input-error{% endif %}"
+            placeholder="{{ 'customer.login.email' | t }}"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+            autofocus>
+        </div>
+
+        {% if form.password_needed %}
+          <div class="form-field">
+            <label for="customer_password">{{ 'customer.login.password' | t }}</label>
+
+            <input type="password" value="" name="customer[password]" id="customer_password"
+              class="password"
+              class="{% if form.errors contains 'password' %}input-error{% endif %}"
+              placeholder="{{ 'customer.login.password' | t }}">
+
+            <div class="forgot-password">
+              <div>
+                <button type="submit" class="btn btn--primary btn--solid">
+                  <span>{{ 'customer.login.sign_in' | t }}</span>
+                </button>
+              </div>
+
+              <div>
+                <button type="button" class="text-link small" data-show-reset>
+                  {{ 'customer.login.forgot_password' | t }}
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-field action-bottom">
+          <a href="{{ routes.root_url }}" class="text-link small">{{ 'customer.login.cancel' | t }}</a>
+
+          <div class="form__legal">
+            {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+          </div>
+        </div>
+      {% endform %}
+    </div>
+
+    <div class="animates is-hidden" data-recover-password>
+      <h2 class="page__heading">{{ 'customer.recover_password.title' | t }}</h2>
+
+      {% form 'recover_customer_password' %}
+        {{ form.errors | default_errors }}
+
+        <div class="form-message">
+          {%- if form.posted_successfully? -%}
+            <p data-recover-success>{{ 'customer.recover_password.success' | t }}</p>
+          {%- else -%}
+            <p>{{ 'customer.recover_password.subtext' | t }}</p>
+          {%- endif -%}
+        </div>
+
+        <div class="form-field">
+          <label for="email">{{ 'customer.login.email' | t }}</label>
+          <input type="email" value="" size="30" name="email" id="recover-email" class="large">
+        </div>
+
+        <div class="form-field action-bottom">
+          <button type="submit" class="btn btn--primary btn--solid">
+            <span>{{ 'customer.recover_password.submit' | t }}</span>
+          </button>
+
+          <span class="note">
+            {{ 'cart.general.or' | t }}
+          </span>
+
+          <button class="text-link small" data-hide-reset>{{ 'customer.recover_password.cancel' | t }}</button>
+
+          <div class="form__legal">
+            {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+          </div>
+        </div>
+      {% endform %}
+    </div>
+  </section>
+
+  {% if shop.checkout.guest_login %}
+    <section class="col">
+      <div class="guest-checkout">
+        <div class="form-field">
+          <h2 class="page__heading">{{ 'customer.login.guest_title' | t }}</h2>
+
+          {% form 'guest_login' %}
+            <button class="caps--link" type="submit">
+              <span>{{ 'customer.login.guest_continue' | t }}</span>
+            </button>
+          {% endform %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+</section>
+
+{% endif %}

@@ -1,0 +1,104 @@
+{% comment %}
+    Renders review block for custom content section
+
+    Accepts:
+    - block: {Object} Block object
+    - style: {String} Block inline style
+    - padding_class: {String} Set class "has-padding" if background colors of the block and the body are different
+    - animation_anchor: {String} ID of the element that will trigger animations
+
+    Usage:
+    {% render 'brick-review', block: block, style: style, padding_class: padding_class, animation_anchor: animation_anchor %}
+{% endcomment %}
+
+{%- liquid
+  assign show_quotation_marks = block.settings.show_quotation_marks
+  assign block_title = block.settings.title
+  assign review = block.settings.review
+  assign bio_image = block.settings.bio_image
+  assign subheading = block.settings.subheading
+  assign review_url = block.settings.review_url
+  assign review_block_classes = 'review review--block' | append: ' ' | append: block.settings.align_text
+
+  if show_quotation_marks
+    assign review_block_classes = review_block_classes | append: ' ' | append: 'review--has-quotes'
+  endif
+
+  assign animation_order = 0
+-%}
+
+<div class="brick__block frame__item"{% if style != blank %} style="{{ style }}"{% endif %} data-prevent-transparent-header {{ block.shopify_attributes }}>
+  <div class="brick__block__text{{ padding_class }}">
+    <div class="brick__block__text__inner">
+      {%- if review_url != blank -%}
+        <a href="{{ review_url }}" class="{{ review_block_classes }}" rel="noopener" target="_blank">
+      {%- else -%}
+        <div class="{{ review_block_classes }}">  
+      {%- endif -%}
+
+        <div class="review__content">
+          {%- if review != blank -%}
+            {%- assign font_size_class = block.settings.text_size | prepend: 'body-size-' -%}
+            {%- assign animation_order = animation_order | plus: 1 -%}
+
+            {%- capture quote_font_size -%}
+              calc(var(--font-{{ block.settings.text_size }}) * var(--FONT-ADJUST-BODY) * 2.5)
+            {%- endcapture -%}
+
+            <blockquote class="{{ font_size_class }}"
+              data-aos="hero"
+              data-aos-anchor="{{ animation_anchor }}"
+              data-aos-order="{{ animation_order }}">
+              {% if show_quotation_marks %}
+                <span class="review__quote review__quote--single">
+                  <span class="review__quote-inner" style="font-size: {{ quote_font_size }};">&ldquo;</span>
+                </span>
+              {% endif %}
+
+              <p>{{- review | truncatewords: 200 -}}</p>
+            </blockquote>
+          {%- endif -%}
+
+          {%- if block_title != blank or subheading != blank or bio_image != blank -%}
+            {%- assign animation_order = animation_order | plus: 1 -%}
+            <div class="review__foot">
+              <div class="review__author"
+                data-aos="hero"
+                data-aos-anchor="{{ animation_anchor }}"
+                data-aos-order="{{ animation_order }}">
+                {%- if bio_image != blank -%}
+                  <div class="review__author__bio-image">
+                    {%- liquid
+                      assign widths = '34, 68, 136, 272, 544, 1088'
+                      assign sizes = '34px'
+                      assign width_retina = '68'
+
+                      render 'image' image: bio_image, width: width_retina, sizes: sizes, widths: widths, cover: true
+                    -%}
+                  </div>
+                {%- endif -%}
+
+                {%- if block_title != blank or subheading != blank -%}
+                  <div class="review__author__content">
+                    {%- if block_title != blank -%}
+                      <div class="review__author__name">{{ block_title }}</div>
+                    {%- endif -%}
+
+                    {%- if subheading != blank -%}
+                      <span class="review__author__subheading subheading">{{ subheading }}</span>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+      {%- if review_url != blank -%}
+        </a>
+      {%- else -%}
+        </div>  
+      {%- endif -%}
+    </div>
+  </div>
+</div>

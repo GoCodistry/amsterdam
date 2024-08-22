@@ -1,0 +1,182 @@
+{% comment %}
+    Renders newsletter form from a block on newsletter, footer, popup and custom content sections
+
+    Accepts:
+    - block: {Object} Block object
+    - show_discount_message: {String} Discount message text (Optional)
+    - success_text: {String} Success message text (Optional)
+    - small_newsletter: {Boolean} Set true to hide the form
+
+    Usage:
+    {% render 'newsletter-form', block: block, show_discount_message: show_discount_message success_text: success_text, small_newsletter: small_newsletter %}
+{% endcomment %}
+
+{%- liquid
+  assign unique = block.id | default: section.id
+  assign form_class = 'newsletter-form'
+  if small_newsletter
+    assign form_class = form_class | append: ' hidden'
+  endif
+
+  if form.posted_successfully?
+    assign form_class = form_class | append: ' has-success'
+  endif
+
+  if form.errors
+    assign form_class = form_class | append: ' has-error'
+  endif
+
+  assign placeholder_default = 'general.newsletter_form.newsletter_email' | t
+  assign placeholder_field = placeholder | default: placeholder_default
+
+  assign text_color = section.settings.color
+
+  if block
+    unless block.settings.color == 'rgba(0,0,0,0)' or block.settings.color == blank
+      assign text_color = block.settings.color
+    endunless
+  endif
+
+  if footer
+    assign text_color = settings.footer_text
+  endif
+
+  if text_color == 'rgba(0,0,0,0)' or text_color == blank
+    assign text_color = settings.text_color
+  endif
+
+  assign input_group = true
+  assign show_name = block.settings.show_name
+  if show_name
+    assign input_group = false
+  endif
+  assign form_id = 'Newsletter--' | append: unique
+  assign field_id = 'email-input-' | append: unique
+  assign button_id = 'subscribe-button-' | append: unique
+  assign button_type = block.settings.button_type
+  assign button_size = block.settings.button_size
+  assign button_style = block.settings.button_style
+  if button_text == blank
+    assign button_text = 'general.newsletter_form.submit' | t
+  endif
+
+  capture button_class
+    if small_newsletter
+      echo 'btn btn--arrow'
+    else
+      unless show_name
+        echo 'caps'
+      else
+        echo 'btn btn--full ' | append: button_type | append: ' ' | append: button_size | append: ' ' | append: button_style
+      endunless
+
+      echo ' newsletter__submit'
+
+      if input_group
+        echo ' input-group__btn'
+      endif
+    endif
+  endcapture
+-%}
+
+{%- capture style -%}
+  --text: {{ text_color }};
+  --text-dark: {{ text_color | color_saturate: 10 | color_darken: 15 }};
+  --text-a35: {{ text_color | color_modify: 'alpha', 0.35 }};
+  --text-a70: {{ text_color | color_modify: 'alpha', 0.70 }};
+  --text-a75: {{ text_color | color_modify: 'alpha', 0.75 }};
+{%- endcapture -%}
+
+{%- capture submit_button -%}
+  <button type="submit" class="{{ button_class }}" name="commit" id="{{ button_id }}">
+    <span>{{ button_text }}</span>
+
+    {%- if block.settings.show_arrow or small_newsletter -%}
+      {%- render 'icon-arrow-right' -%}
+    {%- endif -%}
+  </button>
+{%- endcapture -%}
+
+{%- capture email_field -%}
+  <input
+    type="email"
+    id="{{ field_id }}"
+    class="{% if input_group %}input-group__field{% else %}field{% endif %}"
+    placeholder="{{ placeholder_field }}"
+    aria-label="{{ placeholder_field }}"
+    autocorrect="off"
+    autocapitalize="off"
+    name="contact[email]"
+    data-newsletter-field
+    {% if form.errors %}
+      autofocus
+      aria-invalid="true"
+      aria-describedby="Newsletter-error--{{ unique }}"
+    {% elsif form.posted_successfully? %}
+      aria-describedby="Newsletter-success--{{ unique }}"
+    {% endif %}
+    required>
+{%- endcapture -%}
+
+{%- capture name_field -%}
+  <input
+    type="text"
+    name="contact[first_name]"
+    class="field"
+    aria-label="{{ 'general.newsletter_form.name' | t }}"
+    placeholder="{{ 'general.newsletter_form.name' | t }}"
+    value="{% if customer %}{{ customer.first_name }}{% endif %}">
+{%- endcapture -%}
+
+{%- form 'customer', class: form_class, id: form_id, data-newsletter-form: '', style: style -%}
+  {%- liquid
+    assign success_message = 'general.newsletter_form.thank_you' | t
+    assign success_message_discount = 'general.newsletter_form.thank_you_with_code_html' | t
+
+    if success_text != blank
+      assign success_message_discount = success_text | remove: '<p>' | remove: '</p>'
+    endif
+  -%}
+
+  {%- if form.posted_successfully? -%}
+    <p class="newsletter__message newsletter__message--success" id="Newsletter-success--{{ unique }}" tabindex="-1" autofocus>
+      {%- if show_discount_message and success_message_discount != blank -%}
+        {{ success_message_discount }}
+      {%- else -%}
+        {{ success_message }}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+
+  <div class="newsletter__message newsletter__message--error errors" id="Newsletter-error--{{ unique }}">
+    {%- if form.errors -%}
+      {{ form.errors.translated_fields.email | capitalize }}
+      {{ form.errors.messages.email }}
+    {%- else -%}
+      <em>{{ 'general.newsletter_form.error_message' | t }}</em>
+    {%- endif -%}
+  </div>
+
+  <input type="hidden" name="contact[accepts_marketing]" value="true">
+
+  {%- if show_name -%}
+    <div class="input-row">{{ name_field }}</div>
+    <div class="input-row">{{ email_field }}</div>
+    <div class="input-row">{{ submit_button }}</div>
+  {%- endif -%}
+
+  {%- unless show_name -%}
+    <div class="input-group">
+      {{ email_field }}
+      {{ submit_button }}
+    </div>
+  {%- else -%}
+
+  {%- endunless -%}
+
+  {%- if block.settings.terms -%}
+    <div class="form__legal">
+      {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+    </div>
+  {%- endif -%}
+{%- endform -%}

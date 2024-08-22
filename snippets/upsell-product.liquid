@@ -1,0 +1,141 @@
+{%- liquid
+  if upsell_product == blank
+    assign show_upsell = false
+    assign upsell_error = true
+  endif
+
+  if request.design_mode or upsell_product != blank
+    assign show_upsell = true
+  endif
+
+  assign upsell_variant = upsell_product.selected_or_first_available_variant
+  assign upsell_variant_image = upsell_variant.featured_media | default: upsell_product.featured_media.preview_image
+
+  if settings.currency_code_enable
+    assign upsell_variant_price = upsell_variant.price | money_with_currency
+    assign upsell_variant_compare_at_price = upsell_variant.compare_at_price | money_with_currency
+  else
+    assign upsell_variant_price = upsell_variant.price | money
+    assign upsell_variant_compare_at_price = upsell_variant.compare_at_price | money
+  endif
+
+  assign upsell_title = upsell_title | default: ''
+-%}
+
+{%- if show_upsell -%}
+  <quick-add-product>
+    <div class="product-upsell__holder{% if upsell_error %} product-upsell__holder--onboarding{% endif %}{% if is_cart %} product-upsell__holder--cart{% endif %}" data-quick-add-holder="{{ upsell_product.id }}">
+      {%- if upsell_title != '' -%}
+        <p class="product-upsell__holder__title">{{ upsell_title }}</p>
+      {%- endif -%}
+
+      <div data-cart-errors-container class="product-upsell__errors"></div>
+
+      <div class="product-upsell">
+        <div class="product-upsell__image">
+          {%- if upsell_error -%}
+            <div class="product-upsell__image__thumb svg-placeholder" role="img">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- else -%}
+            <a href="{{ upsell_product.url }}" class="product-upsell__image__link" aria-label="{{ upsell_product.title | strip_html | escape }}">
+              <div class="product-upsell__image__thumb">
+                {%- render 'image' image: upsell_variant_image, widths: '120, 240', width: 240, sizes: '120px', cover: true -%}
+              </div>
+            </a>
+          {%- endif -%}
+        </div>
+
+        <div class="product-upsell__content">
+          {%- if upsell_error -%}
+            <p class="product-upsell__title h3">Choose an upsell product</p>
+            <p class="product-upsell__variant-title h4">Use metafields to show a product here. Empty upsells will not show on live site.</p>
+          {%- else -%}
+            <a href="{{ upsell_product.url }}">
+              <p class="product-upsell__title h3">{{ upsell_product.title | strip_html }}</p>
+
+              {%- if upsell_product.variants.size == 1 and upsell_variant.title != 'Default Title' -%}
+                <p class="product-upsell__variant-title h4">{{ upsell_variant.title | replace: '/', '<span>&nbsp;</span>' }}</p>
+              {%- endif -%}
+
+              <p class="product-upsell__price{% if upsell_variant.compare_at_price > upsell_variant.price %} sale{% endif %}">
+                <span class="new-price">
+                  {%- if upsell_variant.price == 0 -%}
+                    {{ 'general.money.free' | t }}
+                  {%- else -%}
+                    {{ upsell_variant_price }}
+                  {%- endif -%}
+                </span>
+
+                {%- if upsell_variant.compare_at_price > upsell_variant.price -%}
+                  <span class="old-price">{{ upsell_variant_compare_at_price }}</span>
+                {%- endif -%}
+
+                {%- if upsell_variant.unit_price -%}
+                  {%- capture unit_price_separator -%}
+                    <span aria-hidden="true">/</span>
+                    <span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+                  {%- endcapture -%}
+
+                  {%- capture unit_price_base_unit -%}
+                    {% if upsell_variant.unit_price_measurement.reference_value != 1 %}
+                      {{ upsell_variant.unit_price_measurement.reference_value }}
+                    {% endif %}
+                    {{ upsell_variant.unit_price_measurement.reference_unit }}
+                  {%- endcapture -%}
+
+                  <br>
+
+                  <span class="visually-hidden visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
+
+                  <span class="unit">
+                    {{ upsell_variant.unit_price | money }}
+                    {{ unit_price_separator }}
+                    {{ unit_price_base_unit }}
+                  </span>
+                {% endif -%}
+              </p>
+            </a>
+            {%- if is_cart -%}
+              <button type="button" class="product-upsell__skip" title="{{ 'cart.general.remove' | t }}" data-skip-upsell-product>
+                {%- render 'icon-cancel' -%}
+
+                {{- 'cart.general.remove' | t -}}
+              </button>
+            {%- endif -%}
+
+            <button class="product-upsell__btn{% if upsell_product.variants.size == 1 and upsell_variant.available != true %} is-hidden{% endif %}"
+              type="button"
+              data-focus-element
+              data-quick-add-btn
+              {% if upsell_product.variants.size == 1 %}data-quick-add-variant="{{ upsell_variant.id }}"{% endif %}
+              {% if upsell_product.variants.size == 1 and upsell_variant.available != true %}disabled{% endif %}
+              {% if upsell_product.variants.size > 1 %}data-popup-{{ upsell_product.id }}="{{ upsell_product.handle }}"{% endif %}
+            >
+              <span class="btn__plus"></span>
+              <span class="btn__text">{{ 'products.general.upsell_add_to_cart' | t }}</span>
+              <span class="btn__text-cloned" data-quick-add-btn-text>{{ 'products.general.upsell_add_to_cart' | t }}</span>
+
+              <span class="btn__loader">
+                <svg height="18" width="18" class="svg-loader">
+                  <circle r="7" cx="9" cy="9" />
+                  <circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" />
+                </svg>
+              </span>
+
+              <span class="btn__added">&nbsp;</span>
+            </button>
+
+            {%- if upsell_product.variants.size == 1 -%}
+              <span class="product-upsell__out-of-stock">{{ 'products.general.upsell_out_of_stock' | t }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- unless upsell_product.has_only_default_variant -%}
+        {%- render 'product-quick-add-modal-template', product_id: upsell_product.id -%}
+      {%- endunless -%}
+    </div>
+  </quick-add-product>
+{%- endif -%}

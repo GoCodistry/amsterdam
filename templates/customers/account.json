@@ -1,10 +1,24 @@
 {
   "sections": {
     "main": {
-      "type": "main-account",
+      "type": "customer-account",
+      "blocks": {
+        "account": {
+          "type": "account",
+          "settings": {
+          }
+        },
+        "email": {
+          "type": "email",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "account",
+        "email"
+      ],
       "settings": {
-        "padding_top": 36,
-        "padding_bottom": 36
       }
     }
   },

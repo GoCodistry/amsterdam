@@ -1,0 +1,150 @@
+{%- liquid
+  assign highlight_item = highlight_item | downcase | strip_html | escape
+  assign link_title_lowercase = link.title | downcase | strip_html | escape
+  assign parent = false
+  assign grandparent = false
+  if link.levels == 1
+    assign parent = true
+  endif
+  if link.levels == 2
+    assign grandparent = true
+  endif
+
+  assign child_count = 0
+  if grandparent
+    assign child_count = link.links.size
+    if child_count > 10
+      assign child_count = 10
+    endif
+  endif
+
+  assign index = index | append: ""
+  assign image_count = 0
+  assign image_wide_count = 0
+  assign images_space = 0
+  for block in section.blocks
+    if block.settings.position == index
+      assign grandparent = true
+      assign image_count = image_count | plus: 1
+      assign image_space = 1
+
+      if block.settings.wide_image
+        assign image_space = 3
+        assign image_wide_count = image_wide_count | plus: 1
+      endif
+
+      assign images_space = images_space | plus: image_space
+    endif
+  endfor
+
+  if parent or grandparent
+    assign expands = true
+    assign key = link.url | append: link.title | append: link.levels | md5
+  endif
+
+  if parent and link.levels == 1
+    assign child_count = child_count | plus: 1
+  endif
+
+  if image_count and child_count == 0
+    assign only_images = " grandparent--all-images"
+  endif
+-%}
+
+{% capture classes %}{% if grandparent %} grandparent kids-{{ child_count }}{% if image_count > 0 %} images-{{ image_count }}{% endif %} {{ only_images }} {% elsif parent %} parent{% else %} child{% endif %}{% endcapture %}
+
+<div class="menu__item {{ classes }}"
+  {% if expands %}
+    aria-haspopup="true"
+    aria-expanded="false"
+    data-hover-disclosure-toggle="dropdown-{{ key }}"
+    aria-controls="dropdown-{{ key }}"
+    role="button"
+  {% endif %}>
+
+  {% assign filter = '' %}
+  {% if link.type contains 'collection_link' %}
+    {% assign filter = '?filter.v.availability=1' %}
+  {% endif %}
+  <a href="{{ link.url | append:filter }}" data-top-link class="navlink navlink--toplevel{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}">
+    <span class="navtext">{{ link.title | strip_html | escape }}</span>
+  </a>
+  {% if expands %}
+    <div class="header__dropdown"
+      data-hover-disclosure
+      id="dropdown-{{ key }}">
+      <div class="header__dropdown__wrapper">
+        <div class="header__dropdown__inner">
+          {%- if grandparent -%}
+            {%- unless only_images -%}
+              <div class="header__grandparent__links">
+                {% if link.levels == 2 %}
+                  {% for link in link.links %}
+                    {%- assign link_title_lowercase = link.title | downcase | strip_html | escape -%}
+                    <div class="dropdown__family">
+                      {% assign filter = '' %}
+                      {% if link.type contains 'collection_link' %}
+                        {% assign filter = '?filter.v.availability=1' %}
+                      {% endif %}
+                      <a href="{{ link.url | append: filter }}" data-stagger-first class="navlink navlink--child{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}">
+                        <span class="navtext">{{ link.title | strip_html | escape }}</span>
+                      </a>
+                      {% for link in link.links %}
+                        {%- assign link_title_lowercase = link.title | downcase | strip_html | escape -%}
+                        <a href="{{ link.url }}" data-stagger-second class="navlink navlink--grandchild{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}">
+                          <span class="navtext">{{ link.title | strip_html | escape }}</span>
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                {% elsif link.levels == 1 %}
+                  <div class="dropdown__family">
+                    {% for link in link.links %}
+                      {%- assign link_title_lowercase = link.title | downcase | strip_html | escape -%}
+                      <a href="{{ link.url }}" data-stagger class="navlink navlink--grandchild{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}">
+                        <span class="navtext">{{ link.title | strip_html | escape }}</span>
+                      </a>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            {%- endunless -%}
+
+            {%- if image_count > 0 -%}
+              {%- liquid
+                if image_count == 2 and image_wide_count == 1
+                  assign images_space = images_space | minus: 1
+                elsif image_count == 2 and image_wide_count == 2
+                  assign images_space = images_space | minus: 2
+                endif
+              -%}
+
+              <div class="menu__blocks{% if settings.grid_style == 'classic' %} menu__blocks--gap{% endif %}" style="--images-space: {{ images_space }};">
+                {%- liquid
+                  for block in section.blocks
+                    if block.settings.position == index
+                      render 'header-block', block: block, image_count: image_count, only_images: only_images, link_columns: link.links.size
+                    endif
+                  endfor
+                -%}
+              </div>
+            {%- endif -%}
+
+          {%- else -%}
+            {% comment %} Simple dropdown {% endcomment %}
+            {% for link in link.links %}
+              {%- assign link_title_lowercase = link.title | downcase | strip_html | escape -%}
+              {% assign filter = '' %}
+              {% if link.type contains 'collection_link' %}
+                {% assign filter = '?filter.v.availability=1' %}
+              {% endif %}
+              <a href="{{ link.url | append: filter }}" data-stagger class="navlink navlink--child{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}">
+                <span class="navtext">{{ link.title | strip_html | escape }}</span>
+              </a>
+            {% endfor %}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>

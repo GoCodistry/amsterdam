@@ -1,0 +1,283 @@
+<!-- /sections/section-text-row.liquid -->
+
+{%- render 'multicolumn' -%}
+
+{% schema %}
+  {
+    "name": "Text columns with icons",
+    "class": "index-section",
+    "max_blocks": 5,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "type": "range",
+        "id": "heading_size",
+        "label": "Heading size",
+        "min": 1,
+        "max": 15,
+        "step": 1,
+        "default": 5
+      },
+      {
+        "type": "header",
+        "content": "Alignment"
+      },
+      {
+        "type": "select",
+        "id": "align_text",
+        "label": "Text",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Centered"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "icon_alignment",
+        "label": "Icon placement",
+        "default": "icon--top",
+        "options": [
+          { "value": "icon--top", "label": "Top" },
+          { "value": "icon--left", "label": "Left" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "align_columns",
+        "label": "Columns",
+        "default": "flex-align-top",
+        "options": [
+          {
+            "value": "flex-align-top",
+            "label": "Top"
+          },
+          {
+            "value": "flex-align-center",
+            "label": "Centered"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "width",
+        "label": "Width",
+        "default": "wrapper--full-padded",
+        "options": [
+          {"value": "wrapper--full-padded", "label": "Full width padded"},
+          {"value": "wrapper", "label": "Normal"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 50
+      },
+      {
+        "type": "header",
+        "content": "Mobile"
+      },
+      {
+        "type": "select",
+        "id": "layout_mobile",
+        "label": "Layout",
+        "options": [
+          {
+            "value": "grid",
+            "label": "Grid"
+          },
+          {
+            "value": "carousel",
+            "label": "Carousel"
+          }
+        ],
+        "default": "carousel"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "icon",
+        "name": "Icon",
+        "settings": [
+          {
+            "type": "select",
+            "id": "icon_name",
+            "label": "Icon",
+            "default": "icon-award",
+            "options": [
+              { "label": "Award", "value": "icon-award" },
+              { "label": "Box", "value": "icon-box" },
+              { "label": "Chat", "value": "icon-chat" },
+              { "label": "Cloud", "value": "icon-cloud" },
+              { "label": "Diameter", "value": "icon-diameter" },
+              { "label": "Discount", "value": "icon-discount" },
+              { "label": "Donation", "value": "icon-donation" },
+              { "label": "Droplet", "value": "icon-droplet" },
+              { "label": "Info", "value": "icon-info-empty" },
+              { "label": "Email", "value": "icon-email" },
+              { "label": "Fast shipment", "value": "icon-fast-shipment" },
+              { "label": "Flare", "value": "icon-flare" },
+              { "label": "Flower", "value": "icon-flower" },
+              { "label": "Gift", "value": "icon-gift" },
+              { "label": "Green shipment", "value": "icon-green-shipment" },
+              { "label": "Heart", "value": "icon-heart" },
+              { "label": "Leaf", "value": "icon-leaf" },
+              { "label": "Lightening", "value": "icon-lightening" },
+              { "label": "Location", "value": "icon-location" },
+              { "label": "Mail", "value": "icon-mail" },
+              { "label": "Notes", "value": "icon-notes" },
+              { "label": "Pants", "value": "icon-pants" },
+              { "label": "Peace", "value": "icon-peace" },
+              { "label": "Pin", "value": "icon-pin" },
+              { "label": "Planet", "value": "icon-planet" },
+              { "label": "Phone", "value": "icon-phone" },
+              { "label": "Recycle", "value": "icon-recycle" },
+              { "label": "Ruler", "value": "icon-ruler" },
+              { "label": "Shield", "value": "icon-shield" },
+              { "label": "Smile", "value": "icon-smile" },
+              { "label": "Star", "value": "icon-star" },
+              { "label": "Tree", "value": "icon-tree" },
+              { "label": "Trophy", "value": "icon-trophy" },
+              { "label": "Truck", "value": "icon-truck" },
+              { "label": "Vegan", "value": "icon-vegan" },
+              { "label": "Washing machine", "value": "icon-washing-machine" }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "icon_size",
+            "label": "Icon size",
+            "unit": "px",
+            "min": 20,
+            "max": 80,
+            "step": 5,
+            "default": 20
+          },
+          {
+            "type": "color",
+            "id": "icon_color",
+            "label": "Color",
+            "default": "#545454"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Alternative icon/image"
+          },
+          {
+            "type": "header",
+            "content": "Typography"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Title"
+          },
+          {
+            "type": "range",
+            "id": "heading_size",
+            "label": "Heading size",
+            "min": 1,
+            "max": 15,
+            "step": 1,
+            "default": 4
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Share details about your shipping policies, item returns, or customer service.</p>"
+          },
+          {
+            "type": "range",
+            "id": "text_size",
+            "label": "Text size",
+            "min": 1,
+            "max": 15,
+            "step": 1,
+            "default": 3
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Text columns with icons",
+        "category": "Text",
+        "blocks": [
+          {
+            "type": "icon",
+            "settings": {
+              "title": "Secure transactions",
+              "icon_name": "icon-shield",
+              "text": "<p>Transactions are handled with bank-grade security.</p>"
+            }
+          },
+          {
+            "type": "icon",
+            "settings": {
+              "title": "Simple checkout",
+              "icon_name": "icon-trophy",
+              "text": "<p>Our secure checkout is quick and easy to use.</p>"
+            }
+          },
+          {
+            "type": "icon",
+            "settings": {
+              "title": "Get in touch",
+              "icon_name": "icon-chat",
+              "text": "<p>Have questions? Get in touch with us at any time.</p>"
+            }
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    }
+  }
+{% endschema %}

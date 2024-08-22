@@ -1,0 +1,150 @@
+<!-- /snippets/collection-tags-grouped.liquid -->
+
+{% comment %}
+    Renders a list of grouped tags from a collection
+    Accepts:
+    - collection: {Object} current collection
+    Usage:
+    {%- render 'collection-tags-grouped' collection: collection -%}
+{% endcomment %}
+
+{%- assign collection_handle = collection.handle | default: 'all' -%}
+{%- assign collection_tags = collection.tags -%}
+
+{%- if collection_handle == 'all' -%}
+  {%- assign collection_tags = collection.all_tags -%}
+{%- endif -%}
+
+{%- assign sort_by_string = '' -%}
+{%- assign sort_by = search.sort_by | default: collection.sort_by -%}
+{%- if sort_by != blank -%}
+  {%- assign sort_by_string = '?sort_by=' | append: sort_by -%}
+{%- endif -%}
+{%- assign filters_url = collection_handle | append: sort_by_string -%}
+{%- assign filter_exist = false -%}
+{%- assign current_tags_url = '' -%}
+
+<div class="collection__sidebar{% if current_tags %} collection__sidebar--has-buttons{% endif %}" {% if section.settings.filter_layout == 'slide-out' %}data-collection-sidebar-slide-out{% else %}data-collection-sidebar-slider{% endif %} data-active-filters-count="{{ current_tags.size | default: 0 }}">
+  {%- if current_tags.size > 0 -%}
+    {%- assign current_tags_string_handleize = current_tags | join: 'ヽヽヽヽ' | handleize | replace: 'ヽヽヽヽ', '+' -%}
+    <div class="collection__active__filters">
+      {%- if current_tags.size > 1 -%}
+        <a href="{{ routes.collections_url }}/{{ filters_url }}" class="active__filters__clear" data-filter-update-url><small>{{ 'collections.general.clear_filters' | t }}</small></a>
+      {%- endif -%}
+      
+      {%- for current_tag in current_tags -%}
+        {%- assign current_tag_handleize = current_tag | handleize -%}
+        {%- assign prev_string = current_tag_handleize | append: '+' -%}
+        {%- assign next_string = current_tag_handleize | prepend: '+' -%}
+        {%- assign current_tag_url = current_tags_string_handleize | replace: prev_string, '' | replace: next_string, '' | replace: current_tag_handleize, '' -%}
+
+        <a class="active__filters__remove" href="{{ routes.collections_url }}/{{ collection_handle }}{% if current_tag_url != '' %}/{{ current_tag_url }}{% endif %}{{ sort_by_string }}" data-filter-update-url>
+          <small>{{ current_tag }}</small>
+          <span class="filter__x">
+            {%- render 'icon-cancel' -%}
+          </span>
+        </a>
+
+        {%- capture current_tags_url -%}{{ current_tags_url }}{{ current_tag | handleize }}+{%- endcapture -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- capture shop_tags -%}
+  {%- for tag in collection_tags -%}{{ tag | handleize }}+{%- endfor -%}
+  {%- endcapture -%}
+
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'group' -%}
+        {%- if current_tags_url == '+' -%}{%- assign current_tags_url = '' -%}{%- endif -%}
+        {% assign current_tags_compare = current_tags_url | prepend: '+' %}
+        
+        {% assign shop_tags_compare = shop_tags | prepend: '+' %}
+        
+        {%- assign settings_tag_array = block.settings.group_tags | split: ',' -%}
+
+        {%- assign filter_links = '' -%}
+        {%- assign filter_hide = true -%}
+        {%- for settings_tag in settings_tag_array -%}
+          {% comment %} Normalize merchant settings input {% endcomment %}
+          {%- assign settings_tag_handle = settings_tag | handleize -%}
+          {%- assign settings_tag_handle_plus = settings_tag | handleize | append: '+' | prepend: '+' -%}
+
+          {%- assign link_style = 'link--disable' -%}
+
+          {% comment %} If tag is currently active setup URLs to remove tag {% endcomment %}
+          {%- if current_tags_compare contains settings_tag_handle_plus -%}
+            {%- assign link_style = 'link--remove' -%}
+            {%- assign filter_hide = false -%}
+            {%- assign removed_tag_array = '' -%}
+            {%- for product_tag in current_tags -%}
+              {%- assign product_tag_handle = product_tag | handleize -%}
+              {%- unless settings_tag_handle == product_tag_handle -%}
+                {%- assign removed_tag_array = removed_tag_array | append: product_tag_handle | append: '[!ヽ(´ー｀)/!]' -%}
+              {%- endunless -%}
+            {%- endfor -%}
+            {%- assign removed_tag_array = removed_tag_array | split: '[!ヽ(´ー｀)/!]' -%}
+            {%- capture removed_tag_url -%}
+              {%- for tag in removed_tag_array -%}{{ tag | handleize }}{%- unless forloop.last -%}+{%- endunless -%}{%- endfor -%}
+            {%- endcapture -%}
+
+            {%- capture filter_links -%}
+              {{ filter_links }}
+              
+              <li class="sidebar__item sidebar__item--active {{ link_style }}">
+                <a href="{{ routes.collections_url }}/{{ collection_handle }}{% if removed_tag_url != '' %}/{{ removed_tag_url }}{% endif %}{{ sort_by_string }}" title="✕ {{ settings_tag }}" data-filter-update-url>
+                  {{ settings_tag }}
+                </a>
+              </li>
+            {%- endcapture -%}
+          {%- else -%}
+            {% if shop_tags_compare contains settings_tag_handle_plus %}
+              {%- assign link_style = 'link--add' -%}
+              {%- assign filter_hide = false -%}
+            {%- endif -%}
+
+            {%- capture filter_links -%}
+              {{ filter_links }}
+              
+              <li class="sidebar__item {{ link_style }}">
+                <a href="{{ routes.collections_url }}/{{ collection_handle }}/{{ current_tags_url }}{{ settings_tag_handle }}{{ sort_by_string }}" title="+ {{ settings_tag }}" data-filter-update-url>
+                  {{ settings_tag }}
+                </a>
+              </li>
+            {%- endcapture -%}
+          {%- endif -%}
+        {%- endfor -%}
+        
+        {%- unless filter_hide -%}
+          {%- assign filter_exist = true -%}
+        {%- endunless -%}
+
+        <div class="collection__sidebar__group{% if filter_hide %} collection__sidebar__group--hidden{% endif %}"{% if filter_hide %} style="display: none;"{% endif %} {{ block.shopify_attributes }}>
+          <p class="collection__sidebar__heading is-active" data-collection-sidebar-heading tabindex="0" data-focus-element>
+            {{ block.settings.title }}
+
+            {%- render 'icon-plus' -%}
+            {%- render 'icon-minus' -%}
+          </p>
+          <ul class="collection-nav" data-collection-nav-grouped>
+            {{ filter_links }}
+          </ul>
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+
+  {%- unless filter_exist -%}
+    <div class="no-results">
+      <p><strong>{{ 'collections.general.no_filters' | t }}</strong></p>
+    </div>
+  {%- endunless -%}
+</div>
+
+{%- if current_tags -%}
+  <div class="collection__sidebar__buttons">
+    <a class="btn btn--primary btn--outline btn--full" href="{{ routes.collections_url }}/{{ filters_url }}" data-filter-update-url>
+      <span>{{ 'collections.general.reset' | t }}</span>
+    </a>
+  </div>
+{%- endif -%}

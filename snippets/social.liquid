@@ -1,0 +1,70 @@
+<!-- /snippets/social.liquid -->
+{%- if settings.instagram_link != ''
+   or settings.pinterest_link != ''
+   or settings.facebook_link != ''
+   or settings.twitter_link != ''
+   or settings.youtube_link != ''
+	 or settings.tiktok_link != ''
+	 or settings.linkedin_link != ''
+   or settings.vimeo_link != ''
+   or settings.tumblr_link != ''
+   or settings.snapchat_link != ''
+   or settings.feed_link != '' -%}
+	<ul class="social__links">
+	{% if settings.instagram_link != '' %}
+		<li>
+			<a href="{{ settings.instagram_link }}" class="social__link" title="{{ shop.name }} on Instagram" rel="noopener" target="_blank">{% render 'icon-instagram' %}<span class="visually-hidden">Instagram</span></a>
+    </li>
+  {% endif %}
+	{% if settings.facebook_link != '' %}
+		<li>
+			<a href="{{ settings.facebook_link }}" class="social__link" title="{{ shop.name }} on Facebook" rel="noopener" target="_blank">{% render 'icon-facebook' %}<span class="visually-hidden">Facebook</span></a>
+    </li>
+  {% endif %}
+	{% if settings.twitter_link != '' %}
+		<li>
+			<a href="{{ settings.twitter_link }}" class="social__link" title="{{ shop.name }} on Twitter" rel="noopener" target="_blank">{% render 'icon-twitter' %}<span class="visually-hidden">Twitter</span></a>
+    </li>
+  {% endif %}
+	{% if settings.tiktok_link != '' %}
+		<li>
+			<a href="{{ settings.tiktok_link }}" class="social__link" title="{{ shop.name }} on TikKok" rel="noopener" target="_blank">{% render 'icon-tiktok' %}<span class="visually-hidden">TikTok</span></a>
+    </li>
+  {% endif %}
+	{% if settings.pinterest_link != '' %}
+		<li>
+			<a href="{{ settings.pinterest_link }}" class="social__link" title="{{ shop.name }} on Pinterest" rel="noopener" target="_blank">{% render 'icon-pinterest' %}<span class="visually-hidden">Pinterest</span></a>
+    </li>
+  {% endif %}
+	{% if settings.tumblr_link != '' %}
+		<li>
+			<a href="{{ settings.tumblr_link }}" class="social__link" title="{{ shop.name }} on Tumblr" rel="noopener" target="_blank">{% render 'icon-tumblr' %}<span class="visually-hidden">Tumblr</span></a>
+    </li>
+  {% endif %}
+	{% if settings.youtube_link != '' %}
+		<li>
+			<a href="{{ settings.youtube_link }}" class="social__link" title="{{ shop.name }} on YouTube" rel="noopener" target="_blank">{% render 'icon-youtube' %}<span class="visually-hidden">YouTube</span></a>
+    </li>
+  {% endif %}
+	{% if settings.vimeo_link != '' %}
+		<li>
+			<a href="{{ settings.vimeo_link }}" class="social__link" title="{{ shop.name }} on Vimeo" rel="noopener" target="_blank">{% render 'icon-vimeo' %}<span class="visually-hidden">Vimeo</span></a>
+    </li>
+  {% endif %}
+	{% if settings.linkedin_link != '' %}
+		<li>
+			<a href="{{ settings.linkedin_link }}" class="social__link" title="{{ shop.name }} on Linkedin" rel="noopener" target="_blank">{% render 'icon-linkedin' %}<span class="visually-hidden">Linkedin</span></a>
+    </li>
+  {% endif %}
+	{% if settings.snapchat_link != '' %}
+		<li>
+			<a href="{{ settings.snapchat_link }}" class="social__link" title="{{ shop.name }} on Snapchat" rel="noopener" target="_blank">{% render 'icon-snapchat' %}<span class="visually-hidden">Snapchat</span></a>
+    </li>
+  {% endif %}
+	{% if settings.feed_link != '' %}
+		<li>
+			<a href="{{ settings.feed_link }}" class="social__link" title="{{ shop.name }} Feed" rel="noopener" target="_blank">{% render 'icon-rss' %}<span class="visually-hidden">Feed</span></a>
+    </li>
+  {% endif %}
+	</ul>
+{% endif %}

@@ -1,0 +1,79 @@
+{% comment %}
+    Renders an empty product grid item
+
+    Accepts:
+    - last_element (optional)
+    - grid_strings: {String} contains a string of grid classes (optional)
+    - index: element index in the loop
+
+    Usage:
+    {% render 'onboarding-product-grid-item', last_element: lastElement, grid_strings: grid_strings, index: index, placeholder: 'product-3', placeholder_root: 'product-', title: 'Fancy title', animation_delay: animatino_delay, index: index %}
+{% endcomment %}
+
+{%- liquid
+  assign additional_attributes = additional_attributes | default: ''
+  assign animation_duration = 800
+  assign aos_animation_delay = animation_delay | times: 150
+
+  unless grid_strings
+    assign grid_strings = "one-whole"
+  endunless
+
+  assign border_class = ''
+  if settings.product_grid_outline == false
+    assign border_class = 'product-item--borderless'
+  endif
+
+  if settings.product_grid_center
+    assign alignment_class = 'product-item--centered'
+  else
+    assign alignment_class = 'product-item--left'
+  endif
+
+  assign overlay_text_class = 'product-item--outer-text'
+  if settings.overlay_text
+    assign overlay_text_class = 'product-item--overlay-text'
+  endif
+
+  if settings.currency_code_enable
+    assign onboarding_price = 9900 | money_with_currency
+  else
+    assign onboarding_price = 9900 | money
+  endif
+-%}
+
+{%- capture item_unique -%}product-item--{{ section.id }}-{{ index }}{%- endcapture -%}
+{%- assign animation_anchor = '.' | append: item_unique -%}
+
+<div class="product-item {{ grid_strings }} {{ border_class }} {{ alignment_class }} {{ overlay_text_class }} {{ item_unique }}" {{ additional_attributes }}>
+  <div class="product-item__image">
+    <div class="svg-placeholder"
+      data-aos="img-in"
+      data-aos-delay="{{ aos_animation_delay }}"
+      data-aos-duration="{{ animation_duration }}"
+      data-aos-anchor="{{ animation_anchor }}"
+      data-aos-easing="ease-out-quart">
+      {%- liquid
+        assign index = index | default: 1
+        assign index = index | modulo: 6 | floor | plus: 1
+        assign placeholder_root = placeholder_root | default: 'collection-'
+        assign svg_default =  placeholder_root | append: index
+        assign placeholder = placeholder | default: svg_default
+      -%}
+      {{ placeholder | placeholder_svg_tag }}
+    </div>
+  </div>
+  <div class="product-information">
+    <a
+      class="product-link product-item__info"
+      href="#"
+      data-aos="fade"
+      data-aos-delay="{{ aos_animation_delay }}"
+      data-aos-duration="{{ animation_duration }}"
+      data-aos-anchor="{{ animation_anchor }}">
+      {%- assign default_title = 'home_page.onboarding.product_title' | t -%}
+      <p class="product-item__title">{{ title | default: default_title }}</p>
+      <span class="price">{{ onboarding_price }}</span>
+    </a>
+  </div>
+</div>
