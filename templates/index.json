@@ -1,412 +1,75 @@
 {
   "sections": {
-    "slideshow": {
-      "type": "section-slideshow",
-      "blocks": {
-        "slideshow-0": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/11.jpg",
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 11,
-            "description": "",
-            "text_size": 5,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "first_button_text": "",
-            "first_button_link": "",
-            "first_button_type": "btn--primary",
-            "first_button_size": "",
-            "first_button_style": "btn--solid",
-            "first_button_show_arrow": false,
-            "second_button_text": "",
-            "second_button_link": "",
-            "second_button_type": "btn--white",
-            "second_button_size": "",
-            "second_button_style": "btn--solid",
-            "second_button_show_arrow": false
-          }
-        },
-        "464f178a-6c8d-4d02-8521-7bffd00b8ef2": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/10.jpg",
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 11,
-            "description": "",
-            "text_size": 5,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "first_button_text": "",
-            "first_button_link": "",
-            "first_button_type": "btn--primary",
-            "first_button_size": "",
-            "first_button_style": "btn--solid",
-            "first_button_show_arrow": false,
-            "second_button_text": "",
-            "second_button_link": "",
-            "second_button_type": "btn--white",
-            "second_button_size": "",
-            "second_button_style": "btn--solid",
-            "second_button_show_arrow": false
-          }
-        },
-        "f16ab71a-1464-4074-8b13-0faf26344898": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/8BE654D1-37E8-404C-885D-DD070F72D634.JPG",
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 11,
-            "description": "",
-            "text_size": 5,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "first_button_text": "",
-            "first_button_link": "",
-            "first_button_type": "btn--primary",
-            "first_button_size": "",
-            "first_button_style": "btn--solid",
-            "first_button_show_arrow": false,
-            "second_button_text": "",
-            "second_button_link": "",
-            "second_button_type": "btn--white",
-            "second_button_size": "",
-            "second_button_style": "btn--solid",
-            "second_button_show_arrow": false
-          }
-        },
-        "780f046b-d16a-455c-87d0-1239dcfc90b1": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/Photo_Apr_22_3_28_53_PM.jpg",
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 11,
-            "description": "",
-            "text_size": 5,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "first_button_text": "",
-            "first_button_link": "",
-            "first_button_type": "btn--primary",
-            "first_button_size": "",
-            "first_button_style": "btn--solid",
-            "first_button_show_arrow": false,
-            "second_button_text": "",
-            "second_button_link": "",
-            "second_button_type": "btn--white",
-            "second_button_size": "",
-            "second_button_style": "btn--solid",
-            "second_button_show_arrow": false
-          }
-        },
-        "42f39468-cce8-43b3-8e02-d33a418e58e4": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/Photo_Jun_19_4_23_10_PM.jpg",
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 11,
-            "description": "",
-            "text_size": 5,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "first_button_text": "",
-            "first_button_link": "",
-            "first_button_type": "btn--primary",
-            "first_button_size": "",
-            "first_button_style": "btn--solid",
-            "first_button_show_arrow": false,
-            "second_button_text": "",
-            "second_button_link": "",
-            "second_button_type": "btn--white",
-            "second_button_size": "",
-            "second_button_style": "btn--solid",
-            "second_button_show_arrow": false
-          }
-        }
-      },
-      "block_order": [
-        "slideshow-0",
-        "464f178a-6c8d-4d02-8521-7bffd00b8ef2",
-        "f16ab71a-1464-4074-8b13-0faf26344898",
-        "780f046b-d16a-455c-87d0-1239dcfc90b1",
-        "42f39468-cce8-43b3-8e02-d33a418e58e4"
-      ],
-      "settings": {
-        "height": "screen-height-three-quarters",
-        "mobile_height": "screen-height-two-thirds--mobile",
-        "width": "wrapper--full",
-        "transition": "fade",
-        "show_arrows": false,
-        "autoplay": true,
-        "autoplay_speed": 4
-      }
-    },
-    "docs": {
-      "type": "section-rich-text",
+    "image_banner": {
+      "type": "image-banner",
       "blocks": {
         "heading": {
           "type": "heading",
           "settings": {
-            "title": "CALIFORNIA'S LEADING~MID-CENTURY MODERN RETAILER",
-            "text_size": 4
+            "heading": "Browse our latest products",
+            "heading_size": "h0"
           }
         },
-        "text": {
-          "type": "text",
+        "button": {
+          "type": "buttons",
           "settings": {
-            "text": "<p>Amsterdam Modern offers Mid Century Modern furniture, lighting, and other household designs. Our inventory is hand-sourced from all corners of Holland and is shipped directly to our 10,000 sq. ft. warehouse and storefront in Downtown Los Angeles.<\/p>",
-            "text_size": 3,
-            "text_style": "font-body"
+            "button_label_1": "Shop all",
+            "button_link_1": "shopify:\/\/collections\/all",
+            "button_style_secondary_1": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
           }
         }
       },
       "block_order": [
         "heading",
-        "text"
+        "button"
       ],
       "settings": {
-        "width": "wrapper",
-        "align_text": "text-center",
-        "bg_color": "#ffffff",
-        "color": "",
-        "padding_top": 26,
-        "padding_bottom": 26
+        "image_overlay_opacity": 40,
+        "image_height": "large",
+        "desktop_content_position": "bottom-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-3",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
       }
     },
-    "009cdcc6-bd8a-472d-a391-0bbe9a0df968": {
-      "type": "section-collections-list",
-      "blocks": {
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-1": {
-          "type": "collection",
-          "settings": {
-            "collection": "just-landed",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_just_landed_wood_long_dining_table_amsterdam_modern_vintage_furniture_los_angeles_png.png",
-            "title": ""
-          }
-        },
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-0": {
-          "type": "collection",
-          "settings": {
-            "collection": "2-seating",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_seating_leather_slouchy_brown_chair_amsterdam_modern_vintage_furniture_los_angeles.png",
-            "title": ""
-          }
-        },
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-2": {
-          "type": "collection",
-          "settings": {
-            "collection": "lighting",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_lighing_amsterdam_modern_vintage_furniture_los_angeles.png",
-            "title": ""
-          }
-        },
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-3": {
-          "type": "collection",
-          "settings": {
-            "collection": "storage",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_storage_amsterdam_modern_vintage_furniture_los_angeles.png",
-            "title": ""
-          }
-        },
-        "e9170756-720f-44d7-915a-bccf4600a14a": {
-          "type": "collection",
-          "settings": {
-            "collection": "tables",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_tables_amsterdam_modern_vintage_furniture_los_angeles.png",
-            "title": ""
-          }
-        },
-        "7dd78b4d-dd3d-4609-937e-405c07fc68f8": {
-          "type": "collection",
-          "settings": {
-            "collection": "other",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_office_filing_stands_leather_amsterdam_modern_vintage_furniture_los_angeles.jpg",
-            "title": ""
-          }
-        },
-        "6da4dab3-6aa7-4515-93e8-23550c60b540": {
-          "type": "collection",
-          "settings": {
-            "collection": "industrial",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_industrial_filing_cabinet_shelf_amsterdam_modern_vintage_furniture_los_angeles.jpg",
-            "title": ""
-          }
-        },
-        "b21d3ac6-6d91-4b85-85b4-fbc62d658171": {
-          "type": "collection",
-          "settings": {
-            "collection": "archive",
-            "collection_image": "shopify:\/\/shop_images\/Cover_photo_archive_red_sofa_with_dog_amsterdam_modern_vintage_furniture_los_angeles.jpg",
-            "title": ""
-          }
-        }
-      },
-      "block_order": [
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-1",
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-0",
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-2",
-        "template--14751914098823__009cdcc6-bd8a-472d-a391-0bbe9a0df968-1677679595274bed0e-3",
-        "e9170756-720f-44d7-915a-bccf4600a14a",
-        "7dd78b4d-dd3d-4609-937e-405c07fc68f8",
-        "6da4dab3-6aa7-4515-93e8-23550c60b540",
-        "b21d3ac6-6d91-4b85-85b4-fbc62d658171"
-      ],
+    "featured_collection": {
+      "type": "featured-collection",
       "settings": {
-        "title": "",
+        "title": "Featured products",
+        "heading_size": "h2",
         "description": "",
-        "layout": "grid",
-        "aspect_ratio": 0.9,
-        "grid": 4,
-        "enable_slider": false,
-        "bg_color": "",
-        "color": "",
-        "padding_top": 32,
-        "padding_bottom": 32
-      }
-    },
-    "4bb4f135-668a-44a2-a14b-d64561190171": {
-      "type": "section-map",
-      "disabled": true,
-      "settings": {
-        "height": "screen-height-one-half",
-        "mobile_height": "screen-height-one-half--mobile",
-        "title": "Map",
-        "address": "<p>123 Fake St.<br\/>Vancouver, Canada<\/p><p>Mon - Fri, 10am - 9pm<br\/>Weekends, 11am - 4pm<\/p>",
-        "button": "Directions",
-        "bg_color": "",
-        "color": "",
-        "width": "wrapper--full",
-        "api_key": "",
-        "map_address": "404 Beach Avenue, Vancouver, BC",
-        "zoom": 11,
-        "style": "light",
-        "enable_latlong": false,
-        "lat": "",
-        "long": "",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "167873994519009460": {
-      "type": "apps",
-      "blocks": {
-        "ecad6dae-02b7-4056-9693-4357d1402578": {
-          "type": "shopify:\/\/apps\/maestrooo-section-feed\/blocks\/app-block\/43cd482b-515a-4e82-b170-05d391763cd2",
-          "settings": {
-            "title": "",
-            "subheading": "<h6>FOLLOW US <a href=\"https:\/\/instagram.com\/amsterdammodern\" target=\"_blank\" title=\"https:\/\/instagram.com\/amsterdammodern\">@amsterdammodern<\/a><\/h6>",
-            "button_text": "",
-            "button_link": "",
-            "layout": "grid",
-            "image_size": "medium",
-            "add_spacing": true,
-            "rows_count": 1,
-            "show_author": false,
-            "show_caption": false,
-            "show_date": false,
-            "click_action": "open_instagram",
-            "heading_color": "#000000",
-            "subheading_color": "#000000",
-            "button_background": "#000000",
-            "button_color": "#ffffff",
-            "overlay_color": "#000000",
-            "overlay_text_color": "#ffffff",
-            "overlay_opacity": 65
-          }
-        }
-      },
-      "block_order": [
-        "ecad6dae-02b7-4056-9693-4357d1402578"
-      ],
-      "settings": {
-        "include_margins": false
-      }
-    },
-    "f9c1f0c9-1e03-4937-b58b-fa022251c7ab": {
-      "type": "section-tab-collections",
-      "blocks": {
-        "template--14767715221639__f9c1f0c9-1e03-4937-b58b-fa022251c7ab-1679067443e6c4c1f7-0": {
-          "type": "collection",
-          "settings": {
-            "title": "First collection",
-            "featured_collection": "",
-            "show_image": true,
-            "align_with_product_images": false,
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "description": "",
-            "color": "#ffffff",
-            "link_text": "View products",
-            "link": "",
-            "button_type": "btn--white",
-            "button_size": "",
-            "button_style": "btn--outline",
-            "show_arrow": false
-          }
-        },
-        "template--14767715221639__f9c1f0c9-1e03-4937-b58b-fa022251c7ab-1679067443e6c4c1f7-1": {
-          "type": "collection",
-          "settings": {
-            "title": "Second collection",
-            "featured_collection": "",
-            "show_image": true,
-            "align_with_product_images": false,
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "description": "",
-            "color": "#ffffff",
-            "link_text": "View products",
-            "link": "",
-            "button_type": "btn--white",
-            "button_size": "",
-            "button_style": "btn--outline",
-            "show_arrow": false
-          }
-        }
-      },
-      "block_order": [
-        "template--14767715221639__f9c1f0c9-1e03-4937-b58b-fa022251c7ab-1679067443e6c4c1f7-0",
-        "template--14767715221639__f9c1f0c9-1e03-4937-b58b-fa022251c7ab-1679067443e6c4c1f7-1"
-      ],
-      "disabled": true,
-      "settings": {
-        "title": "",
-        "text": "",
-        "layout": "stacked",
-        "show_product_count": false,
-        "bg_color": "",
-        "color": "",
-        "padding_top": 32,
-        "padding_bottom": 32
+        "show_description": false,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 44,
+        "padding_bottom": 36
       }
     }
   },
   "order": [
-    "slideshow",
-    "docs",
-    "009cdcc6-bd8a-472d-a391-0bbe9a0df968",
-    "4bb4f135-668a-44a2-a14b-d64561190171",
-    "167873994519009460",
-    "f9c1f0c9-1e03-4937-b58b-fa022251c7ab"
+    "image_banner",
+    "featured_collection"
   ]
 }

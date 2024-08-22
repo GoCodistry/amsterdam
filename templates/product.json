@@ -1,413 +1,103 @@
 {
   "sections": {
     "main": {
-      "type": "product",
+      "type": "main-product",
       "blocks": {
-        "45fddc5a-e613-4d43-b619-0131b971332b": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
           "type": "title",
           "settings": {
-            "subheading_option": "vendor",
-            "show_rating": true,
-            "enable_star_rating": true,
-            "show_rating_count": false,
-            "padding_bottom": 8
           }
         },
-        "519bf55b-b2c0-4343-a983-043e85b7790c": {
+        "price": {
           "type": "price",
           "settings": {
-            "padding_bottom": 16
           }
         },
-        "f6e177ae-e6fe-498a-959e-3e21ceb756b8": {
-          "type": "buttons",
+        "variant_picker": {
+          "type": "variant_picker",
           "settings": {
-            "show_quantity": true,
-            "show_payment_button": false,
-            "padding_bottom": 32
+            "picker_type": "button",
+            "swatch_shape": "circle"
           }
         },
-        "tabs": {
-          "type": "tab_richtext",
+        "quantity_selector": {
+          "type": "quantity_selector",
           "settings": {
-            "show_read_more": false,
-            "style": "accordions",
-            "title_1": "Shipping & Returns",
-            "raw_content_1": "<p>Please read our Shipping & Delivery Policy <a href=\"https:\/\/amsterdammodern.myshopify.com\/pages\/shipping-delivery-policy\" title=\"https:\/\/amsterdammodern.myshopify.com\/pages\/shipping-delivery-policy\">here.<\/a><\/p><p>Please read our Returns & Exchange Policy <a href=\"https:\/\/amsterdammodern.myshopify.com\/pages\/return-exchange-policy\" target=\"_blank\" title=\"https:\/\/amsterdammodern.myshopify.com\/pages\/return-exchange-policy\">here<\/a>.<\/p>",
-            "title_2": "Specifications",
-            "raw_content_2": "<p>{{ product.metafields.custom.specifications.value }}<\/p>",
-            "title_3": "",
-            "raw_content_3": "",
-            "title_4": "",
-            "raw_content_4": "",
-            "title_5": "",
-            "raw_content_5": "",
-            "padding_bottom": 12
           }
         },
-        "cdf06883-a2e8-46bd-be38-d7366c7c86b5": {
-          "type": "variants",
-          "disabled": true,
+        "buy_buttons": {
+          "type": "buy_buttons",
           "settings": {
-            "info_page": "",
-            "subscriptions_enable_selectors": false,
-            "padding_bottom": 16
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
           }
         },
-        "pickup": {
-          "type": "pickup",
+        "description": {
+          "type": "description",
           "settings": {
-            "padding_bottom": 32
           }
         },
-        "006304c3-1b72-4e44-af02-9cab8de146ce": {
-          "type": "inventory_countdown",
-          "disabled": true,
+        "share": {
+          "type": "share",
           "settings": {
-            "show_notice": "low-inventory",
-            "max_inventory": 10,
-            "hide_inventory_counter": true,
-            "padding_bottom": 16
+            "share_label": "Share"
           }
         }
       },
       "block_order": [
-        "45fddc5a-e613-4d43-b619-0131b971332b",
-        "519bf55b-b2c0-4343-a983-043e85b7790c",
-        "f6e177ae-e6fe-498a-959e-3e21ceb756b8",
-        "tabs",
-        "cdf06883-a2e8-46bd-be38-d7366c7c86b5",
-        "pickup",
-        "006304c3-1b72-4e44-af02-9cab8de146ce"
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "share"
       ],
       "settings": {
-        "product_sticky_enable": false,
-        "image_layout": "thumbnails",
-        "image_size": "normal",
-        "show_cart_bar": false,
-        "enable_zoom": true,
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "stacked",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "mobile_thumbnails": "hide",
+        "hide_variants": true,
         "enable_video_looping": false,
-        "mobile_image_style": "thumbs",
-        "padding_top": 90,
-        "padding_bottom": 30,
-        "quote_url": "shopify:\/\/pages\/shipping-quote",
-        "quote_text": "Request a Shipping Quote"
+        "padding_top": 36,
+        "padding_bottom": 12
       }
     },
-    "faq": {
-      "type": "section-accordion",
-      "blocks": {
-        "faq-1": {
-          "type": "text",
-          "settings": {
-            "title": "Frequently asked question",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        },
-        "faq-2": {
-          "type": "text",
-          "settings": {
-            "title": "Frequently asked question",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        },
-        "faq-3": {
-          "type": "text",
-          "settings": {
-            "title": "Frequently asked question",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        },
-        "faq-4": {
-          "type": "text",
-          "settings": {
-            "title": "Frequently asked question",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        }
-      },
-      "block_order": [
-        "faq-1",
-        "faq-2",
-        "faq-3",
-        "faq-4"
-      ],
-      "disabled": true,
+    "related-products": {
+      "type": "related-products",
       "settings": {
-        "title": "FAQ",
-        "bg_color": "",
-        "color": "",
-        "border_color": "",
-        "width": "wrapper",
-        "padding_top": 30,
-        "padding_bottom": 0
-      }
-    },
-    "shipping": {
-      "type": "section-accordion",
-      "blocks": {
-        "shipping-0": {
-          "type": "icon",
-          "settings": {
-            "icon_name": "icon-fast-shipment",
-            "icon_size": 20,
-            "icon_color": "#aaaaaa",
-            "title": "Fast shipping",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        },
-        "shipping-1": {
-          "type": "icon",
-          "settings": {
-            "icon_name": "icon-box",
-            "icon_size": 20,
-            "icon_color": "#aaaaaa",
-            "title": "Order tracking",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        },
-        "shipping-2": {
-          "type": "icon",
-          "settings": {
-            "icon_name": "icon-chat",
-            "icon_size": 20,
-            "icon_color": "#aaaaaa",
-            "title": "Get in touch",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>"
-          }
-        }
-      },
-      "block_order": [
-        "shipping-0",
-        "shipping-1",
-        "shipping-2"
-      ],
-      "disabled": true,
-      "settings": {
-        "title": "Shipping",
-        "bg_color": "",
-        "color": "",
-        "border_color": "",
-        "width": "wrapper",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "about": {
-      "type": "section-accordion",
-      "blocks": {
-        "about-0": {
-          "type": "image",
-          "settings": {
-            "title": "Image heading",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
-            "aspect_ratio": 0.6
-          }
-        },
-        "about-1": {
-          "type": "image",
-          "settings": {
-            "title": "Image heading",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
-            "aspect_ratio": 0.6
-          }
-        },
-        "about-2": {
-          "type": "image",
-          "settings": {
-            "title": "Image heading",
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
-            "aspect_ratio": 0.6
-          }
-        }
-      },
-      "block_order": [
-        "about-0",
-        "about-1",
-        "about-2"
-      ],
-      "disabled": true,
-      "settings": {
-        "title": "About us",
-        "bg_color": "",
-        "color": "",
-        "border_color": "",
-        "width": "wrapper",
-        "padding_top": 0,
-        "padding_bottom": 30
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "enable_product_reviews": false,
-        "enable_accordion": true,
-        "padding_top": 0,
-        "padding_bottom": 30
-      }
-    },
-    "custom": {
-      "type": "section-custom-content",
-      "blocks": {
-        "custom-0": {
-          "type": "image",
-          "settings": {
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 7,
-            "description": "",
-            "text_size": 3,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "link_text": "",
-            "link": "",
-            "button_type": "btn--primary hero__btn",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false
-          }
-        },
-        "custom-1": {
-          "type": "text",
-          "settings": {
-            "subheading": "Introducing",
-            "subheading_size": 3,
-            "title": "Product feature",
-            "heading_size": 7,
-            "text": "<p>Use this section to create unique side-by-side layouts with various content blocks. Pair text with images, newsletter blocks, products, videos, testimonials and more.<\/p>",
-            "text_size": 3,
-            "button_text": "",
-            "button_url": "",
-            "button_type": "btn--primary hero__btn",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
-            "show_social_links": false,
-            "text_columns": 1,
-            "align_text": "text-left",
-            "bg_color": "#f7f7f7",
-            "color": ""
-          }
-        }
-      },
-      "block_order": [
-        "custom-0",
-        "custom-1"
-      ],
-      "disabled": true,
-      "settings": {
-        "height": "screen-height-one-half",
-        "mobile_height": "screen-height-one-half--mobile",
-        "width": "wrapper--full-padded",
-        "borders": false,
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "imgtxt": {
-      "type": "section-custom-content",
-      "blocks": {
-        "imgtxt-0": {
-          "type": "text",
-          "settings": {
-            "subheading": "Introducing",
-            "subheading_size": 3,
-            "title": "Another feature",
-            "heading_size": 7,
-            "text": "<p>Use this section to create unique side-by-side layouts with various content blocks. Pair text with images, newsletter blocks, products, videos, testimonials and more.<\/p>",
-            "text_size": 3,
-            "button_text": "",
-            "button_url": "",
-            "button_type": "btn--primary hero__btn",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
-            "show_social_links": false,
-            "text_columns": 1,
-            "align_text": "text-left",
-            "bg_color": "#f7f7f7",
-            "color": ""
-          }
-        },
-        "imgtxt-1": {
-          "type": "image",
-          "settings": {
-            "overlay_opacity": 0,
-            "overlay_color": "#000000",
-            "show_overlay_text": false,
-            "title": "",
-            "heading_size": 7,
-            "description": "",
-            "text_size": 3,
-            "flex_align": "align--middle-center",
-            "bg_color": "",
-            "color": "#ffffff",
-            "link_text": "",
-            "link": "",
-            "button_type": "btn--primary hero__btn",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false
-          }
-        }
-      },
-      "block_order": [
-        "imgtxt-0",
-        "imgtxt-1"
-      ],
-      "disabled": true,
-      "settings": {
-        "height": "screen-height-one-half",
-        "mobile_height": "screen-height-one-half--mobile",
-        "width": "wrapper--full-padded",
-        "borders": false,
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "related": {
-      "type": "related",
-      "blocks": {
-        "cd1bdd0b-67e1-4ed3-8677-3ae16c1a03ee": {
-          "type": "recent",
-          "settings": {
-            "product_recently_heading": "Recently viewed",
-            "product_recently_limit": 4
-          }
-        },
-        "a09f479d-5e00-409c-9ee6-ad318a20d075": {
-          "type": "related",
-          "settings": {
-            "product_recommendations_heading": "Related products",
-            "limit": 4
-          }
-        }
-      },
-      "block_order": [
-        "cd1bdd0b-67e1-4ed3-8677-3ae16c1a03ee",
-        "a09f479d-5e00-409c-9ee6-ad318a20d075"
-      ],
-      "settings": {
-        "enable_tabs": true,
-        "bg_color": "",
-        "color": "",
-        "border_color": "",
-        "padding_top": 30,
-        "padding_bottom": 0
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 28
       }
     }
   },
   "order": [
     "main",
-    "faq",
-    "shipping",
-    "about",
-    "reviews",
-    "custom",
-    "imgtxt",
-    "related"
+    "related-products"
   ]
 }

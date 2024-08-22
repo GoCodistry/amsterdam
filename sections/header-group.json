@@ -1,48 +1,53 @@
 {
+  "name": "t:sections.header.name",
   "type": "header",
-  "name": "Header",
   "sections": {
-    "announcement": {
-      "type": "announcement",
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement-bar-0"
+      ],
       "settings": {
-        "layout": "slider",
-        "slider_speed": 7,
-        "show_arrows": false,
-        "marquee_speed": 100,
-        "text_size": 2,
-        "bg_color": "#edecec",
-        "color": "#353535"
+        "color_scheme": "scheme-1",
+        "show_line_separator": true,
+        "show_social": false,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "enable_country_selector": false,
+        "enable_language_selector": false
       }
     },
     "header": {
       "type": "header",
       "settings": {
-        "header_sticky": true,
-        "header_style": "logo_above",
-        "show_icons": true,
-        "icon_as_circle": false,
-        "cart_icon_family": "bag",
-        "logo": "shopify:\/\/shop_images\/logo.svg",
-        "logo_max_limit": 440,
-        "main_menu_linklist": "header-menu",
-        "enable_search": true,
-        "show_social_icons": true,
-        "show_locale_selector": true,
-        "show_currency_selector": true,
-        "type": "currency",
-        "highlight_item": "",
-        "highlight_item_color": "#c0871f",
-        "transparent_home": false,
-        "transparent_collection": false,
-        "transparent_article": false,
-        "transparent_page": false,
-        "secondary_menu_linklist": "",
-        "tertiary_menu_linklist": ""
+        "logo_position": "middle-left",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "mobile_logo_position": "center",
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     }
   },
   "order": [
-    "announcement",
+    "announcement-bar",
     "header"
   ]
 }

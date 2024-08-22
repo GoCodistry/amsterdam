@@ -3,18 +3,8 @@
     "main": {
       "type": "main-page",
       "settings": {
-        "subheading": "",
-        "subheading_size": 2,
-        "show_title": true,
-        "heading_size": 3,
-        "show_content": true,
-        "text_size": 2,
-        "align_text": "text-left",
-        "width": "wrapper",
-        "bg_color": "",
-        "color": "",
-        "padding_top": 50,
-        "padding_bottom": 50
+        "padding_top": 28,
+        "padding_bottom": 28
       }
     }
   },

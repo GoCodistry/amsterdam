@@ -1,27 +1,13 @@
 {
   "sections": {
     "main": {
-      "type": "list-collections",
-      "blocks": {
-        "be8758e2-82f2-4055-a6be-c209682125c3": {
-          "type": "collection",
-          "settings": {
-            "collection": "a-r-cordemeyer-for-auping",
-            "collection_name": ""
-          }
-        }
-      },
-      "block_order": [
-        "be8758e2-82f2-4055-a6be-c209682125c3"
-      ],
+      "type": "main-list-collections",
       "settings": {
-        "display_type": "selected",
         "title": "Collections",
-        "grid": 3,
-        "rows": 8,
-        "layout_mobile": "carousel",
-        "padding_top": 32,
-        "padding_bottom": 32
+        "sort": "alphabetical",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "columns_mobile": "2"
       }
     }
   },

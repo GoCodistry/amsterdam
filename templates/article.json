@@ -1,22 +1,38 @@
 {
   "sections": {
     "main": {
-      "type": "article",
+      "type": "main-article",
       "blocks": {
-        "related-products": {
-          "type": "related",
+        "featured_image": {
+          "type": "featured_image",
           "settings": {
+            "image_height": "adapt"
           }
         },
-        "recent-articles": {
-          "type": "recent",
+        "title": {
+          "type": "title",
+          "settings": {
+            "blog_show_date": true,
+            "blog_show_author": false
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        },
+        "content": {
+          "type": "content",
           "settings": {
           }
         }
       },
       "block_order": [
-        "related-products",
-        "recent-articles"
+        "featured_image",
+        "title",
+        "share",
+        "content"
       ],
       "settings": {
       }

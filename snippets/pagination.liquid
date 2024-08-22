@@ -1,47 +1,74 @@
-<!-- /snippets/pagination-custom.liquid -->
 {% comment %}
-  * This snippet renders a custom widget based on the current 'paginate' context,
-  {% render 'pagination-custom', paginate: paginate %}
+  Renders a set of links for paginated results. Must be used within paginate tags.
+
+  Usage:
+  {% paginate results by 2 %}
+    {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
+  {% endpaginate %}
+
+  Accepts:
+  - paginate: {Object}
+  - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag.
 {% endcomment %}
 
-{% if paginate.pages > 1 %}
-  <nav class="pagination-custom">
-    {%- if paginate.previous -%}
-      <a class="pagination-custom__prev" href="{{ paginate.previous.url }}" title="{{ 'general.pagination.prev' | t }}">
-        <span>{{ 'general.pagination.prev' | t }}</span>
-        {%- render 'icon-arrow-left' -%}
-      </a>
-    {%- else -%}
-      <span class="pagination-custom__prev is-hidden">
-        <span>{{ 'general.pagination.prev' | t }}</span>
-        {%- render 'icon-arrow-left' -%}
-      </span>
-    {%- endif -%}
+{{ 'component-pagination.css' | asset_url | stylesheet_tag }}
 
-    <div class="pagination-custom__inner">
-      {%- for part in paginate.parts -%}
-        {%- if part.is_link -%}
-          <a href="{{ part.url }}" title="{{ part.title }}" class="pagination-custom__page">{{ part.title }}</a>
-        {%- else -%}
-          {%- if part.title == paginate.current_page -%}
-            <span class="pagination-custom__page pagination-custom__page--active">{{ part.title }}</span>  
-          {%- else -%}
-            <span class="pagination-custom__sep">{{ part.title }}</span>  
-          {%- endif -%}
+{%- if paginate.parts.size > 0 -%}
+  <div class="pagination-wrapper">
+    <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+      <ul class="pagination__list list-unstyled" role="list">
+        {%- if paginate.previous -%}
+          <li>
+            <a
+              href="{{ paginate.previous.url }}{{ anchor }}"
+              class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce"
+              aria-label="{{ 'general.pagination.previous' | t }}"
+            >
+              {% render 'icon-caret' %}
+            </a>
+          </li>
         {%- endif -%}
-      {%- endfor -%}
-    </div>
 
-    {%- if paginate.next -%}
-      <a class="pagination-custom__next" href="{{ paginate.next.url }}" title="{{ 'general.pagination.next' | t }}">
-        <span>{{ 'general.pagination.next' | t }}</span>
-        {%- render 'icon-arrow-right' -%}
-      </a>
-    {%- else -%}
-    <span class="pagination-custom__next is-hidden">
-      <span>{{ 'general.pagination.next' | t }}</span>
-      {%- render 'icon-arrow-right' -%}
-    </span>
-    {%- endif -%}
-  </nav>
-{% endif %}
+        {%- for part in paginate.parts -%}
+          <li>
+            {%- if part.is_link -%}
+              <a
+                href="{{ part.url }}{{ anchor }}"
+                class="pagination__item link"
+                aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+              >
+                {{- part.title -}}
+              </a>
+            {%- else -%}
+              {%- if part.title == paginate.current_page -%}
+                <a
+                  role="link"
+                  aria-disabled="true"
+                  class="pagination__item pagination__item--current light"
+                  aria-current="page"
+                  aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                >
+                  {{- part.title -}}
+                </a>
+              {%- else -%}
+                <span class="pagination__item">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+
+        {%- if paginate.next -%}
+          <li>
+            <a
+              href="{{ paginate.next.url }}{{ anchor }}"
+              class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce"
+              aria-label="{{ 'general.pagination.next' | t }}"
+            >
+              {%- render 'icon-caret' -%}
+            </a>
+          </li>
+        {%- endif -%}
+      </ul>
+    </nav>
+  </div>
+{%- endif -%}
