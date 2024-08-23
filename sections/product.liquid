@@ -765,7 +765,7 @@
                                     {%- endif -%}
 
                                     {%- if product.metafields.custom.on_hold -%}
-                                        Pending
+                                        On Hold
                                     {%- elsif current_variant.available and preorder_check -%}
                                         {{ 'products.product.pre_order' | t }}
                                     {%- elsif current_variant.available -%}

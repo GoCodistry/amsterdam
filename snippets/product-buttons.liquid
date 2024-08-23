@@ -31,7 +31,7 @@
     assign button_text =  'products.product.sold_out' | t
   endunless
   if product.metafields.custom.on_hold
-    assign button_text =  'pending'
+    assign button_text =  'On Hold'
   endif
 -%}
 

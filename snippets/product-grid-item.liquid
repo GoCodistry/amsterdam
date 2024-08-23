@@ -407,7 +407,7 @@
             <span class="product-qty">(QTY: {{ product.selected_or_first_available_variant.inventory_quantity }})</span>
           </div>
           {% if product.metafields.custom.on_hold %}
-            <div class="on-hold">PENDING</div>
+            <div class="on-hold">On Hold</div>
           {% else %}
             <div class="product-item__price__holder{% if has_siblings %} has-siblings{% endif %}">
               {%- if has_siblings or product_item_cutline != blank -%}

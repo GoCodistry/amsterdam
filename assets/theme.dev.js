@@ -8186,8 +8186,8 @@
         addToCartText.forEach((element) => {
           if (variant) {
             console.log(element.parentNode.getAttribute('data-label'));
-            if (element.parentNode.getAttribute('data-label') === "Pending") {
-              element.innerHTML = 'Pending';
+            if (element.parentNode.getAttribute('data-label') === "On Hold") {
+              element.innerHTML = 'On Hold';
             }else if (variant.available) {
               element.innerHTML = addText;
             } else if (isWaitlist) {
