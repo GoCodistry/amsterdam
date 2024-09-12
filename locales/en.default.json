@@ -441,7 +441,7 @@
     },
     "product": {
       "regular_price": "Regular price",
-      "sold_out": "On Hold",
+      "sold_out": "Sold",
       "sale_type": "Sale type",
       "pre_order": "Pre-order",
       "on_sale": "Sale",
@@ -532,7 +532,7 @@
       },
       "throttle": {
         "merchandise": {
-          "sold_out": "On Hold"
+          "sold_out": "Sold"
         }
       }
     }
