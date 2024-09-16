@@ -1,5 +1,5 @@
 {%- assign filters_default = search.filters | default: collection.filters -%}
-
+{%- assign main_menu_linklist = 'header-menu' -%}
 <form data-collection-filters-form class="collection__filters">
   {%- for filter in filters_default -%}
     {%- liquid
@@ -52,29 +52,84 @@
 
       {%- case filter.type -%}
         {%- when 'list' or 'boolean' -%}
-          <ul class="collection-nav">
-            {%- for filter_value in filter.values -%}
-              <li class="sidebar__item{% if filter_value.active %} sidebar__item--active link--remove{% elsif filter_value.count == 0 and filter_value.active == false %} link--disable{% else %} link--add{% endif %}{% if forloop.index > 10 %} is-hidden{% endif %}"{% if forloop.index > 10 %} data-link-hidden{% endif %}>
-                <input type="checkbox"
-                  name="{{ filter_value.param_name }}"
-                  value="{{ filter_value.value }}"
-                  id="filter-{{ filter.label }}-{{ forloop.index }}"
-                  {% if filter_value.active -%}checked{%- endif %}
-                  {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}>
-                <label for="filter-{{ filter.label }}-{{ forloop.index }}">
-                  {%- if is_swatch_option -%}
-                    <span class="swatch__button swatch__button--{{ settings.swatch_style }}" data-swatch="{{ filter_value.label | escape_once }}"></span>
-                  {%- endif -%}
-                  {% if filter_value.label == 'Out of stock'%}
-                    Archived
-                  {% else %}
-                    {{ filter_value.label }}
+          {% if filter.label == 'Category' %}
+            {% assign link_father_flag = 0 -%}
+            {% for link in linklists[main_menu_linklist].links %}
+              {% if link.title contains collection.title %}
+                {% assign link_father = link.title -%}
+                {% assign link_father_flag = 1 -%}
+              {% endif %}
+              {% for childlink in link.links %}
+               {% assign link_title_lowercase = collection.title | downcase | strip_html | escape -%}
+               {% assign link_child_title_lowercase = childlink.title | downcase | strip_html | escape -%}
+                {% if link_child_title_lowercase == link_title_lowercase %}
+                  {% assign link_father = link.title -%}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          
+            {% for link in linklists[main_menu_linklist].links %}
+              {% if link.title contains link_father %}
+                  {% if link.links.size > 0 %}
+                    <ul class="collection-nav">
+                      {% for childlink in link.links %}
+                        {% assign link_title_lowercase = collection.title | downcase | strip_html | escape -%}
+                        {% assign link_child_title_lowercase = childlink.title | downcase | strip_html | escape -%}
+                      <li class="sidebar__item">
+                        {% if link_child_title_lowercase == link_title_lowercase %}
+                            <span for="filter-{{ childlink.title }}-{{ forloop.index }}">
+                              <a href="{{ childlink.url }}">
+                                <u><strong>{{ childlink.title }}</strong></u>
+                              </a>
+                            </span>
+                        {% else %}
+                          {% if link_father_flag == 1 and childlink.title == "All" %}
+                              <span for="filter-{{ childlink.title }}-{{ forloop.index }}">
+                                <a href="{{ childlink.url }}">
+                                  <u><strong>{{ childlink.title }}</strong></u>
+                                </a>
+                              </span>
+                          {% else %}
+                            <span for="filter-{{ childlink.title }}-{{ forloop.index }}">
+                              <a href="{{ childlink.url }}">
+                              {{ childlink.title }}
+                              </a>
+                            </span>
+                          {% endif %}
+                        {% endif %}
+                        
+                      </li>
+                    {% endfor %}
+                    </ul>
                   {% endif %}
-                </label>
-              </li>
-            {%- endfor -%}
-          </ul>
-
+              {% endif %}
+            {% endfor %}
+          {%- else -%}
+            <ul class="collection-nav">
+              {%- for filter_value in filter.values -%}
+                {% if filter_value.count > 0 %} 
+                  <li class="sidebar__item{% if filter_value.active %} sidebar__item--active link--remove{% elsif filter_value.count == 0 and filter_value.active == false %} link--disable{% else %} link--add{% endif %}{% if forloop.index > 10 %} is-hidden{% endif %}"{% if forloop.index > 10 %} data-link-hidden{% endif %}>
+                    <input type="checkbox"
+                      name="{{ filter_value.param_name }}"
+                      value="{{ filter_value.value }}"
+                      id="filter-{{ filter.label }}-{{ forloop.index }}"
+                      {% if filter_value.active -%}checked{%- endif %}
+                      {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}>
+                    <label for="filter-{{ filter.label }}-{{ forloop.index }}">
+                      {%- if is_swatch_option -%}
+                        <span class="swatch__button swatch__button--{{ settings.swatch_style }}" data-swatch="{{ filter_value.label | escape_once }}"></span>
+                      {%- endif -%}
+                      {% if filter_value.label == 'Out of stock'%}
+                        Archived
+                      {% else %}
+                        {{ filter_value.label }}
+                      {% endif %}
+                    </label>
+                  </li>
+                {% endif %}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
           {%- if filter.values.size > 10 -%}
             <div class="collection__sidebar__actions">
               <a href="#" data-show-more class="collection__sidebar__link">
