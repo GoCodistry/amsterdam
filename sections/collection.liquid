@@ -112,44 +112,46 @@
                             assign filter_active_count = current_tags.size
                         endif
                     -%}
-                    <div class="popout--group">
-                        <button
-                                type="button"
-                                class="popout__toggle{% unless filter_layout == 'slide-out' %} popout__toggle--filters{% endunless %}"
-                                aria-expanded="{% if show_group_filters %}true{% else %}false{% endif %}"
-                                aria-controls="filter-groups"
-                                data-aria-toggle
-                                data-group-tags-enabled>
-                            {%- render 'icon-filter' -%}
+                    {%- if collection.title != "ARCHIVE" -%}
+                      <div class="popout--group">
+                          <button
+                                  type="button"
+                                  class="popout__toggle{% unless filter_layout == 'slide-out' %} popout__toggle--filters{% endunless %}"
+                                  aria-expanded="{% if show_group_filters %}true{% else %}false{% endif %}"
+                                  aria-controls="filter-groups"
+                                  data-aria-toggle
+                                  data-group-tags-enabled>
+                              {%- render 'icon-filter' -%}
 
-                            {%- if filter_layout == 'slide-out' -%}
-                                {{ 'collections.general.filters' | t }}
-                            {%- else -%}
-                                <span class="popout__toggleable-text">
-                                    <span class="popout__expanded-show">
-                                        {{- 'collections.general.show_filters' | t -}}
-                                        <span class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}"
-                                              data-active-filters>
-                                            {{- filter_active_count -}}
-                                        </span>
-                                    </span>
+                              {%- if filter_layout == 'slide-out' -%}
+                                  {{ 'collections.general.filters' | t }}
+                              {%- else -%}
+                                  <span class="popout__toggleable-text">
+                                      <span class="popout__expanded-show">
+                                          {{- 'collections.general.show_filters' | t -}}
+                                          <span class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}"
+                                                data-active-filters>
+                                              {{- filter_active_count -}}
+                                          </span>
+                                      </span>
 
-                                    <span class="popout__expanded-hide">
-                                        {{- 'collections.general.hide_filters' | t -}}
-                                        <span class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}"
-                                              data-active-filters>
-                                            {{- filter_active_count -}}
-                                        </span>
-                                    </span>
-                                </span>
-                            {%- endif -%}
+                                      <span class="popout__expanded-hide">
+                                          {{- 'collections.general.hide_filters' | t -}}
+                                          <span class="filter-count{% if filter_active_count < 1 %} hidden{% endif %}"
+                                                data-active-filters>
+                                              {{- filter_active_count -}}
+                                          </span>
+                                      </span>
+                                  </span>
+                              {%- endif -%}
 
-                            {%- unless filter_layout == 'slide-out' -%}
-                                {%- render 'icon-nav-arrow-down' -%}
-                            {%- endunless -%}
-                        </button>
+                              {%- unless filter_layout == 'slide-out' -%}
+                                  {%- render 'icon-nav-arrow-down' -%}
+                              {%- endunless -%}
+                          </button>
 
-                    </div>
+                      </div>
+                  {%- endif -%}
                 {%- endif -%}
 
                 {%- if show_sort -%}

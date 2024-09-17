@@ -107,7 +107,7 @@
           {%- else -%}
             <ul class="collection-nav">
               {%- for filter_value in filter.values -%}
-                {% if filter_value.count > 0 %} 
+                {% if filter_value.count > 0 and filter_value.label != "Out of stock"%} 
                   <li class="sidebar__item{% if filter_value.active %} sidebar__item--active link--remove{% elsif filter_value.count == 0 and filter_value.active == false %} link--disable{% else %} link--add{% endif %}{% if forloop.index > 10 %} is-hidden{% endif %}"{% if forloop.index > 10 %} data-link-hidden{% endif %}>
                     <input type="checkbox"
                       name="{{ filter_value.param_name }}"
