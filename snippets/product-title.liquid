@@ -77,49 +77,51 @@
       {%- endunless -%}
       <div class="wishlist-engine" data-product_id="{{ product.id }}" data-variant_id="{{ product.selected_or_first_available_variant.id }}" data-full_button="false" data-css="true"></div>
     </h1>
-    {% if country != '' %}
-      <span class="product-country">
-{% assign digits = "0 1 2 3 4 5 6 7 8 9" | split: " " %}
-{% assign designerss  = product.metafields.custom.designer_namen_new  %}
-{% assign countryyy = product.metafields.custom.country1 %}
-{% assign producer =  product.metafields.custom.producer %}
-<a href="{{ shop.url }}/collections/{{ producer | handle }}"> {{ producer }}</a>
-{% if producer != blank and designerss != blank  %}
-  /
-{% endif %}
+  {% if country != '' %}
+    <span class="product-country">
+    {% assign digits = "0 1 2 3 4 5 6 7 8 9" | split: " " %}
+    {% assign designerss  = product.metafields.custom.designer_namen_new  %}
+    {% assign countryyy = product.metafields.custom.country1 %}
+    {% assign producer =  product.metafields.custom.producer %}
+    <a href="{{ shop.url }}/collections/{{ producer | handle }}"> {{ producer }}</a>
+    {% if producer != blank and designerss != blank  %}
+      /
+    {% endif %}
 
-{% if producer == blank and countryyy == blank and designerss == blank %}
-  {% assign vendor_split = product.vendor | split:'/' %}
-  {% if vendor_split.size == 3 %}
-      {% assign designer = vendor_split[0] %}
-      {% assign manufacturer = vendor_split[1] %}
-      {% assign country = vendor_split[2] %} 
-      {% assign redUrl = vendor_split[2] %} 
-  {% elsif vendor_split.size == 2 %}
-    {% assign designer = vendor_split[0] %}
-    {% assign manufacturer = "" %}
-    {% assign country = vendor_split[1] %}
-    {% assign redUrl = vendor_split[1] %} 
-  {% elsif vendor_split.size == 1 %}
-    {% assign designer = vendor_split[0] %}
-    {% assign manufacturer = "" %}
-    {% assign country = "" %}
-    {% assign redUrl = vendor_split[0] %} 
-  {% endif %} 
-  {% if redUrl == 'Amsterdam Modern' %}
-    {% assign redUrl = 'amsterdam-modern-2' %} 
-  {% endif %} 
-  <a href="{{ shop.url }}/collections/{{ redUrl | handle }}"> {{ designer }}</a>
-  {% if manufacturer != blank and country != blank and designer != blank %}
-    /
-    <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ manufacturer }}</a>
-    /
-    <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ country }}</a>
-  {% endif %}
-  {% if manufacturer == blank and designer != blank and country != blank %}
-    /
-    <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ country }}</a>
-  {% endif %}
+    {% if producer == blank and countryyy == blank and designerss == blank %}
+      {% assign vendor_split = product.vendor | split:'/' %}
+      {% if vendor_split.size == 3 %}
+          {% assign designer = vendor_split[0] %}
+          {% assign manufacturer = vendor_split[1] %}
+          {% assign country = vendor_split[2] %} 
+          {% assign redUrl = vendor_split[2] %} 
+      {% elsif vendor_split.size == 2 %}
+        {% assign designer = vendor_split[0] %}
+        {% assign manufacturer = "" %}
+        {% assign country = vendor_split[1] %}
+        {% assign redUrl = vendor_split[1] %} 
+      {% elsif vendor_split.size == 1 %}
+        {% assign designer = vendor_split[0] %}
+        {% assign manufacturer = "" %}
+        {% assign country = "" %}
+        {% assign redUrl = vendor_split[0] %} 
+      {% endif %}      
+      {% if redUrl != 'Unattributed' and country != 'Unattributed' and designer != 'Unattributed' and manufacturer != 'Unattributed' %}
+        {% if redUrl == 'Amsterdam Modern' %}
+          {% assign redUrl = 'amsterdam-modern-2' %} 
+        {% endif %} 
+        <a href="{{ shop.url }}/collections/{{ redUrl | handle }}"> {{ designer }}</a>
+        {% if manufacturer != blank and country != blank and designer != blank %}
+          /
+          <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ manufacturer }}</a>
+          /
+          <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ country }}</a>
+        {% endif %}
+        {% if manufacturer == blank and designer != blank and country != blank %}
+          /
+          <a href="{{ shop.url }}/collections/{{ redUrl | handle | strip }}">{{ country }}</a>
+        {% endif %}
+      {% endif %}
 
 
   {% else %}
